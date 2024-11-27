@@ -1,0 +1,27 @@
+--- a/net/minecraft/network/protocol/game/ClientboundTabListPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundTabListPacket.java
+@@ -7,6 +_,10 @@
+ public class ClientboundTabListPacket implements Packet<ClientGamePacketListener> {
+    public final Component f_133480_;
+    public final Component f_133481_;
++   // Paper start
++   public net.kyori.adventure.text.Component adventure$header;
++   public net.kyori.adventure.text.Component adventure$footer;
++   // Paper end
+ 
+    public ClientboundTabListPacket(Component p_179430_, Component p_179431_) {
+       this.f_133480_ = p_179430_;
+@@ -19,6 +_,13 @@
+    }
+ 
+    public void m_5779_(FriendlyByteBuf p_133491_) {
++      // Paper start
++      if (this.adventure$header != null && this.adventure$footer != null) {
++         p_133491_.writeComponent(this.adventure$header);
++         p_133491_.writeComponent(this.adventure$footer);
++         return;
++      }
++      // Paper end
+       p_133491_.m_130083_(this.f_133480_);
+       p_133491_.m_130083_(this.f_133481_);
+    }

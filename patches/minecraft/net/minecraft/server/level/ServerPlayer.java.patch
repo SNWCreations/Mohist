@@ -143,12 +143,14 @@
     private WardenSpawnTracker f_244516_ = new WardenSpawnTracker(0, 0, 0);
     private final ContainerSynchronizer f_143379_ = new ContainerSynchronizer() {
        public void m_142589_(AbstractContainerMenu p_143448_, NonNullList<ItemStack> p_143449_, ItemStack p_143450_, int[] p_143451_) {
-@@ -245,6 +_,22 @@
+@@ -245,6 +_,24 @@
     public int f_8943_;
     public boolean f_8944_;
  
 +   // CraftBukkit start
 +   public String displayName;
++   public net.kyori.adventure.text.Component adventure$displayName; // Paper
++   public Component listName;
 +   public org.bukkit.Location compassTarget;
 +   public int newExp = 0;
 +   public int newLevel = 0;
@@ -1009,7 +1011,7 @@
           this.m_36397_(p_9016_.m_36344_());
        }
  
-@@ -1135,6 +_,16 @@
+@@ -1135,6 +_,15 @@
        this.m_36362_(p_9016_.m_36331_());
        this.m_36364_(p_9016_.m_36332_());
        this.m_219749_(p_9016_.m_219759_());
@@ -1022,7 +1024,6 @@
 +      net.minecraftforge.event.ForgeEventFactory.onPlayerClone(this, p_9016_, !p_9017_);
 +      this.tabListHeader = p_9016_.tabListHeader;
 +      this.tabListFooter = p_9016_.tabListFooter;
-+      this.language = p_9016_.language; // Mohist - Language not synchronized when respawn
     }
  
     protected void m_142540_(MobEffectInstance p_143393_, @Nullable Entity p_143394_) {
@@ -1075,11 +1076,12 @@
           this.f_8906_.m_243119_(new ClientboundSystemChatPacket(p_240560_, p_240545_), PacketSendListener.m_243073_(() -> {
              if (this.m_240399_(false)) {
                 int i = 256;
-@@ -1274,14 +_,25 @@
+@@ -1274,14 +_,30 @@
           return "<unknown>";
        }
     }
 -
++   public java.util.Locale adventure$locale = java.util.Locale.US; // Paper
     public void m_9156_(ServerboundClientInformationPacket p_9157_) {
 +      // CraftBukkit start
 +      if (m_5737_() != p_9157_.f_133868_()) {
@@ -1099,6 +1101,10 @@
        this.m_20088_().m_135381_(f_36089_, (byte)p_9157_.f_133867_());
        this.m_20088_().m_135381_(f_36090_, (byte)(p_9157_.f_133868_() == HumanoidArm.LEFT ? 0 : 1));
 +      this.language = p_9157_.f_133863_();
++      // Paper start
++      this.adventure$locale = net.kyori.adventure.translation.Translator.parseLocale(this.language); // Mohist - We use different field to represent language
++      this.f_8906_.f_9742_.f_129468_.attr(com.mohistmc.paper.adventure.PaperAdventure.LOCALE_ATTRIBUTE).set(this.adventure$locale);
++      // Paper end
     }
  
     public boolean m_143432_() {

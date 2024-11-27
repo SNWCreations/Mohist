@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSystemChatPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSystemChatPacket.java
-@@ -1,24 +_,81 @@
+@@ -1,24 +_,107 @@
  package net.minecraft.network.protocol.game;
  
 +import java.util.Objects;
@@ -28,32 +28,58 @@
 -   public boolean m_6588_() {
 -      return true;
 -   }
-+public final class ClientboundSystemChatPacket implements Packet<ClientGamePacketListener> {
++// Spigot start
++public final class ClientboundSystemChatPacket implements Packet<ClientGamePacketListener> { // Paper - Adventure
 +   private final Component f_237849_;
++   private final net.kyori.adventure.text.Component adventure$content; // Mohist - Mod Compatibility
 +   private final boolean f_240374_;
 +   private final String content0;
 +
-+    public ClientboundSystemChatPacket(Component f_237849_, boolean f_240374_) {
-+        this.f_237849_ = f_237849_;
-+        this.f_240374_ = f_240374_;
-+        this.content0 = Component.Serializer.m_130703_(f_237849_);
-+    }
-+
-+    public ClientboundSystemChatPacket(String content, boolean overlay) {
-+        this(Component.Serializer.m_130701_(content), overlay);
++    public ClientboundSystemChatPacket(Component f_237849_, boolean f_240374_) { // Paper - No locale context
++        this(null, Component.Serializer.m_130703_(f_237849_), f_240374_); // Paper - Adventure
 +    }
 +
 +    public ClientboundSystemChatPacket(BaseComponent[] content, boolean overlay) {
-+        this(ComponentSerializer.toString(content), overlay);
++        this(null, improveBungeeComponentSerialization(content), overlay); // Paper - Adventure
 +    }
 +
 +    // Spigot end
++    // Paper start
++
++    public ClientboundSystemChatPacket(net.kyori.adventure.text.Component content, boolean overlay) {
++        this(content, null, overlay);
++    }
++
++    private static String improveBungeeComponentSerialization(net.md_5.bungee.api.chat.BaseComponent[] content) {
++        if (content.length == 1) {
++            return net.md_5.bungee.chat.ComponentSerializer.toString(content[0]);
++        } else {
++            return net.md_5.bungee.chat.ComponentSerializer.toString(content);
++        }
++    }
++
++    public ClientboundSystemChatPacket(@javax.annotation.Nullable net.kyori.adventure.text.Component adventure$content, @javax.annotation.Nullable String content, boolean overlay) {
++        this.f_237849_ = com.mohistmc.paper.adventure.PaperAdventure.asVanilla(adventure$content); // Mohist - Compatibility
++        this.content0 = content;
++        this.adventure$content = adventure$content;
++        this.f_240374_ = overlay;
++        com.google.common.base.Preconditions.checkArgument(!(adventure$content == null && content == null), "Component adventure$content and String (json) content cannot both be null");
++    }
++    // Paper end
 +    public ClientboundSystemChatPacket(FriendlyByteBuf p_237852_) {
 +        this(p_237852_.m_130238_(), p_237852_.readBoolean());
 +    }
 +
 +    public void m_5779_(FriendlyByteBuf p_237860_) {
-+        p_237860_.m_130072_(this.content0, 262144); // Spigot
++        // Paper start
++        if (this.adventure$content != null) {
++            p_237860_.writeComponent(this.adventure$content);
++        } else if (this.f_237849_ != null) {
++            p_237860_.m_130072_(this.content0, 262144); // Spigot
++        } else {
++            throw new IllegalArgumentException("Must supply either adventure component or string json content");
++        }
++        // Paper end
 +        p_237860_.writeBoolean(this.f_240374_);
 +    }
 +
