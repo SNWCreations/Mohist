@@ -29,7 +29,7 @@
 -      return true;
 -   }
 +// Spigot start
-+public final class ClientboundSystemChatPacket implements Packet<ClientGamePacketListener> { // Paper - Adventure
++public final class ClientboundSystemChatPacket implements Packet<ClientGamePacketListener> {
 +   private final Component f_237849_;
 +   private final net.kyori.adventure.text.Component adventure$content; // Mohist - Mod Compatibility
 +   private final boolean f_240374_;
