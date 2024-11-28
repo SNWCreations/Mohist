@@ -2234,7 +2234,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
         @Deprecated // Paper
-        public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable java.util.UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent component) {
+        public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent component) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2247,7 +2247,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
         @Deprecated // Paper
-        public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable java.util.UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
+        public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
