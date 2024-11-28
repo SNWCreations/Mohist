@@ -1441,7 +1441,15 @@ public final class CraftServer implements Server {
         return configuration.getInt("settings.spawn-radius", -1);
     }
 
+    // Paper start
     @Override
+    public net.kyori.adventure.text.Component shutdownMessage() {
+        String msg = getShutdownMessage();
+        return msg != null ? net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(msg) : null;
+    }
+    // Paper end
+    @Override
+    @Deprecated // Paper
     public String getShutdownMessage() {
         return configuration.getString("settings.shutdown-message");
     }
@@ -1610,6 +1618,18 @@ public final class CraftServer implements Server {
 
     @Override
     public int broadcast(String message, String permission) {
+        // Paper start - Adventure
+        return this.broadcast(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(message), permission);
+    }
+
+    @Override
+    public int broadcast(net.kyori.adventure.text.Component message) {
+        return this.broadcast(message, BROADCAST_CHANNEL_USERS);
+    }
+
+    @Override
+    public int broadcast(net.kyori.adventure.text.Component message, String permission) {
+        // Paper end
         Set<CommandSender> recipients = new HashSet<>();
         for (Permissible permissible : getPluginManager().getPermissionSubscriptions(permission)) {
             if (permissible instanceof CommandSender && permissible.hasPermission(permission)) {
@@ -1617,14 +1637,14 @@ public final class CraftServer implements Server {
             }
         }
 
-        BroadcastMessageEvent broadcastMessageEvent = new BroadcastMessageEvent(!Bukkit.isPrimaryThread(), message, recipients);
+        BroadcastMessageEvent broadcastMessageEvent = new BroadcastMessageEvent(!Bukkit.isPrimaryThread(), message, recipients); // Paper - Adventure
         getPluginManager().callEvent(broadcastMessageEvent);
 
         if (broadcastMessageEvent.isCancelled()) {
             return 0;
         }
 
-        message = broadcastMessageEvent.getMessage();
+        message = broadcastMessageEvent.message(); // Paper - Adventure
 
         for (CommandSender recipient : recipients) {
             recipient.sendMessage(message);
@@ -1977,6 +1997,17 @@ public final class CraftServer implements Server {
     public boolean isPrimaryThread() {
         return Thread.currentThread().equals(console.serverThread)/* || console.hasStopped()*/; // All bets are off if we have shut down (e.g. due to watchdog)
     }
+
+    // Paper start - Adventure
+    @Override
+    public net.kyori.adventure.text.Component motd() {
+        return this.console.motd();
+    }
+    @Override
+    public void motd(final net.kyori.adventure.text.Component motd) {
+        this.console.motd(motd);
+    }
+    // Paper end
 
     @Override
     public String getMotd() {
@@ -2418,4 +2449,52 @@ public final class CraftServer implements Server {
         return spigot;
     }
     // Spigot end
+
+    // Paper start - adventure sounds
+    @Override
+    public void playSound(final net.kyori.adventure.sound.Sound sound) {
+        final long seed = sound.seed().orElseGet(this.console.overworld().getRandom()::nextLong);
+        for (ServerPlayer player : this.playerList.getPlayers()) {
+            player.connection.send(com.mohistmc.paper.adventure.PaperAdventure.asSoundPacket(sound, player.getX(), player.getY(), player.getZ(), seed, null));
+        }
+    }
+
+    @Override
+    public void playSound(final net.kyori.adventure.sound.Sound sound, final double x, final double y, final double z) {
+        com.mohistmc.paper.adventure.PaperAdventure.asSoundPacket(sound, x, y, z, sound.seed().orElseGet(this.console.overworld().getRandom()::nextLong), this.playSound0(x, y, z, this.console.getAllLevels()));
+    }
+
+    @Override
+    public void playSound(final net.kyori.adventure.sound.Sound sound, final net.kyori.adventure.sound.Sound.Emitter emitter) {
+        final long seed = sound.seed().orElseGet(this.console.overworld().getRandom()::nextLong);
+        if (emitter == net.kyori.adventure.sound.Sound.Emitter.self()) {
+            for (ServerPlayer player : this.playerList.getPlayers()) {
+                player.connection.send(com.mohistmc.paper.adventure.PaperAdventure.asSoundPacket(sound, player, seed, null));
+            }
+        } else if (emitter instanceof org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity craftEntity) {
+            final net.minecraft.world.entity.Entity entity = craftEntity.getHandle();
+            com.mohistmc.paper.adventure.PaperAdventure.asSoundPacket(sound, entity, seed, this.playSound0(entity.getX(), entity.getY(), entity.getZ(), List.of((ServerLevel) entity.level())));
+        } else {
+            throw new IllegalArgumentException("Sound emitter must be an Entity or self(), but was: " + emitter);
+        }
+    }
+
+    private java.util.function.BiConsumer<net.minecraft.network.protocol.Packet<?>, Float> playSound0(final double x, final double y, final double z, final Iterable<ServerLevel> levels) {
+        return (packet, distance) -> {
+            for (final ServerLevel level : levels) {
+                level.getServer().getPlayerList().broadcast(null, x, y, z, distance, level.dimension(), packet);
+            }
+        };
+    }
+    // Paper end
+    // Paper start
+    private Iterable<? extends net.kyori.adventure.audience.Audience> adventure$audiences;
+    @Override
+    public Iterable<? extends net.kyori.adventure.audience.Audience> audiences() {
+        if (this.adventure$audiences == null) {
+            this.adventure$audiences = com.google.common.collect.Iterables.concat(java.util.Collections.singleton(this.getConsoleSender()), this.getOnlinePlayers());
+        }
+        return this.adventure$audiences;
+    }
+    // Paper end
 }

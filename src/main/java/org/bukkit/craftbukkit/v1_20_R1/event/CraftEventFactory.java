@@ -954,7 +954,7 @@ public class CraftEventFactory {
      * Server methods
      */
     public static ServerListPingEvent callServerListPingEvent(Server craftServer, InetAddress address, String motd, int numPlayers, int maxPlayers) {
-        ServerListPingEvent event = new ServerListPingEvent("", address, motd, numPlayers, maxPlayers);
+        ServerListPingEvent event = new ServerListPingEvent("", address, craftServer.motd(), numPlayers, maxPlayers); // Paper - Adventure
         craftServer.getPluginManager().callEvent(event);
         return event;
     }

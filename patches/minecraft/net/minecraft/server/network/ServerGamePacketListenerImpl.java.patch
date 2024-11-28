@@ -238,7 +238,7 @@
           this.m_9942_(Component.m_237115_("multiplayer.disconnect.idling"));
        }
  
-@@ -337,12 +_,44 @@
+@@ -337,12 +_,49 @@
        return this.f_9745_.m_7779_(this.f_9743_.m_36316_());
     }
  
@@ -246,11 +246,17 @@
     public void m_9942_(Component p_9943_) {
 -      this.f_9742_.m_243124_(new ClientboundDisconnectPacket(p_9943_), PacketSendListener.m_243092_(() -> {
 -         this.f_9742_.m_129507_(p_9943_);
-+      disconnect(CraftChatMessage.fromComponent(p_9943_));
++      disconnect(com.mohistmc.paper.adventure.PaperAdventure.asAdventure(p_9943_)); // Mohist - Adventure
 +   }
 +   // CraftBukkit end
 +
++   // Mohist start - Adventure
 +   public void disconnect(String pTextComponent) {
++      disconnect(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(pTextComponent));
++   }
++
++   public void disconnect(net.kyori.adventure.text.Component pTextComponent) {
++      // Mohist end
 +      // CraftBukkit start - fire PlayerKickEvent
 +      if (this.processedDisconnect) {
 +         return;
@@ -259,7 +265,7 @@
 +         LoginHandler.disconnect(this, pTextComponent);
 +         return;
 +      }
-+      String leaveMessage = ChatFormatting.YELLOW + this.f_9743_.m_6302_() + " left the game.";
++      net.kyori.adventure.text.Component leaveMessage = net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.Component.text(this.f_9743_.m_6302_())); // Paper - Adventure // Mohist - Remove Paper config related expression
 +
 +      PlayerKickEvent event = new PlayerKickEvent(this.f_9743_.getBukkitEntity(), pTextComponent, leaveMessage);
 +
@@ -273,13 +279,12 @@
 +      }
 +      this.f_9743_.kickLeaveMessage = event.getLeaveMessage(); // CraftBukkit - SPIGOT-3034: Forward leave message to PlayerQuitEvent
 +      // Send the possibly modified leave message
-+      final Component ichatbasecomponent = CraftChatMessage.fromString(event.getReason(), true)[0];
++      final Component ichatbasecomponent = PaperAdventure.asVanilla(event.reason()); // Paper - Adventure
 +      // CraftBukkit end
 +      this.f_9742_.m_243124_(new ClientboundDisconnectPacket(ichatbasecomponent), PacketSendListener.m_243092_(() -> {
 +         this.f_9742_.m_129507_(ichatbasecomponent);
        }));
-+
-+      this.m_7026_(ichatbasecomponent); // CraftBukkit - fire quit instantly
++      this.onDisconnect(ichatbasecomponent, event.leaveMessage()); // CraftBukkit - fire quit instantly // Paper - use kick event leave message
        this.f_9742_.m_129540_();
 -      this.f_9745_.m_18709_(this.f_9742_::m_129541_);
 +      this.f_9745_.m_6681_(this.f_9742_::m_129541_); // CraftBukkit - Don't wait
@@ -1041,10 +1046,15 @@
     }
  
     public void m_5938_(ServerboundPaddleBoatPacket p_9878_) {
-@@ -1118,12 +_,22 @@
+@@ -1118,12 +_,37 @@
     }
  
     public void m_7026_(Component p_9825_) {
++      // Paper start
++      this.onDisconnect(p_9825_, null);
++   }
++   public void onDisconnect(Component p_9825_, @Nullable net.kyori.adventure.text.Component quitMessage) {
++      // Paper end
 +      // CraftBukkit start - Rarely it would send a disconnect line twice
 +      if (this.processedDisconnect) {
 +         return;
@@ -1058,9 +1068,19 @@
 -      this.f_9745_.m_6846_().m_240416_(Component.m_237110_("multiplayer.player.left", this.f_9743_.m_5446_()).m_130940_(ChatFormatting.YELLOW), false);
        this.f_9743_.m_9231_();
        this.f_9745_.m_6846_().m_11286_(this.f_9743_);
-+      String quitMessage = this.f_9745_.m_6846_().quitMessage;
-+      if ((quitMessage != null) && (quitMessage.length() > 0)) {
-+         this.f_9745_.m_6846_().broadcastMessage(CraftChatMessage.fromString(quitMessage));
++      // Paper start - Adventure
++      // Mohist start - We can't change method signature for compatibility
++      if (quitMessage == null) {
++         this.f_9745_.m_6846_().m_11286_(this.f_9743_);
++      } else {
++         this.f_9745_.m_6846_().remove(this.f_9743_, quitMessage);
++      }
++      // Mohist end
++      quitMessage = this.f_9745_.m_6846_().quitMessage; // Paper - pass in quitMessage to fix kick message not being used // Mohist - Use field to retrieve quit message for better compatibility
++      this.f_9745_.m_6846_().quitMessage = null; // Release quit message object to prevent memory leak
++      if ((quitMessage != null) && !quitMessage.equals(net.kyori.adventure.text.Component.empty())) {
++         this.f_9745_.m_6846_().m_240416_(PaperAdventure.asVanilla(quitMessage), false);
++         // Paper end
 +      }
 +      // CraftBukkit end
        this.f_9743_.m_8967_().m_7670_();

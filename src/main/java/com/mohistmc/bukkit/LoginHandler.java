@@ -55,7 +55,7 @@ public class LoginHandler {
         serverLoginPacketListener.state = ServerLoginPacketListenerImpl.State.NEGOTIATING; // FORGE: continue NEGOTIATING, we move to READY_TO_ACCEPT after Forge is ready
     }
 
-    public static void disconnect(ServerGamePacketListenerImpl serverGamePacketListener, String pTextComponent){
+    public static void disconnect(ServerGamePacketListenerImpl serverGamePacketListener, net.kyori.adventure.text.Component pTextComponent){
         Waitable waitable = new Waitable() {
             @Override
             protected Object evaluate() {

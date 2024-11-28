@@ -65,6 +65,14 @@
     private PlayerList f_129763_;
     private volatile boolean f_129764_ = true;
     private boolean f_129765_;
+@@ -213,6 +_,7 @@
+    private boolean f_129708_;
+    @Nullable
+    private String f_129709_;
++   private net.kyori.adventure.text.Component mohist$adventure$motd; // Paper - Adventure // Mohist - Use another field for compatibility
+    private int f_129711_;
+    public final long[] f_129748_ = new long[100];
+    @Nullable
 @@ -237,24 +_,44 @@
     private final FrameTimer f_129735_ = new FrameTimer();
     private boolean f_129736_;
@@ -670,7 +678,7 @@
     private ServerStatus m_271988_() {
        ServerStatus.Players serverstatus$players = this.m_271961_();
 -      return new ServerStatus(Component.m_130674_(this.f_129709_), Optional.of(serverstatus$players), Optional.of(ServerStatus.Version.m_272202_()), Optional.ofNullable(this.f_271173_), this.m_214005_());
-+      return new ServerStatus(Component.m_130674_(this.f_129709_), Optional.of(serverstatus$players), Optional.of(ServerStatus.Version.m_272202_()), Optional.ofNullable(this.f_271173_), this.m_214005_(), Optional.of(new net.minecraftforge.network.ServerStatusPing()));
++      return new ServerStatus(com.mohistmc.paper.adventure.PaperAdventure.asVanilla(this.mohist$adventure$motd), Optional.of(serverstatus$players), Optional.of(ServerStatus.Version.m_272202_()), Optional.ofNullable(this.f_271173_), this.m_214005_(), Optional.of(new net.minecraftforge.network.ServerStatusPing())); // Mohist - Adventure
     }
  
     private ServerStatus.Players m_271961_() {
@@ -760,6 +768,26 @@
     }
  
     public SystemReport m_177935_(SystemReport p_177936_) {
+@@ -1141,7 +_,19 @@
+    }
+ 
+    public void m_129989_(String p_129990_) {
++      // Paper start - Adventure
+       this.f_129709_ = p_129990_;
++      this.mohist$adventure$motd = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserializeOr(p_129990_, net.kyori.adventure.text.Component.empty()); // Mohist - Adventure
++   }
++
++   public net.kyori.adventure.text.Component motd() {
++      return this.mohist$adventure$motd;
++   }
++
++   public void motd(net.kyori.adventure.text.Component motd) {
++      // Paper end - Adventure
++      this.f_129709_ = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(motd); // Mohist - Adventure
++      this.mohist$adventure$motd = motd;
+    }
+ 
+    public boolean m_129918_() {
 @@ -1164,7 +_,7 @@
  
     @Nullable
