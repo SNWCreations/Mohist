@@ -11,7 +11,7 @@ import java.util.List;
  * Represents a book ({@link Material#WRITABLE_BOOK} or {@link
  * Material#WRITTEN_BOOK}) that can have a title, an author, and pages.
  */
-public interface BookMeta extends ItemMeta {
+public interface BookMeta extends ItemMeta, net.kyori.adventure.inventory.Book { // Paper
 
     /**
      * Represents the generation (or level of copying) of a written book
@@ -120,16 +120,60 @@ public interface BookMeta extends ItemMeta {
      */
     boolean hasPages();
 
+    // Paper start
     /**
-     * Gets the specified page in the book. The given page must exist.
+     * Gets the title of the book.
+     * <p>
+     * Plugins should check that hasTitle() returns true before calling this
+     * method.
+     *
+     * @return the title of the book
+     */
+    @Override
+    net.kyori.adventure.text.@Nullable Component title();
+
+    /**
+     * Sets the title of the book.
+     * <p>
+     * Limited to 32 characters. Removes title when given null.
+     *
+     * @param title the title to set
+     * @return the same {@link BookMeta} instance
+     */
+    @org.jetbrains.annotations.Contract(value = "_ -> this", pure = false)
+    @Override
+    @NotNull BookMeta title(net.kyori.adventure.text.@Nullable Component title);
+
+    /**
+     * Gets the author of the book.
+     * <p>
+     * Plugins should check that hasAuthor() returns true before calling this
+     * method.
+     *
+     * @return the author of the book
+     */
+    @Override
+    net.kyori.adventure.text.@Nullable Component author();
+
+    /**
+     * Sets the author of the book. Removes author when given null.
+     *
+     * @param author the author to set
+     * @return the same {@link BookMeta} instance
+     */
+    @org.jetbrains.annotations.Contract(value = "_ -> this", pure = false)
+    @Override
+    @NotNull BookMeta author(net.kyori.adventure.text.@Nullable Component author);
+
+    /**
+     * Gets the specified page in the book. The page must exist.
      * <p>
      * Pages are 1-indexed.
      *
      * @param page the page number to get, in range [1, getPageCount()]
      * @return the page from the book
      */
-    @NotNull
-    String getPage(int page);
+    net.kyori.adventure.text.@NotNull Component page(int page);
 
     /**
      * Sets the specified page in the book. Pages of the book must be
@@ -143,31 +187,7 @@ public interface BookMeta extends ItemMeta {
      * @param page the page number to set, in range [1, getPageCount()]
      * @param data the data to set for that page
      */
-    void setPage(int page, @NotNull String data);
-
-    /**
-     * Gets all the pages in the book.
-     *
-     * @return list of all the pages in the book
-     */
-    @NotNull
-    List<String> getPages();
-
-    /**
-     * Clears the existing book pages, and sets the book to use the provided
-     * pages. Maximum 100 pages with 256 characters per page.
-     *
-     * @param pages A list of pages to set the book to use
-     */
-    void setPages(@NotNull List<String> pages);
-
-    /**
-     * Clears the existing book pages, and sets the book to use the provided
-     * pages. Maximum 50 pages with 256 characters per page.
-     *
-     * @param pages A list of strings, each being a page
-     */
-    void setPages(@NotNull String... pages);
+    void page(int page, net.kyori.adventure.text.@NotNull Component data);
 
     /**
      * Adds new pages to the end of the book. Up to a maximum of 50 pages with
@@ -175,6 +195,101 @@ public interface BookMeta extends ItemMeta {
      *
      * @param pages A list of strings, each being a page
      */
+    void addPages(net.kyori.adventure.text.@NotNull Component @NotNull ... pages);
+
+    interface BookMetaBuilder extends Builder {
+
+        @Override
+        @NotNull BookMetaBuilder title(net.kyori.adventure.text.@Nullable Component title);
+
+        @Override
+        @NotNull BookMetaBuilder author(net.kyori.adventure.text.@Nullable Component author);
+
+        @Override
+        @NotNull BookMetaBuilder addPage(net.kyori.adventure.text.@NotNull Component page);
+
+        @Override
+        @NotNull BookMetaBuilder pages(net.kyori.adventure.text.@NotNull Component @NotNull ... pages);
+
+        @Override
+        @NotNull BookMetaBuilder pages(java.util.@NotNull Collection<net.kyori.adventure.text.Component> pages);
+
+        @Override
+        @NotNull BookMeta build();
+    }
+
+    @Override
+    @NotNull BookMetaBuilder toBuilder();
+
+    // Paper end
+
+    /**
+     * Gets the specified page in the book. The given page must exist.
+     * <p>
+     * Pages are 1-indexed.
+     *
+     * @param page the page number to get, in range [1, getPageCount()]
+     * @return the page from the book
+     * @deprecated in favour of {@link #page(int)}
+     */
+    @NotNull
+    @Deprecated // Paper
+    String getPage(int page);
+
+    /**
+     * Sets the specified page in the book. Pages of the book must be
+     * contiguous.
+     * <p>
+     * The data can be up to 256 characters in length, additional characters
+     * are truncated.
+     * <p>
+     * Pages are 1-indexed.
+     *
+     * @param page the page number to set, in range [1, getPageCount()]
+     * @param data the data to set for that page
+     * @deprecated in favour of {@link #page(int, net.kyori.adventure.text.Component)}
+     */
+    @Deprecated // Paper
+    void setPage(int page, @NotNull String data);
+
+    /**
+     * Gets all the pages in the book.
+     *
+     * @return list of all the pages in the book
+     * @deprecated in favour of {@link #pages()}
+     */
+    @NotNull
+    @Deprecated // Paper
+    List<String> getPages();
+
+    /**
+     * Clears the existing book pages, and sets the book to use the provided
+     * pages. Maximum 100 pages with 256 characters per page.
+     *
+     * @param pages A list of pages to set the book to use
+     * @deprecated in favour of {@link #pages(List)}
+     */
+    @Deprecated // Paper
+    void setPages(@NotNull List<String> pages);
+
+    /**
+     * Clears the existing book pages, and sets the book to use the provided
+     * pages. Maximum 50 pages with 256 characters per page.
+     *
+     * @param pages A list of strings, each being a page
+     * @deprecated in favour of {@link #pages(net.kyori.adventure.text.Component...)}
+     */
+    @Deprecated // Paper
+    void setPages(@NotNull String... pages);
+
+    /**
+     * Adds new pages to the end of the book. Up to a maximum of 50 pages with
+     * 256 characters per page.
+     *
+     * @param pages A list of strings, each being a page
+     * @deprecated in favour of {@link #addPages(net.kyori.adventure.text.Component...)}
+     */
+    @Deprecated // Paper
     void addPage(@NotNull String... pages);
 
     /**
