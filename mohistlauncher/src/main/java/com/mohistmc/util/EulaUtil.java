@@ -40,6 +40,12 @@ public class EulaUtil {
     }
 
     public static boolean hasAcceptedEULA() throws IOException {
+        if (Boolean.getBoolean("com.mojang.eula.agree")) { // respect Spigot EULA agreement JVM argument there
+            System.err.println( "You have used the Spigot command line EULA agreement flag." );
+            System.err.println( "By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula)." );
+            System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
+            return true;
+        }
         return (globalEula.exists() && Files.readAllLines(globalEula.toPath()).contains("eula=true")) || (eula.exists() && Files.readAllLines(eula.toPath()).contains("eula=true"));
     }
 }
