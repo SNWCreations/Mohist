@@ -276,12 +276,17 @@
        this.f_11204_.m_78433_(p_11277_);
        ServerStatsCounter serverstatscounter = this.f_11202_.get(p_11277_.m_20148_());
        if (serverstatscounter != null) {
-@@ -336,9 +_,25 @@
+@@ -336,9 +_,30 @@
  
     }
  
-+   public String quitMessage;
++   public @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component quitMessage;
     public void m_11286_(ServerPlayer p_11287_) {
++      // Paper start
++      this.remove(p_11287_, net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, com.mohistmc.paper.adventure.PaperAdventure.asAdventure(p_11287_.m_5446_())));
++   }
++   public void remove(ServerPlayer p_11287_, net.kyori.adventure.text.Component leaveMessage) {
++      // Paper end
 +      net.minecraftforge.event.ForgeEventFactory.firePlayerLoggedOut(p_11287_);
        ServerLevel serverlevel = p_11287_.m_284548_();
        p_11287_.m_36220_(Stats.f_12989_);
@@ -292,7 +297,7 @@
 +         p_11287_.m_6915_();
 +      }
 +
-+      PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), p_11287_.kickLeaveMessage != null ? p_11287_.kickLeaveMessage : "\u00A7e" + p_11287_.m_6302_() + " left the game");
++      PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), leaveMessage); // Paper - Adventure
 +      cserver.getPluginManager().callEvent(playerQuitEvent);
 +      p_11287_.getBukkitEntity().disconnect(playerQuitEvent.getQuitMessage());
 +
@@ -330,7 +335,7 @@
 +      // This removes the scoreboard (and player reference) for the specific player in the manager
 +      cserver.getScoreboardManager().removePlayer(p_11287_.getBukkitEntity());
 +      // CraftBukkit end
-+      quitMessage = playerQuitEvent.getQuitMessage();
++      quitMessage = playerQuitEvent.quitMessage();
 +   }
 +
 +   // Mohist start
@@ -738,7 +743,7 @@
 -   }
 +      // CraftBukkit start - disconnect safely
 +      for (ServerPlayer player : this.f_11196_) {
-+         player.f_8906_.disconnect(this.f_11195_.server.getShutdownMessage()); // CraftBukkit - add custom shutdown message
++         player.f_8906_.m_9942_(com.mohistmc.paper.adventure.PaperAdventure.asVanilla(this.f_11195_.server.shutdownMessage())); // CraftBukkit - add custom shutdown message // Paper - Adventure // Mohist - Adventure -> Vanilla instead of new method for better mod compatibility
 +      }
 +      // CraftBukkit end
 +

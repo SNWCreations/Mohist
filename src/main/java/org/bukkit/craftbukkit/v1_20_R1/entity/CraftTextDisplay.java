@@ -34,6 +34,18 @@ public class CraftTextDisplay extends CraftDisplay implements TextDisplay {
         getHandle().setText(CraftChatMessage.fromString(text, true)[0]);
     }
 
+    // Paper start
+    @Override
+    public net.kyori.adventure.text.Component text() {
+        return com.mohistmc.paper.adventure.PaperAdventure.asAdventure(this.getHandle().getText()); // Mohist - Use Mohist's PaperAdventure
+    }
+
+    @Override
+    public void text(net.kyori.adventure.text.Component text) {
+        this.getHandle().setText(text == null ? net.minecraft.network.chat.Component.empty() : com.mohistmc.paper.adventure.PaperAdventure.asVanilla(text)); // Mohist - Use Mohist's PaperAdventure
+    }
+    // Paper end
+
     @Override
     public int getLineWidth() {
         return getHandle().getLineWidth();

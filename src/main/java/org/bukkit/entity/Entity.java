@@ -731,10 +731,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
     Spigot spigot();
     // Spigot end
 
+    // Paper start
     @NotNull
     @Override
     default net.kyori.adventure.text.event.HoverEvent<net.kyori.adventure.text.event.HoverEvent.ShowEntity> asHoverEvent(final @NotNull java.util.function.UnaryOperator<net.kyori.adventure.text.event.HoverEvent.ShowEntity> op) {
         return net.kyori.adventure.text.event.HoverEvent.showEntity(op.apply(net.kyori.adventure.text.event.HoverEvent.ShowEntity.of(this.getType().getKey(), this.getUniqueId(), this.customName())));
     }
 
+    /**
+     * Gets the entity's display name formatted with their team prefix/suffix and
+     * the entity's default hover/click events.
+     *
+     * @return the team display name
+     */
+    net.kyori.adventure.text.@NotNull Component teamDisplayName();
+    // Paper end
 }

@@ -52,7 +52,41 @@ import java.util.UUID;
 /**
  * Represents a player, connected or not
  */
-public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginMessageRecipient {
+public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginMessageRecipient, net.kyori.adventure.identity.Identified, net.kyori.adventure.bossbar.BossBarViewer, com.mohistmc.paper.network.NetworkClient { // Paper // Mohist - Use Mohistified Paper API
+
+    // Paper start
+    @Override
+    default net.kyori.adventure.identity.@NotNull Identity identity() {
+        return net.kyori.adventure.identity.Identity.identity(this.getUniqueId());
+    }
+
+    /**
+     * Gets an unmodifiable view of all known currently active bossbars.
+     * <p>
+     * <b>This currently only returns bossbars shown to the player via
+     * {@link #showBossBar(net.kyori.adventure.bossbar.BossBar)} and does not contain bukkit
+     * {@link org.bukkit.boss.BossBar} instances shown to the player.</b>
+     *
+     * @return an unmodifiable view of all known currently active bossbars
+     * @since 4.14.0
+     */
+    @Override
+    @org.jetbrains.annotations.UnmodifiableView @NotNull Iterable<? extends net.kyori.adventure.bossbar.BossBar> activeBossBars();
+
+    /**
+     * Gets the "friendly" name to display of this player.
+     *
+     * @return the display name
+     */
+    net.kyori.adventure.text.@NotNull Component displayName();
+
+    /**
+     * Sets the "friendly" name to display of this player.
+     *
+     * @param displayName the display name to set
+     */
+    void displayName(final net.kyori.adventure.text.@Nullable Component displayName);
+    // Paper end
 
     /**
      * {@inheritDoc}
@@ -84,12 +118,44 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      */
     public void setDisplayName(@Nullable String name);
 
+    // Paper start
+    /**
+     * Sets the name that is shown on the in-game player list.
+     * <p>
+     * If the value is null, the name will be identical to {@link #getName()}.
+     *
+     * @param name new player list name
+     */
+    void playerListName(net.kyori.adventure.text.@Nullable Component name);
+
+    /**
+     * Gets the name that is shown on the in-game player list.
+     *
+     * @return the player list name
+     */
+    net.kyori.adventure.text.@NotNull Component playerListName();
+
+    /**
+     * Gets the currently displayed player list header for this player.
+     *
+     * @return player list header or null
+     */
+    net.kyori.adventure.text.@Nullable Component playerListHeader();
+
+    /**
+     * Gets the currently displayed player list footer for this player.
+     *
+     * @return player list footer or null
+     */
+    net.kyori.adventure.text.@Nullable Component playerListFooter();
+    // Paper end
     /**
      * Gets the name that is shown on the player list.
      *
      * @return the player list name
      */
     @NotNull
+    @Deprecated // Paper
     public String getPlayerListName();
 
     /**
@@ -99,6 +165,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      *
      * @param name new player list name
      */
+    @Deprecated // Paper
     public void setPlayerListName(@Nullable String name);
 
     /**
@@ -115,6 +182,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      * @return player list header or null
      */
     @Nullable
+    @Deprecated // Paper
     public String getPlayerListFooter();
 
     /**
@@ -122,6 +190,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      *
      * @param header player list header, null for empty
      */
+    @Deprecated // Paper
     public void setPlayerListHeader(@Nullable String header);
 
     /**
@@ -129,6 +198,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      *
      * @param footer player list footer, null for empty
      */
+    @Deprecated // Paper
     public void setPlayerListFooter(@Nullable String footer);
 
     /**
@@ -138,6 +208,7 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      * @param header player list header, null for empty
      * @param footer player list footer, null for empty
      */
+    @Deprecated // Paper
     public void setPlayerListHeaderFooter(@Nullable String header, @Nullable String footer);
 
     /**
@@ -823,6 +894,121 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      * @param map The map to be sent
      */
     public void sendMap(@NotNull MapView map);
+
+    // Paper start
+    /**
+     * Sends an array of components as a single message to the specified screen position of this player
+     *
+     * @deprecated This is unlikely the API you want to use. See {@link #sendActionBar(String)} for a more proper Action Bar API. This deprecated API may send unsafe items to the client.
+     * @param position the screen position
+     * @param components the components to send
+     */
+    @Deprecated
+    public default void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
+        spigot().sendMessage(position, components);
+    }
+
+    /**
+     * Set the text displayed in the player list header and footer for this player
+     *
+     * @param header content for the top of the player list
+     * @param footer content for the bottom of the player list
+     * @deprecated in favour of {@link #sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component, net.kyori.adventure.text.Component)}
+     */
+    @Deprecated
+    public void setPlayerListHeaderFooter(@Nullable net.md_5.bungee.api.chat.BaseComponent[] header, @Nullable net.md_5.bungee.api.chat.BaseComponent[] footer);
+
+    /**
+     * Set the text displayed in the player list header and footer for this player
+     *
+     * @param header content for the top of the player list
+     * @param footer content for the bottom of the player list
+     * @deprecated in favour of {@link #sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component, net.kyori.adventure.text.Component)}
+     */
+    @Deprecated
+    public void setPlayerListHeaderFooter(@Nullable net.md_5.bungee.api.chat.BaseComponent header, @Nullable net.md_5.bungee.api.chat.BaseComponent footer);
+
+    /**
+     * Update the times for titles displayed to the player
+     *
+     * @param fadeInTicks  ticks to fade-in
+     * @param stayTicks    ticks to stay visible
+     * @param fadeOutTicks ticks to fade-out
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void setTitleTimes(int fadeInTicks, int stayTicks, int fadeOutTicks);
+
+    /**
+     * Update the subtitle of titles displayed to the player
+     *
+     * @param subtitle Subtitle to set
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void setSubtitle(net.md_5.bungee.api.chat.BaseComponent[] subtitle);
+
+    /**
+     * Update the subtitle of titles displayed to the player
+     *
+     * @param subtitle Subtitle to set
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void setSubtitle(net.md_5.bungee.api.chat.BaseComponent subtitle);
+
+    /**
+     * Show the given title to the player, along with the last subtitle set, using the last set times
+     *
+     * @param title Title to set
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void showTitle(@Nullable net.md_5.bungee.api.chat.BaseComponent[] title);
+
+    /**
+     * Show the given title to the player, along with the last subtitle set, using the last set times
+     *
+     * @param title Title to set
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void showTitle(@Nullable net.md_5.bungee.api.chat.BaseComponent title);
+
+    /**
+     * Show the given title and subtitle to the player using the given times
+     *
+     * @param title        big text
+     * @param subtitle     little text under it
+     * @param fadeInTicks  ticks to fade-in
+     * @param stayTicks    ticks to stay visible
+     * @param fadeOutTicks ticks to fade-out
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void showTitle(@Nullable net.md_5.bungee.api.chat.BaseComponent[] title, @Nullable net.md_5.bungee.api.chat.BaseComponent[] subtitle, int fadeInTicks, int stayTicks, int fadeOutTicks);
+
+    /**
+     * Show the given title and subtitle to the player using the given times
+     *
+     * @param title        big text
+     * @param subtitle     little text under it
+     * @param fadeInTicks  ticks to fade-in
+     * @param stayTicks    ticks to stay visible
+     * @param fadeOutTicks ticks to fade-out
+     * @deprecated Use {@link #showTitle(net.kyori.adventure.title.Title)} or {@link #sendTitlePart(net.kyori.adventure.title.TitlePart, Object)}
+     */
+    @Deprecated
+    public void showTitle(@Nullable net.md_5.bungee.api.chat.BaseComponent title, @Nullable net.md_5.bungee.api.chat.BaseComponent subtitle, int fadeInTicks, int stayTicks, int fadeOutTicks);
+
+    /**
+     * Hide any title that is currently visible to the player
+     *
+     * @deprecated use {@link #clearTitle()}
+     */
+    @Deprecated
+    public void hideTitle();
+    // Paper end
 
     /**
      * Send a hurt animation. This fakes incoming damage towards the player from
@@ -1858,7 +2044,14 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      * @return client view distance as above
      */
     public int getClientViewDistance();
-
+    // Paper start
+    /**
+     * Gets the player's current locale.
+     *
+     * @return the player's locale
+     */
+    @NotNull java.util.Locale locale();
+    // Paper end
     /**
      * Gets the player's estimated ping in milliseconds.
      *
@@ -1996,11 +2189,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Deprecated // Paper
         @Override
         public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent component) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Deprecated // Paper
         @Override
         public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -2011,7 +2206,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          *
          * @param position the screen position
          * @param component the components to send
+         * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
+        @Deprecated // Paper
         public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @NotNull net.md_5.bungee.api.chat.BaseComponent component) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -2021,7 +2218,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          *
          * @param position the screen position
          * @param components the components to send
+         * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
+        @Deprecated // Paper
         public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -2032,7 +2231,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          * @param position the screen position
          * @param sender the sender of the message
          * @param component the components to send
+         * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
+        @Deprecated // Paper
         public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent component) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -2043,7 +2244,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          * @param position the screen position
          * @param sender the sender of the message
          * @param components the components to send
+         * @deprecated use {@code sendMessage} methods that accept {@link net.kyori.adventure.text.Component}
          */
+        @Deprecated // Paper
         public void sendMessage(@NotNull net.md_5.bungee.api.ChatMessageType position, @Nullable UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
             throw new UnsupportedOperationException("Not supported yet.");
         }

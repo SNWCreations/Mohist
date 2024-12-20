@@ -118,6 +118,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private final EntityType entityType;
     private EntityDamageEvent lastDamageEvent;
     private final CraftPersistentDataContainer persistentDataContainer = new CraftPersistentDataContainer(DATA_TYPE_REGISTRY);
+    protected net.kyori.adventure.pointer.Pointers adventure$pointers; // Paper - implement pointers
 
     public CraftEntity(final CraftServer server, final Entity entity) {
         this.server = server;
@@ -799,6 +800,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     }
 
     @Override
+    public net.kyori.adventure.pointer.Pointers pointers() {
+        if (this.adventure$pointers == null) {
+            this.adventure$pointers = net.kyori.adventure.pointer.Pointers.builder()
+                    .withDynamic(net.kyori.adventure.identity.Identity.DISPLAY_NAME, this::name)
+                    .withDynamic(net.kyori.adventure.identity.Identity.UUID, this::getUniqueId)
+                    .withStatic(net.kyori.adventure.permission.PermissionChecker.POINTER, this::permissionValue)
+                    .build();
+        }
+
+        return this.adventure$pointers;
+    }
+    // Paper end
+    @Override
     public void setCustomName(String name) {
         // sane limit for name length
         if (name != null && name.length() > 256) {
@@ -877,6 +891,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     public String getName() {
         return CraftChatMessage.fromComponent(getHandle().getName());
     }
+
+    // Paper start
+    @Override
+    public net.kyori.adventure.text.@org.jetbrains.annotations.NotNull Component name() {
+        return com.mohistmc.paper.adventure.PaperAdventure.asAdventure(this.getHandle().getName());
+    }
+
+    @Override
+    public net.kyori.adventure.text.@org.jetbrains.annotations.NotNull Component teamDisplayName() {
+        return com.mohistmc.paper.adventure.PaperAdventure.asAdventure(this.getHandle().getDisplayName());
+    }
+    // Paper end
 
     @Override
     public boolean isPermissionSet(String name) {

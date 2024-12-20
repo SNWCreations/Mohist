@@ -1,0 +1,10 @@
+--- a/net/minecraft/network/PacketEncoder.java
++++ b/net/minecraft/network/PacketEncoder.java
+@@ -33,6 +_,7 @@
+          } else {
+             FriendlyByteBuf friendlybytebuf = new FriendlyByteBuf(p_130547_);
+             friendlybytebuf.m_130130_(i);
++            friendlybytebuf.adventure$locale = p_130545_.channel().attr(com.mohistmc.paper.adventure.PaperAdventure.LOCALE_ATTRIBUTE).get(); // Paper
+ 
+             try {
+                int j = friendlybytebuf.writerIndex();

@@ -62,7 +62,7 @@ import java.util.logging.Logger;
 /**
  * Represents a server implementation.
  */
-public interface Server extends PluginMessageRecipient {
+public interface Server extends PluginMessageRecipient, net.kyori.adventure.audience.ForwardingAudience { // Paper
 
     /**
      * Used for all administrative messages, such as an operator using a
@@ -957,8 +957,33 @@ public interface Server extends PluginMessageRecipient {
      * @param permission the required permission {@link Permissible
      *     permissibles} must have to receive the broadcast
      * @return number of message recipients
+     * @deprecated in favour of {@link #broadcast(net.kyori.adventure.text.Component, String)}
      */
+    @Deprecated // Paper
     public int broadcast(@NotNull String message, @NotNull String permission);
+    // Paper start
+    /**
+     * Broadcast a message to all players.
+     * <p>
+     * This is the same as calling {@link #broadcast(net.kyori.adventure.text.Component,
+     * java.lang.String)} with the {@link #BROADCAST_CHANNEL_USERS} permission.
+     *
+     * @param message the message
+     * @return the number of players
+     */
+    int broadcast(net.kyori.adventure.text.@NotNull Component message);
+
+    /**
+     * Broadcasts the specified message to every user with the given
+     * permission name.
+     *
+     * @param message message to broadcast
+     * @param permission the required permission {@link Permissible
+     *     permissibles} must have to receive the broadcast
+     * @return number of message recipients
+     */
+    int broadcast(net.kyori.adventure.text.@NotNull Component message, @NotNull String permission);
+    // Paper end
 
     /**
      * Gets the player by the given name, regardless if they are offline or
@@ -1347,27 +1372,56 @@ public interface Server extends PluginMessageRecipient {
      */
     boolean isPrimaryThread();
 
+    // Paper start
     /**
      * Gets the message that is displayed on the server list.
      *
-     * @return the servers MOTD
+     * @return the server's MOTD
      */
-    @NotNull
-    String getMotd();
+    net.kyori.adventure.text.@NotNull Component motd();
 
     /**
      * Set the message that is displayed on the server list.
      *
      * @param motd The message to be displayed
      */
-    void setMotd(@NotNull String motd);
+    void motd(final net.kyori.adventure.text.@NotNull Component motd);
 
     /**
      * Gets the default message that is displayed when the server is stopped.
      *
      * @return the shutdown message
      */
+    net.kyori.adventure.text.@Nullable Component shutdownMessage();
+    // Paper end
+
+    /**
+     * Gets the message that is displayed on the server list.
+     *
+     * @return the servers MOTD
+     * @deprecated in favour of {@link #motd()}
+     */
+    @NotNull
+    @Deprecated // Paper
+    String getMotd();
+
+    /**
+     * Set the message that is displayed on the server list.
+     *
+     * @param motd The message to be displayed
+     * @deprecated in favour of {@link #motd(net.kyori.adventure.text.Component)}
+     */
+    @Deprecated // Paper
+    void setMotd(@NotNull String motd);
+
+    /**
+     * Gets the default message that is displayed when the server is stopped.
+     *
+     * @return the shutdown message
+     * @deprecated in favour of {@link #shutdownMessage()}
+     */
     @Nullable
+    @Deprecated // Paper
     String getShutdownMessage();
 
     /**

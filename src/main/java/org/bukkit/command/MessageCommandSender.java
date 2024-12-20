@@ -49,6 +49,13 @@ public interface MessageCommandSender extends CommandSender {
         throw new NotImplementedException();
     }
 
+    // Paper start
+    @Override
+    default net.kyori.adventure.text.@org.jetbrains.annotations.NotNull Component name() {
+        throw new UnsupportedOperationException();
+    }
+    // Paper end
+
     @Override
     default boolean isOp() {
         throw new NotImplementedException();

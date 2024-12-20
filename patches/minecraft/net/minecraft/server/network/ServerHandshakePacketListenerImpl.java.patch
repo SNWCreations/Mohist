@@ -121,3 +121,14 @@
              } else {
                 this.f_9966_.m_129507_(f_9964_);
              }
+@@ -51,6 +_,10 @@
+             throw new UnsupportedOperationException("Invalid intention " + p_9975_.m_134735_());
+       }
+ 
++      // Paper start - NetworkClient implementation
++      this.f_9966_.protocolVersion = p_9975_.m_134738_();
++      this.f_9966_.virtualHost = com.mohistmc.paper.network.PaperNetworkClient.prepareVirtualHost(p_9975_.f_134721_, p_9975_.f_134722_);
++      // Paper end
+    }
+ 
+    public void m_7026_(Component p_9973_) {
