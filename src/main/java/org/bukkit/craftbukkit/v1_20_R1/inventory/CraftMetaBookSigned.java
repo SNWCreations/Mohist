@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap; // Fork - fix compile error
+
 @DelegateDeserialization(SerializableMeta.class)
 class CraftMetaBookSigned extends CraftMetaBook implements BookMeta {
 
@@ -79,7 +81,7 @@ class CraftMetaBookSigned extends CraftMetaBook implements BookMeta {
     }
 
     @Override
-    Builder<String, Object> serialize(Builder<String, Object> builder) {
+    ImmutableMap.Builder<String, Object> serialize(ImmutableMap.Builder<String, Object> builder) { // Fork - fix compile error
         super.serialize(builder);
         return builder;
     }
