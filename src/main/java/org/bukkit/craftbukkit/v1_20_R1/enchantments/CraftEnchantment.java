@@ -72,7 +72,7 @@ public class CraftEnchantment extends Enchantment {
 
     @Override
     public boolean isCursed() {
-        return target instanceof BindingCurseEnchantment || target instanceof VanishingCurseEnchantment;
+        return this.target.isCurse(); // Paper
     }
 
     @Override
