@@ -1594,6 +1594,27 @@
           }
        } else {
           this.f_20954_ = 0;
+@@ -2576,6 +_,20 @@
+ 
+       this.m_6138_();
+       this.m_9236_().m_46473_().m_7238_();
++      // Paper start
++      if (((ServerLevel) this.m_9236_()).hasEntityMoveEvent && !(this instanceof net.minecraft.world.entity.player.Player)) {
++         if (this.f_19854_ != this.m_20185_() || this.f_19855_ != this.m_20186_() || this.f_19856_ != this.m_20189_() || this.f_19859_ != this.m_146908_() || this.f_19860_ != this.m_146909_()) {
++            Location from = new Location(this.m_9236_().getWorld(), this.f_19854_, this.f_19855_, this.f_19856_, this.f_19859_, this.f_19860_);
++            Location to = new Location (this.m_9236_().getWorld(), this.m_20185_(), this.m_20186_(), this.m_20189_(), this.m_146908_(), this.m_146909_());
++            com.mohistmc.paper.event.entity.EntityMoveEvent event = new com.mohistmc.paper.event.entity.EntityMoveEvent(this.getBukkitLivingEntity(), from, to.clone());
++            if (!event.callEvent()) {
++               this.m_19890_(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
++            } else if (!to.equals(event.getTo())) {
++               this.m_19890_(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch());
++            }
++         }
++      }
++      // Paper end
+       if (!this.m_9236_().f_46443_ && this.m_6126_() && this.m_20071_()) {
+          this.m_6469_(this.m_269291_().m_269063_(), 1.0F);
+       }
 @@ -2587,9 +_,12 @@
     }
  
