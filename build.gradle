@@ -880,10 +880,15 @@ project.gradle.startParameter.excludedTaskNames.add(':clean:genPatches')
 
 tasks.register("githubActionOutput") {
     it.onlyIf {
-        System.env.GITHUB_ACTIONS
+        System.getenv().containsKey("GITHUB_ACTIONS")
     }
     it.doLast {
-        println "::set-output name=artifact_name::Mohist-${project.minecraft_version}"
+        var outputFile = new File(System.getenv().get("GITHUB_OUTPUT")).toPath()
+        try (var writer = Files.newBufferedWriter(outputFile)) {
+            writer.writeLine("artifact_name=Mohist-${project.minecraft_version}")
+        } catch (IOException e) {
+            logger.error("Error writing artifact name", e)
+        }
     }
 }
 // Fork end
