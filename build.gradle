@@ -871,7 +871,22 @@ task setup() {  //These must be strings so that we can do lazy resolution. Else 
     dependsOn ':mohist:extractMapped'
 }
 
+// Fork start - GitHub Actions automated building, thanks USS-Shenzhou
+tasks.getByPath(':clean:compileJava').mustRunAfter tasks.getByPath(':clean:extractMapped')
+
+tasks.getByPath(':mohist:compileJava').mustRunAfter tasks.getByPath(':mohist:extractMapped')
+
 project.gradle.startParameter.excludedTaskNames.add(':clean:genPatches')
+
+tasks.register("githubActionOutput") {
+    it.onlyIf {
+        System.env.GITHUB_ACTIONS
+    }
+    it.doLast {
+        println "::set-output name=artifact_name::Mohist-${project.minecraft_version}"
+    }
+}
+// Fork end
 
 idea {
     module {
