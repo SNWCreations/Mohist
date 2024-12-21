@@ -18,6 +18,7 @@ import org.bukkit.scoreboard.Team;
 
 public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     final Scoreboard board;
+    boolean registeredGlobally = false; // Paper
 
     CraftScoreboard(Scoreboard board) {
         this.board = board;
@@ -25,42 +26,66 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
 
     @Override
     public CraftObjective registerNewObjective(String name, String criteria) {
-        return registerNewObjective(name, criteria, name);
+        return this.registerNewObjective(name, criteria, name);
     }
+    // Paper start - Adventure
+    @Override
+    public CraftObjective registerNewObjective(String name, String criteria, net.kyori.adventure.text.Component displayName) {
+        return this.registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, RenderType.INTEGER);
+    }
+    @Override
+    public CraftObjective registerNewObjective(String name, String criteria, net.kyori.adventure.text.Component displayName, RenderType renderType) {
+        return this.registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, renderType);
+    }
+    @Override
+    public CraftObjective registerNewObjective(String name, Criteria criteria, net.kyori.adventure.text.Component displayName) throws IllegalArgumentException {
+        return this.registerNewObjective(name, criteria, displayName, RenderType.INTEGER);
+    }
+    @Override
+    public CraftObjective registerNewObjective(String name, Criteria criteria, net.kyori.adventure.text.Component displayName, RenderType renderType) throws IllegalArgumentException {
+        if (displayName == null) {
+            displayName = net.kyori.adventure.text.Component.empty();
+        }
+        Preconditions.checkArgument(name != null, "Objective name cannot be null");
+        Preconditions.checkArgument(criteria != null, "Criteria cannot be null");
+        Preconditions.checkArgument(renderType != null, "RenderType cannot be null");
+        Preconditions.checkArgument(name.length() <= Short.MAX_VALUE, "The name '%s' is longer than the limit of 32767 characters (%s)", name, name.length());
+        Preconditions.checkArgument(this.board.getObjective(name) == null, "An objective of name '%s' already exists", name);
+        // Paper start - lazily track plugin scoreboards
+        if (((CraftCriteria) criteria).criteria != net.minecraft.world.scores.criteria.ObjectiveCriteria.DUMMY && !this.registeredGlobally) {
+            net.minecraft.server.MinecraftServer.getServer().server.getScoreboardManager().registerScoreboardForVanilla(this);
+            this.registeredGlobally = true;
+        }
+        // Paper end
+        net.minecraft.world.scores.Objective objective = this.board.addObjective(name, ((CraftCriteria) criteria).criteria, com.mohistmc.paper.adventure.PaperAdventure.asVanilla(displayName), CraftScoreboardTranslations.fromBukkitRender(renderType));
+        return new CraftObjective(this, objective);
+    }
+    // Paper end - Adventure
 
     @Override
     public CraftObjective registerNewObjective(String name, String criteria, String displayName) {
-        return registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, RenderType.INTEGER);
+        return this.registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, RenderType.INTEGER);
     }
 
     @Override
     public CraftObjective registerNewObjective(String name, String criteria, String displayName, RenderType renderType) {
-        return registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, renderType);
+        return this.registerNewObjective(name, CraftCriteria.getFromBukkit(criteria), displayName, renderType);
     }
 
     @Override
     public CraftObjective registerNewObjective(String name, Criteria criteria, String displayName) {
-        return registerNewObjective(name, criteria, displayName, RenderType.INTEGER);
+        return this.registerNewObjective(name, criteria, displayName, RenderType.INTEGER);
     }
 
     @Override
     public CraftObjective registerNewObjective(String name, Criteria criteria, String displayName, RenderType renderType) {
-        Preconditions.checkArgument(name != null, "Objective name cannot be null");
-        Preconditions.checkArgument(criteria != null, "Criteria cannot be null");
-        Preconditions.checkArgument(displayName != null, "Display name cannot be null");
-        Preconditions.checkArgument(renderType != null, "RenderType cannot be null");
-        Preconditions.checkArgument(name.length() <= Short.MAX_VALUE, "The name '%s' is longer than the limit of 32767 characters (%s)", name, name.length());
-        Preconditions.checkArgument(displayName.length() <= 128, "The display name '%s' is longer than the limit of 128 characters (%s)", displayName, displayName.length());
-        Preconditions.checkArgument(board.getObjective(name) == null, "An objective of name '%s' already exists", name);
-
-        net.minecraft.world.scores.Objective objective = board.addObjective(name, ((CraftCriteria) criteria).criteria, CraftChatMessage.fromStringOrNull(displayName), CraftScoreboardTranslations.fromBukkitRender(renderType));
-        return new CraftObjective(this, objective);
+        return this.registerNewObjective(name, criteria, net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(displayName), renderType); // Paper - Adventure
     }
 
     @Override
     public Objective getObjective(String name) {
         Preconditions.checkArgument(name != null, "Objective name cannot be null");
-        net.minecraft.world.scores.Objective nms = board.getObjective(name);
+        net.minecraft.world.scores.Objective nms = this.board.getObjective(name);
         return nms == null ? null : new CraftObjective(this, nms);
     }
 
@@ -83,7 +108,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
         Preconditions.checkArgument(criteria != null, "Criteria cannot be null");
 
         ImmutableSet.Builder<Objective> objectives = ImmutableSet.builder();
-        for (net.minecraft.world.scores.Objective netObjective : board.getObjectives()) {
+        for (net.minecraft.world.scores.Objective netObjective : this.board.getObjectives()) {
             CraftObjective objective = new CraftObjective(this, netObjective);
             if (objective.getTrackedCriteria().equals(criteria)) {
                 objectives.add(objective);
@@ -101,7 +126,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     @Override
     public Objective getObjective(DisplaySlot slot) {
         Preconditions.checkArgument(slot != null, "Display slot cannot be null");
-        net.minecraft.world.scores.Objective objective = board.getDisplayObjective(CraftScoreboardTranslations.fromBukkitSlot(slot));
+        net.minecraft.world.scores.Objective objective = this.board.getDisplayObjective(CraftScoreboardTranslations.fromBukkitSlot(slot));
         if (objective == null) {
             return null;
         }
@@ -112,7 +137,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public ImmutableSet<Score> getScores(OfflinePlayer player) {
         Preconditions.checkArgument(player != null, "OfflinePlayer cannot be null");
 
-        return getScores(player.getName());
+        return this.getScores(player.getName());
     }
 
     @Override
@@ -130,7 +155,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public void resetScores(OfflinePlayer player) {
         Preconditions.checkArgument(player != null, "OfflinePlayer cannot be null");
 
-        resetScores(player.getName());
+        this.resetScores(player.getName());
     }
 
     @Override
@@ -138,7 +163,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
         Preconditions.checkArgument(entry != null, "Entry cannot be null");
 
         for (net.minecraft.world.scores.Objective objective : this.board.getObjectives()) {
-            board.resetPlayerScore(entry, objective);
+            this.board.resetPlayerScore(entry, objective);
         }
     }
 
@@ -146,7 +171,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public Team getPlayerTeam(OfflinePlayer player) {
         Preconditions.checkArgument(player != null, "OfflinePlayer cannot be null");
 
-        PlayerTeam team = board.getPlayersTeam(player.getName());
+        PlayerTeam team = this.board.getPlayersTeam(player.getName());
         return team == null ? null : new CraftTeam(this, team);
     }
 
@@ -154,7 +179,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public Team getEntryTeam(String entry) {
         Preconditions.checkArgument(entry != null, "Entry cannot be null");
 
-        PlayerTeam team = board.getPlayersTeam(entry);
+        PlayerTeam team = this.board.getPlayersTeam(entry);
         return team == null ? null : new CraftTeam(this, team);
     }
 
@@ -162,7 +187,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public Team getTeam(String teamName) {
         Preconditions.checkArgument(teamName != null, "Team name cannot be null");
 
-        PlayerTeam team = board.getPlayerTeam(teamName);
+        PlayerTeam team = this.board.getPlayerTeam(teamName);
         return team == null ? null : new CraftTeam(this, team);
     }
 
@@ -175,15 +200,15 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     public Team registerNewTeam(String name) {
         Preconditions.checkArgument(name != null, "Team name cannot be null");
         Preconditions.checkArgument(name.length() <= Short.MAX_VALUE, "Team name '%s' is longer than the limit of 32767 characters (%s)", name, name.length());
-        Preconditions.checkArgument(board.getPlayerTeam(name) == null, "Team name '%s' is already in use", name);
+        Preconditions.checkArgument(this.board.getPlayerTeam(name) == null, "Team name '%s' is already in use", name);
 
-        return new CraftTeam(this, board.addPlayerTeam(name));
+        return new CraftTeam(this, this.board.addPlayerTeam(name));
     }
 
     @Override
     public ImmutableSet<OfflinePlayer> getPlayers() {
         ImmutableSet.Builder<OfflinePlayer> players = ImmutableSet.builder();
-        for (Object playerName : board.getTrackedPlayers()) {
+        for (Object playerName : this.board.getTrackedPlayers()) {
             players.add(Bukkit.getOfflinePlayer(playerName.toString()));
         }
         return players.build();
@@ -192,7 +217,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     @Override
     public ImmutableSet<String> getEntries() {
         ImmutableSet.Builder<String> entries = ImmutableSet.builder();
-        for (Object entry : board.getTrackedPlayers()) {
+        for (Object entry : this.board.getTrackedPlayers()) {
             entries.add(entry.toString());
         }
         return entries.build();
@@ -201,11 +226,30 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     @Override
     public void clearSlot(DisplaySlot slot) {
         Preconditions.checkArgument(slot != null, "Slot cannot be null");
-        board.setDisplayObjective(CraftScoreboardTranslations.fromBukkitSlot(slot), null);
+        this.board.setDisplayObjective(CraftScoreboardTranslations.fromBukkitSlot(slot), null);
     }
 
     // CraftBukkit method
     public Scoreboard getHandle() {
-        return board;
+        return this.board;
     }
+    // Paper start
+    @Override
+    public ImmutableSet<Score> getScoresFor(org.bukkit.entity.Entity entity) throws IllegalArgumentException {
+        Preconditions.checkArgument(entity != null, "Entity cannot be null");
+        return this.getScores(((org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity) entity).getHandle().getScoreboardName());
+    }
+
+    @Override
+    public void resetScoresFor(org.bukkit.entity.Entity entity) throws IllegalArgumentException {
+        Preconditions.checkArgument(entity != null, "Entity cannot be null");
+        this.resetScores(((org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity) entity).getHandle().getScoreboardName());
+    }
+
+    @Override
+    public Team getEntityTeam(org.bukkit.entity.Entity entity) throws IllegalArgumentException {
+        Preconditions.checkArgument(entity != null, "Entity cannot be null");
+        return this.getEntryTeam(((org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity) entity).getHandle().getScoreboardName());
+    }
+    // Paper end
 }
