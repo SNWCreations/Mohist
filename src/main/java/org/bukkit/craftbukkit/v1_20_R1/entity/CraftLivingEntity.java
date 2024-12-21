@@ -72,7 +72,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+public class CraftLivingEntity extends CraftEntity implements LivingEntity, com.mohistmc.paper.entity.Frictional { // Paper // Mohist
     private CraftEntityEquipment equipment;
 
     public CraftLivingEntity(final CraftServer server, final net.minecraft.world.entity.LivingEntity entity) {
@@ -845,5 +845,18 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
             }
         });
     }
+
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public net.kyori.adventure.util.TriState getFrictionState() {
+        return this.getHandle().frictionState;
+    }
+
+    @Override
+    public void setFrictionState(@org.jetbrains.annotations.NotNull net.kyori.adventure.util.TriState state) {
+        java.util.Objects.requireNonNull(state, "state may not be null");
+        this.getHandle().frictionState = state;
+    }
+
     // Paper end
 }

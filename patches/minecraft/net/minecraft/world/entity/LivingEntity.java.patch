@@ -225,6 +225,15 @@
           this.m_252836_();
        }
  
+@@ -624,7 +_,7 @@
+    }
+ 
+    public boolean m_147223_() {
+-      return this.f_147183_;
++      return !this.frictionState.toBooleanOrElse(!this.f_147183_); // Paper
+    }
+ 
+    public void m_147244_(boolean p_147245_) {
 @@ -635,12 +_,14 @@
        return true;
     }
@@ -241,7 +250,7 @@
                 this.m_9236_().m_6263_((Player)null, this.m_20185_(), this.m_20186_(), this.m_20189_(), equipable.m_150681_(), this.m_5720_(), 1.0F, 1.0F);
              }
  
-@@ -652,6 +_,15 @@
+@@ -652,12 +_,26 @@
        }
     }
  
@@ -257,6 +266,34 @@
     public void m_142687_(Entity.RemovalReason p_276115_) {
        super.m_142687_(p_276115_);
        this.f_20939_.m_276084_();
+    }
+ 
+    public void m_7380_(CompoundTag p_21145_) {
++      // Paper start
++      if (this.frictionState != net.kyori.adventure.util.TriState.NOT_SET) {
++         p_21145_.m_128359_("Paper.FrictionState", this.frictionState.toString());
++      }
++      // Paper end
+       p_21145_.m_128350_("Health", this.m_21223_());
+       p_21145_.m_128376_("HurtTime", (short)this.f_20916_);
+       p_21145_.m_128405_("HurtByTimestamp", this.f_20950_);
+@@ -688,6 +_,16 @@
+ 
+    public void m_7378_(CompoundTag p_21096_) {
+       this.m_7911_(p_21096_.m_128457_("AbsorptionAmount"));
++      // Paper start
++      if (p_21096_.m_128441_("Paper.FrictionState")) {
++         String fs = p_21096_.m_128461_("Paper.FrictionState");
++         try {
++            frictionState = net.kyori.adventure.util.TriState.valueOf(fs);
++         } catch (Exception ignored) {
++            f_201943_.error("Unknown friction state {} for {}", fs, this); // Mohist - SLF4J style logging
++         }
++      }
++      // Paper end
+       if (p_21096_.m_128425_("Attributes", 9) && this.m_9236_() != null && !this.m_9236_().f_46443_) {
+          this.m_21204_().m_22168_(p_21096_.m_128437_("Attributes", 10));
+       }
 @@ -704,6 +_,18 @@
           }
        }
