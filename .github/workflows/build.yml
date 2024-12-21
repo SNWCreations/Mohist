@@ -8,11 +8,13 @@ on:
       - 'src/**'
       - 'build.gradle'
       - 'patches/' # Also consider patch files
+      - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'src/**'
       - 'build.gradle'
       - 'patches/' # Also consider patch files
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 jobs:
