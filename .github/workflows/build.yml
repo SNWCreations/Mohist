@@ -37,18 +37,16 @@ jobs:
           key: $${{ runner.os }}-gradle
       - name: Get Short Identifier
         uses: iendeavor/shorten-commit-sha@v2.0.0
-        with:
-          output_name: sha
         id: short-sha
       - name: Get Permission
         run: chmod 777 gradlew
       - name: Build
         id: build
         env:
-          VERSION_IDENTIFIER: SNAPSHOT+${{ steps.shorten_commit_sha.outputs.sha }}
+          VERSION_IDENTIFIER: SNAPSHOT+${{ env.shortened_commit_sha }}
         run: ./gradlew :setup mohistJar :githubActionOutput --stacktrace
       - name: GitHub Action Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.build.outputs.artifact_name}}.dev+${{steps.shorten_commit_sha.outputs.sha}}
+          name: ${{steps.build.outputs.artifact_name}}.dev+${{env.shortened_commit_sha}}
           path: projects/mohist/build/libs/*
