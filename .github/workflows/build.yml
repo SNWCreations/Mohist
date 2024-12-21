@@ -34,7 +34,10 @@ jobs:
             ~/.gradle/wrapper
           key: $${{ runner.os }}-gradle
       - name: Get Short Identifier
-        uses: benjlevesque/short-sha@v1.2
+        uses: iendeavor/shorten-commit-sha@v2.0.0
+        with:
+          output_name: sha
+          pull_request_github_sha: github.event.pull_request.head.sha # use the last commit to the head branch of the pull request, instead of the last merge commit of the pull request merge branch
         id: short-sha
       - name: Get Permission
         run: chmod 777 gradlew
@@ -44,7 +47,7 @@ jobs:
           VERSION_IDENTIFIER: SNAPSHOT+${{ steps.short-sha.outputs.sha }}
         run: ./gradlew :setup mohistJar :githubActionOutput --stacktrace
       - name: GitHub Action Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.build.outputs.artifact_name}}.dev+${{steps.short-sha.outputs.sha}}
+          name: ${{steps.build.outputs.artifact_name}}.dev+${{steps.shorten-commit-sha.outputs.sha}}
           path: projects/mohist/build/libs/*
