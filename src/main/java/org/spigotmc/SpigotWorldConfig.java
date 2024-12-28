@@ -12,6 +12,17 @@ public class SpigotWorldConfig
     private final YamlConfiguration config;
     private boolean verbose;
 
+    // Mohist start - Used by Level constructor to prevent NPE on SpigotWorldConfig calls caused by custom Level classes from mods
+    public static SpigotWorldConfig mohist$createAnonymousUninitializedInstance() {
+        return new SpigotWorldConfig();
+    }
+
+    private SpigotWorldConfig() {
+        this.worldName = "";
+        this.config = new YamlConfiguration();
+    }
+    // Mohist end
+
     public SpigotWorldConfig(String worldName)
     {
         this.worldName = worldName;

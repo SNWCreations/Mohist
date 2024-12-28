@@ -123,7 +123,7 @@
 +   public List<ItemEntity> captureDrops;
 +   public final it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<SpawnCategory> ticksPerSpawnCategory = new it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<>();
 +   public boolean populating;
-+   public org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
++   public org.spigotmc.SpigotWorldConfig spigotConfig = org.spigotmc.SpigotWorldConfig.mohist$createAnonymousUninitializedInstance(); // Spigot // Mohist - Prevent NPE caused by custom Level classes from mods
 +
 +   public CraftWorld getWorld() {
 +      return this.world;
