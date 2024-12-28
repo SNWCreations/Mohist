@@ -108,7 +108,7 @@ public final class PaperAdventure {
     @Deprecated
     public static final PlainComponentSerializer PLAIN = PlainComponentSerializer.builder().flattener(FLATTENER).build();
 
-    private static final Codec<CompoundTag, String, IOException, IOException> NBT_CODEC = new Codec<CompoundTag, String, IOException, IOException>() {
+    private static final Codec<CompoundTag, String, IOException, IOException> NBT_CODEC = new Codec<>() {
         @Override
         public @NotNull CompoundTag decode(final @NotNull String encoded) throws IOException {
             try {

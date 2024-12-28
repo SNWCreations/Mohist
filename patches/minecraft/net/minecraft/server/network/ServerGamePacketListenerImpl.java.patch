@@ -1911,13 +1911,60 @@
     }
  
     public void m_5617_(ServerboundClientInformationPacket p_9845_) {
-@@ -1658,7 +_,55 @@
+@@ -1658,7 +_,102 @@
        this.f_9743_.m_9156_(p_9845_);
     }
  
 +   // CraftBukkit start
 +   private static final ResourceLocation CUSTOM_REGISTER = new ResourceLocation("register");
 +   private static final ResourceLocation CUSTOM_UNREGISTER = new ResourceLocation("unregister");
++   // Mohist start
++   public void handleCustomPayloadMohist(final ServerboundCustomPayloadPacket p_9860_) {
++      var readerIndex = p_9860_.f_133981_.readerIndex();
++      var buf = new byte[p_9860_.f_133981_.readableBytes()];
++      p_9860_.f_133981_.readBytes(buf);
++      p_9860_.f_133981_.readerIndex(readerIndex);
++      ServerLifecycleHooks.getCurrentServer().m_201446_(() -> {
++         if (ServerLifecycleHooks.getCurrentServer().hasStopped() || processedDisconnect) {
++            return;
++         }
++         if (this.f_9742_.m_129536_()) {
++            if (p_9860_.f_133980_.equals(CUSTOM_REGISTER)) {
++               try {
++                  String channels = new String(buf, StandardCharsets.UTF_8);
++                  for (String channel : channels.split("\0")) {
++                     if (!StringUtil.m_14408_(channel)) {
++                        getCraftPlayer().addChannel(channel);
++                     }
++                  }
++               } catch (Exception ex) {
++                  f_9744_.error("Couldn't register custom payload", ex);
++                  this.disconnect("Invalid payload REGISTER!");
++               }
++            } else if (p_9860_.f_133980_.equals(CUSTOM_UNREGISTER)) {
++               try {
++                  String channels = new String(buf, StandardCharsets.UTF_8);
++                  for (String channel : channels.split("\0")) {
++                     if (!StringUtil.m_14408_(channel)) {
++                        getCraftPlayer().removeChannel(channel);
++                     }
++                  }
++               } catch (Exception ex) {
++                  f_9744_.error("Couldn't unregister custom payload", ex);
++                  this.disconnect("Invalid payload UNREGISTER!");
++               }
++            } else {
++               try {
++                  this.cserver.getMessenger().dispatchIncomingMessage(this.f_9743_.getBukkitEntity(), p_9860_.f_133980_.toString(), buf);
++               } catch (Exception ex) {
++                  f_9744_.error("Couldn't dispatch custom payload", ex);
++                  this.disconnect("Invalid custom payload!");
++               }
++            }
++         }
++      });
++   }
++   // Mohist end
     public void m_7423_(ServerboundCustomPayloadPacket p_9860_) {
 +      PacketUtils.m_131359_(p_9860_, this, this.f_9743_.m_284548_());
 +      var readerIndex = p_9860_.f_133981_.readerIndex();

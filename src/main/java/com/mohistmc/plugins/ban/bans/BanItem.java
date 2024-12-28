@@ -70,4 +70,9 @@ public class BanItem {
         if (!MohistConfig.ban_item_enable) return false;
         return BanConfig.MOSHOU.getMoShouList().contains(CraftItemStack.asCraftMirror(itemStack).getType().name());
     }
+
+    public static boolean checkMoShou(net.minecraft.world.entity.player.Player player, ItemStack itemStack) {
+        if (player.getBukkitEntity().isOp()) return false;
+        return checkMoShou(itemStack);
+    }
 }

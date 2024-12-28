@@ -28,22 +28,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class MohistCommand extends Command {
 
-    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost");
+    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost", "cleardropitem");
 
     public MohistCommand(String name) {
         super(name);
         this.description = "Mohist related commands";
-        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed]";
+        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed|cleardropitem]";
         this.setPermission("mohist.command.mohist");
     }
 
@@ -59,6 +63,9 @@ public class MohistCommand extends Command {
                 }
             } else if (args.length == 2 && args[0].equalsIgnoreCase("playermods")) {
                 return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+            }
+            else if (args.length == 2 && args[0].equalsIgnoreCase("cleardropitem")) {
+                return Bukkit.getWorldsByName().stream().toList();
             }
         }
 
@@ -84,6 +91,7 @@ public class MohistCommand extends Command {
                 sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.clientOnlymods")+ ServerAPI.modlists_Client.size() + ") -> " + ServerAPI.modlists_Client);
                 sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.serverOnlymods") + ServerAPI.modlists_Server.size() + ") -> " + ServerAPI.modlists_Server);
                 sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.allMods") + ServerAPI.modlists_All.size() + ") -> " + ServerAPI.modlists_All);
+                return true;
             }
             case "playermods" -> {
                 // Not recommended for use in games, only test output
@@ -97,6 +105,7 @@ public class MohistCommand extends Command {
                 } else {
                     sender.sendMessage(ChatColor.RED + I18n.as("mohistcmd.playermods.playernotOnline", args[1]));
                 }
+                return true;
             }
             case "reload" -> {
                 Command.broadcastCommandMessage(sender, ChatColor.RED + I18n.as("mohistcmd.reload.line1"));
@@ -106,6 +115,7 @@ public class MohistCommand extends Command {
 
                 MinecraftServer.getServer().server.reloadCount++;
                 sender.sendMessage(ChatColor.GREEN + "mohist-config/mohist.yml directory reload complete.");
+                return true;
             }
             case "version" -> {
                 sender.sendMessage("Mohist: " + MohistMC.versionInfo.mohist());
@@ -114,13 +124,14 @@ public class MohistCommand extends Command {
                 sender.sendMessage("Bukkit: " + MohistMC.versionInfo.bukkit());
                 sender.sendMessage("CraftBukkit: " + MohistMC.versionInfo.craftbukkit());
                 sender.sendMessage("Spigot: " + MohistMC.versionInfo.spigot());
+                return true;
             }
             case "channels_incom" -> sender.sendMessage(ServerAPI.channels_Incoming().toString());
             case "printthreadcost" -> MohistThreadCost.dumpThreadCpuTime();
             case "channels_outgo" -> sender.sendMessage(ServerAPI.channels_Outgoing().toString());
             case "speed" -> {
                 if (sender instanceof Player p) {
-                    if (args.length == 2 && p.isOp()) {
+                    if (args.length == 2) {
                         if (this.isFloat(args[1])) {
                             if (p.isFlying()) {
                                 float speed = Float.parseFloat(args[1]);
@@ -141,9 +152,34 @@ public class MohistCommand extends Command {
                             p.setWalkSpeed(0.2f);
                             p.sendMessage(I18n.as("mohistcmd.flightAndWalkspeedRestore"));
                         }
+                        return true;
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED + I18n.as("error.notplayer"));
+                    return false;
+                }
+            }
+            case "cleardropitem" -> {
+                if (args.length == 2) {
+                    World world = Bukkit.getWorld(args[1]);
+                    if (world == null) {
+                        sender.sendMessage(ChatColor.RED + " World not found!");
+                        return false;
+                    } else {
+                        AtomicInteger size = new AtomicInteger(0);
+                        for (org.bukkit.entity.Entity entity : world.getEntities().stream().toList()) {
+                            if (entity.getType() == EntityType.DROPPED_ITEM) {
+                                ItemStack item = ((org.bukkit.entity.Item) entity).getItemStack();
+                                entity.remove();
+                                size.addAndGet(item.getAmount());
+                            }
+                        }
+                        sender.sendMessage(I18n.as("worldcommands.world.cleardropitem", size.get(), world.getName()));
+                        return true;
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Usage: /mohist cleardropitem <worldname>");
+                    return false;
                 }
             }
             default -> {

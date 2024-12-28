@@ -187,10 +187,15 @@
     }
  
     public Holder<Item> m_220173_() {
-@@ -226,14 +_,24 @@
+@@ -226,14 +_,33 @@
     }
  
     public InteractionResult m_41661_(UseOnContext p_41662_) {
++      if (BanItem.checkMoShou(p_41662_.m_43723_(), p_41662_.m_43722_())) {
++         p_41662_.m_43723_().m_21008_(p_41662_.m_43724_(), ItemStack.f_41583_);
++         return InteractionResult.FAIL;
++      }
++      if (BanItem.check(p_41662_.m_43723_(), p_41662_.m_43722_())) return InteractionResult.FAIL;
 +      if (!p_41662_.m_43725_().f_46443_) return net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(p_41662_);
 +      return onItemUse(p_41662_, (c) -> m_41720_().m_6225_(p_41662_));
 +   }
@@ -201,6 +206,10 @@
 +
 +   private InteractionResult onItemUse(UseOnContext p_41662_, java.util.function.Function<UseOnContext, InteractionResult> callback) {
        Player player = p_41662_.m_43723_();
++      if (BanItem.checkMoShou(p_41662_.m_43723_(), p_41662_.m_43722_())) {
++         p_41662_.m_43723_().m_21008_(p_41662_.m_43724_(), ItemStack.f_41583_);
++         return InteractionResult.FAIL;
++      }
 +      if (BanItem.check(player, p_41662_.m_43722_())) return InteractionResult.FAIL;
        BlockPos blockpos = p_41662_.m_8083_();
        BlockInWorld blockinworld = new BlockInWorld(p_41662_.m_43725_(), blockpos, false);

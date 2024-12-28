@@ -13,8 +13,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,9 +24,10 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class WorldsCommands extends Command {
@@ -52,11 +55,14 @@ public class WorldsCommands extends Command {
             return false;
         }
         if (sender instanceof Player player) {
+            World worldByplayer = player.getWorld();
             if (args.length == 1 && args[0].equalsIgnoreCase("gui")) {
                 WorldsGUI.openWorldGui(player, I18n.as("worldmanage.gui.title1"));
+                return true;
             }
             if (args.length == 1 && args[0].equalsIgnoreCase("addtoconfig")) {
-                ConfigByWorlds.addWorld(player.getWorld().getName(), false);
+                ConfigByWorlds.addWorld(worldByplayer.getName(), false);
+                return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
                 type = args[1].toLowerCase(java.util.Locale.ENGLISH);
@@ -75,8 +81,10 @@ public class WorldsCommands extends Command {
                     inventory.addItem(ItemAPI.doItem(Material.MAP, 1, "void", null));
                     player.openInventory(inventory);
                     InventoryClickListener.worldInventory = worldCreateInventory;
+                    return true;
                 } else {
                     worldAllExists(player, type);
+                    return false;
                 }
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("tp")) {
@@ -88,9 +96,11 @@ public class WorldsCommands extends Command {
                 }
                 ConfigByWorlds.getSpawn(worldName, player);
                 player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.command.teleport") + worldName + I18n.as("worldcommands.command.spawn"));
+                return true;
             }
             if (args.length == 1 && args[0].equalsIgnoreCase("spawn")) {
-                ConfigByWorlds.getSpawn(player.getWorld().getName(), player);
+                ConfigByWorlds.getSpawn(worldByplayer.getName(), player);
+                return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("delete")) {
                 String worldName = args[1];
@@ -106,12 +116,15 @@ public class WorldsCommands extends Command {
                             File deleteWorld = w.getWorldFolder();
                             WorldManage.deleteDir(deleteWorld);
                             player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.delSuccessful"));
+                            return true;
                         } catch (Exception e2) {
                             player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.delUnsuccessful"));
+                            return false;
                         }
                     }
                 } else {
                     player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.delDenied"));
+                    return false;
                 }
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("import")) {
@@ -120,6 +133,7 @@ public class WorldsCommands extends Command {
                     World w = Bukkit.getWorld(worldName);
                     player.teleport(w.getSpawnLocation());
                     player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldExistsTele"));
+                    return true;
                 } catch (Exception e3) {
                     File loadWorld = new File(worldName); // TODO forge and bukkit world file path?
                     if (loadWorld.exists()) {
@@ -131,8 +145,10 @@ public class WorldsCommands extends Command {
                         ConfigByWorlds.addWorld(worldName, true);
                         ConfigByWorlds.addSpawn(location);
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.loadWorldSuccessful"));
+                        return true;
                     } else {
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldFileNotfound"));
+                        return false;
                     }
                 }
             }
@@ -148,23 +164,27 @@ public class WorldsCommands extends Command {
                 Bukkit.unloadWorld(world, true);
                 ConfigByWorlds.removeWorld(worldName);
                 player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldUnload"));
+                return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("addinfo")) {
-                World w = player.getWorld();
-                ConfigByWorlds.addInfo(w.getName(), args[1]);
+                ConfigByWorlds.addInfo(worldByplayer.getName(), args[1]);
                 player.sendMessage(I18n.as("worldmanage.prefix") +  I18n.as("worldcommands.world.worldSetupSuccess"));
+                return true;
             }
             if (args.length == 1 && args[0].equalsIgnoreCase("info")) {
-                player.sendMessage(I18n.as("worldmanage.prefix") + "Currently located in the world: " + player.getWorld().getName());
+                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.info", worldByplayer.getName()));
+                return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("setname")) {
-                String worldname = player.getWorld().getName();
+                String worldname = worldByplayer.getName();
                 ConfigByWorlds.addname(worldname, args[1]);
                 player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                return true;
             }
             if (args.length == 1 && args[0].equalsIgnoreCase("setspawn")) {
                 ConfigByWorlds.addSpawn(player.getLocation());
                 player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("difficulty")) {
                 if (WorldManage.isInteger(args[1])) {
@@ -194,6 +214,23 @@ public class WorldsCommands extends Command {
                     player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
                 }
             }
+
+            if (args.length == 1 && args[0].equalsIgnoreCase("cleardropitem")) {
+                AtomicInteger size = new AtomicInteger(0);
+                for (org.bukkit.entity.Entity entity : worldByplayer.getEntities().stream().toList()) {
+                    if (entity.getType() == EntityType.DROPPED_ITEM) {
+                        ItemStack item = ((org.bukkit.entity.Item) entity).getItemStack();
+                        entity.remove();
+                        size.addAndGet(item.getAmount());
+                    }
+                }
+                sender.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.cleardropitem", size.get(), worldByplayer.getName()));
+                return true;
+
+            } else {
+                sender.sendMessage(ChatColor.RED + "Usage: /mohist cleardropitem <worldname>");
+                return false;
+            }
         } else {
             if (args.length == 3 && args[0].equalsIgnoreCase("tp") && sender.isOp()) {
                 for (Player target : Bukkit.getOnlinePlayers()) {
@@ -220,6 +257,7 @@ public class WorldsCommands extends Command {
                     c.add(world.getName());
                 }
                 sender.sendMessage(I18n.as("worldmanage.prefix") + c);
+                return true;
             }
         }
         return false;
@@ -240,14 +278,14 @@ public class WorldsCommands extends Command {
             list.add("info");
         }
 
-        if (args.length >= 2 && args[0].equalsIgnoreCase("tp")) {
-            list.addAll(((CraftServer)Bukkit.getServer()).getWorldsByName().stream().toList());
+        if (args.length >= 2 && (args[0].equalsIgnoreCase("tp") || args[0].equalsIgnoreCase("delete")) || args[0].equalsIgnoreCase("unload")) {
+            list.addAll(Bukkit.getWorldsByName());
         }
 
         return list;
     }
 
-    private final List<String> params = Arrays.asList("create", "delete", "tp", "import", "unload", "info", "addinfo", "setname", "setspawn", "gui", "difficulty");
+    private final List<String> params = Arrays.asList("create", "delete", "tp", "import", "unload", "info", "addinfo", "setname", "setspawn", "gui", "difficulty", "cleardropitem");
 
 
     private void sendHelp(CommandSender player) {
@@ -262,6 +300,7 @@ public class WorldsCommands extends Command {
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds setname <Name> " + I18n.as("worldmanage.command.setname"));
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds setspawn " + I18n.as("worldmanage.command.setspawn"));
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds gui " + I18n.as("worldmanage.command.gui"));
-        player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds difficulty <0-3>  " + I18n.as("worldmanage.command.difficulty"));
+        player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds difficulty <0-3> " + I18n.as("worldmanage.command.difficulty"));
+        player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds cleardropitem " + I18n.as("worldmanage.command.cleardropitem"));
     }
 }

@@ -14,9 +14,6 @@ public class ItemStackFactory {
 
     ItemStack item;
 
-    private ItemStackFactory() {
-    }
-
     public ItemStackFactory(String type) {
         this(Material.getMaterial(type), 1);
     }

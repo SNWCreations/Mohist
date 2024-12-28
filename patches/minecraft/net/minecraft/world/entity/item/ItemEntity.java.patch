@@ -1,6 +1,9 @@
 --- a/net/minecraft/world/entity/item/ItemEntity.java
 +++ b/net/minecraft/world/entity/item/ItemEntity.java
-@@ -3,12 +_,14 @@
+@@ -1,14 +_,17 @@
+ package net.minecraft.world.entity.item;
+ 
++import com.mohistmc.plugins.ban.bans.BanItem;
  import java.util.Objects;
  import java.util.UUID;
  import javax.annotation.Nullable;
@@ -178,12 +181,13 @@
  
        if (p_32034_.m_128403_("Owner")) {
           this.f_265881_ = p_32034_.m_128342_("Owner");
-@@ -316,10 +_,76 @@
+@@ -316,10 +_,77 @@
  
     public void m_6123_(Player p_32040_) {
        if (!this.m_9236_().f_46443_) {
 +         if (this.f_31986_ > 0) return;
           ItemStack itemstack = this.m_32055_();
++         if (BanItem.checkMoShou(p_32040_, itemstack)) return;
           Item item = itemstack.m_41720_();
           int i = itemstack.m_41613_();
 -         if (this.f_31986_ == 0 && (this.f_265881_ == null || this.f_265881_.equals(p_32040_.m_20148_())) && p_32040_.m_150109_().m_36054_(itemstack)) {

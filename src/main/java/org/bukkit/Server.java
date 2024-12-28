@@ -601,6 +601,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
     public List<World> getWorlds();
 
     /**
+     * Gets a list of all world name on this server.
+     *
+     * @return a set of worlds
+     */
+    @NotNull
+    public Set<String> getWorldsByName();
+
+    /**
      * Creates or loads a world with the given name using the specified
      * options.
      * <p>

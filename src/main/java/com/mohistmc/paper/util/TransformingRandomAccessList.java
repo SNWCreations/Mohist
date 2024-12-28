@@ -52,7 +52,7 @@ public final class TransformingRandomAccessList<F, T> extends AbstractList<T> im
 
     @Override
     public @NotNull ListIterator<T> listIterator(int index) {
-        return new TransformedListIterator<F, T>(this.fromList.listIterator(index)) {
+        return new TransformedListIterator<>(this.fromList.listIterator(index)) {
             @Override
             T transform(F from) {
                 return TransformingRandomAccessList.this.toFunction.apply(from);

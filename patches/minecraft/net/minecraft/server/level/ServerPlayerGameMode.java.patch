@@ -12,7 +12,7 @@
  import javax.annotation.Nullable;
  import net.minecraft.advancements.CriteriaTriggers;
  import net.minecraft.core.BlockPos;
-@@ -9,21 +_,32 @@
+@@ -9,21 +_,33 @@
  import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
  import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
  import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
@@ -40,6 +40,7 @@
 +import org.bukkit.GameMode;
 +import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 +import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 +import org.bukkit.event.Event;
 +import org.bukkit.event.block.Action;
 +import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -216,7 +217,7 @@
           return false;
        } else {
           BlockEntity blockentity = this.f_9244_.m_7702_(p_9281_);
-@@ -229,30 +_,43 @@
+@@ -229,38 +_,57 @@
           if (block instanceof GameMasterBlock && !this.f_9245_.m_36337_()) {
              this.f_9244_.m_7260_(p_9281_, blockstate, blockstate, 3);
              return false;
@@ -268,7 +269,12 @@
     }
  
     public InteractionResult m_6261_(ServerPlayer p_9262_, Level p_9263_, ItemStack p_9264_, InteractionHand p_9265_) {
-@@ -261,6 +_,8 @@
++      if (BanItem.checkMoShou(p_9262_, p_9262_.m_21120_(p_9265_))) {
++         p_9262_.m_21008_(p_9265_, ItemStack.f_41583_);
++         return InteractionResult.FAIL;
++      }
+       if (this.f_9247_ == GameType.SPECTATOR) {
+          return InteractionResult.PASS;
        } else if (p_9262_.m_36335_().m_41519_(p_9264_.m_41720_())) {
           return InteractionResult.PASS;
        } else {
@@ -277,7 +283,7 @@
           int i = p_9264_.m_41613_();
           int j = p_9264_.m_41773_();
           InteractionResultHolder<ItemStack> interactionresultholder = p_9264_.m_41682_(p_9263_, p_9262_, p_9265_);
-@@ -294,13 +_,63 @@
+@@ -294,13 +_,67 @@
        }
     }
  
@@ -292,6 +298,10 @@
 +   public AtomicBoolean cancelledBlock = new AtomicBoolean(false);
 +   public PlayerInteractEvent eventCB;
     public InteractionResult m_7179_(ServerPlayer p_9266_, Level p_9267_, ItemStack p_9268_, InteractionHand p_9269_, BlockHitResult p_9270_) {
++      if (BanItem.checkMoShou(p_9266_, p_9266_.m_21120_(p_9269_))) {
++         p_9266_.m_21008_(p_9269_, ItemStack.f_41583_);
++         return InteractionResult.FAIL;
++      }
 +      if (BanItem.check(p_9266_, p_9268_)) return InteractionResult.FAIL;
        BlockPos blockpos = p_9270_.m_82425_();
        BlockState blockstate = p_9267_.m_8055_(blockpos);

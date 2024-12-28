@@ -10,6 +10,7 @@ import com.mohistmc.plugins.ban.BanConfig;
 import com.mohistmc.plugins.ban.BanListener;
 import com.mohistmc.plugins.ban.BanType;
 import com.mohistmc.plugins.ban.utils.BanSaveInventory;
+import com.mohistmc.plugins.ban.utils.BanUtils;
 import com.mohistmc.util.I18n;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,9 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -118,48 +121,92 @@ public class BansCommand extends Command {
                 }
                 switch (args[1]) {
                     case "item" -> {
-                        Warehouse wh = new Warehouse("§2Show bans item");
+                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.item"));
+                        List<String> old = MohistConfig.ban_item_materials;
                         for (String s : MohistConfig.ban_item_materials) {
                             Material material = ItemAPI.getMaterial(s);
                             if (!material.isEmpty()) {
                                 wh.addItem(new GUIItem(new ItemStackFactory(material)
                                         .setDisplayName(s)
-                                        .toItemStack()));
+                                        .toItemStack()) {
+                                    @Override
+                                    public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
+                                        if (type.isRightClick()) {
+                                            old.remove(s);
+                                            BanUtils.saveToYaml(old, BanType.ITEM);
+                                            wh.removeItem(this);
+                                            wh.openGUI(player);
+                                        }
+                                    }
+                                });
                             }
                         }
                         wh.openGUI(player);
                         return true;
                     }
                     case "item-moshou" -> {
-                        Warehouse wh = new Warehouse("§2Show bans moshou item");
+                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.item-moshou"));
+                        List<String> old = BanConfig.MOSHOU.getMoShouList();
                         for (String s : BanConfig.MOSHOU.getMoShouList()) {
                             Material material = ItemAPI.getMaterial(s);
                             if (!material.isEmpty()) {
                                 wh.addItem(new GUIItem(new ItemStackFactory(material)
                                         .setDisplayName(s)
-                                        .toItemStack()));
+                                        .toItemStack()) {
+                                    @Override
+                                    public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
+                                        if (type.isRightClick()) {
+                                            old.remove(s);
+                                            BanUtils.saveToYaml(old, BanType.ITEM_MOSHOU);
+                                            wh.removeItem(this);
+                                            wh.openGUI(player);
+                                        }
+                                    }
+                                });
                             }
                         }
                         wh.openGUI(player);
                         return true;
                     }
                     case "entity" -> {
-                        Warehouse wh = new Warehouse("§2Show bans entity");
+                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.entity"));
+                        List<String> old = MohistConfig.ban_entity_types;
                         for (String s : MohistConfig.ban_entity_types) {
                             wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(EntityAPI.entityType(s)))
                                     .setDisplayName(s)
-                                    .toItemStack()));
+                                    .toItemStack()) {
+                                @Override
+                                public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
+                                    if (type.isRightClick()) {
+                                        old.remove(s);
+                                        BanUtils.saveToYaml(old, BanType.ENTITY);
+                                        wh.removeItem(this);
+                                        wh.openGUI(player);
+                                    }
+                                }
+                            });
                         }
                         wh.openGUI(player);
                         return true;
                     }
                     case "enchantment" -> {
-                        Warehouse wh = new Warehouse("§2Show bans enchantment");
+                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.enchantment"));
+                        List<String> old = MohistConfig.ban_enchantment_list;
                         for (String s : MohistConfig.ban_enchantment_list) {
                             wh.addItem(new GUIItem(new ItemStackFactory(Material.ENCHANTED_BOOK)
                                     .setDisplayName(s)
                                     .setEnchantment(ItemAPI.getEnchantmentByKey(s))
-                                    .toItemStack()));
+                                    .toItemStack()) {
+                                @Override
+                                public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
+                                    if (type.isRightClick()) {
+                                        old.remove(s);
+                                        BanUtils.saveToYaml(old, BanType.ENCHANTMENT);
+                                        wh.removeItem(this);
+                                        wh.openGUI(player);
+                                    }
+                                }
+                            });
                         }
                         wh.openGUI(player);
                         return true;

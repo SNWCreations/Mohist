@@ -24,6 +24,8 @@ import com.mohistmc.util.I18n;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -37,6 +39,18 @@ public class BackupWorldCommand extends Command {
         this.description = I18n.as("worldbackupcmd.description");
         this.usageMessage = "/backupworld";
         this.setPermission("mohist.command.backupworld");
+    }
+
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, String[] args) {
+        List<String> list = new ArrayList<>();
+        if ((sender.isOp() || testPermission(sender))) {
+            if (args.length == 0) {
+                list.addAll(Bukkit.getWorldsByName());
+            }
+        }
+
+        return list;
     }
 
     @Override

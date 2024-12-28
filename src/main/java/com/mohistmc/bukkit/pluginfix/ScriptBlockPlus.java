@@ -35,7 +35,7 @@ public class ScriptBlockPlus {
      * @return A {@link Map} whose keys are Maven artifact IDs and whose values are {@link Version}s
      */
     public static Map<String, ScriptBlockPlus> identify() {
-        Map<String, ScriptBlockPlus> versions = new TreeMap<String, ScriptBlockPlus>();
+        Map<String, ScriptBlockPlus> versions = new TreeMap<>();
         ScriptBlockPlus scriptBlockPlus = new ScriptBlockPlus(
                 "netty-common",
                 "4.1.82.Final",
