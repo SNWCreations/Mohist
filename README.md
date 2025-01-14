@@ -1,9 +1,6 @@
 <div align="center">
   <h1>Mohist 1.20.1</h1>
 
-## Selling Mohist commercial copyright (I can afford the subsequent updates and maintenance), price: $6000 (this amount is used to pay for my legal prosecution), please contact me if you need it (emil: mgazul@163.com)
-## 出售Mohist商业版权（我可以负担后续的更新和维护），售价：6000美元，有需要的请联系我(QQ: 2634905535)
-
 ### Minecraft Forge Hybrid server implementing the Spigot/Bukkit API, formerly known as Thermos/Cauldron/MCPC+
 
 [![](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fci.codemc.io%2Fjob%2FMohistMC%2Fjob%2FMohist-1.20.1)](https://ci.codemc.io/job/MohistMC/job/Mohist-1.20.1)
