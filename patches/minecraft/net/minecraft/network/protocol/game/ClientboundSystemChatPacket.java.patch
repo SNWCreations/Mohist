@@ -74,7 +74,7 @@
 +        // Paper start
 +        if (this.adventure$content != null) {
 +            p_237860_.writeComponent(this.adventure$content);
-+        } else if (this.f_237849_ != null) {
++        } else if (this.content0 != null) {
 +            p_237860_.m_130072_(this.content0, 262144); // Spigot
 +        } else {
 +            throw new IllegalArgumentException("Must supply either adventure component or string json content");
