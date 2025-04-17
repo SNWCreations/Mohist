@@ -5,12 +5,11 @@
 
 package net.minecraftforge.gametest;
 
-import net.minecraft.gametest.framework.GameTest;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import net.minecraft.gametest.framework.GameTest;
 
 /**
  * When used on a class, this sets the default state for whether

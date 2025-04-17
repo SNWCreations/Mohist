@@ -5,9 +5,9 @@
 
 package net.minecraftforge.common.util;
 
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.function.Supplier;
 
 /**
  * Proxy object for a value that is calculated on first access

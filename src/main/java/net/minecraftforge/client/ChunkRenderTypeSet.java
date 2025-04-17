@@ -7,16 +7,15 @@ package net.minecraftforge.client;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.Util;
-import net.minecraft.client.renderer.RenderType;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import net.minecraft.Util;
+import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An immutable ordered set (not implementing {@link java.util.Set}) of chunk {@linkplain RenderType render types}.

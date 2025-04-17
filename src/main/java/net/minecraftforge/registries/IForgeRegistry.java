@@ -6,6 +6,10 @@
 package net.minecraftforge.registries;
 
 import com.mojang.serialization.Codec;
+import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -13,11 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.tags.ITagManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * Main interface for the registry system. Use this to query the registry system.

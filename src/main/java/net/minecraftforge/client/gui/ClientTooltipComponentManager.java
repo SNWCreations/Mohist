@@ -6,15 +6,14 @@
 package net.minecraftforge.client.gui;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.function.Function;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.function.Function;
 
 /**
  * Manager for {@link ClientTooltipComponent} factories.

@@ -56,7 +56,7 @@ public class LoginHandler {
     }
 
     public static void disconnect(ServerGamePacketListenerImpl serverGamePacketListener, net.kyori.adventure.text.Component pTextComponent){
-        Waitable waitable = new Waitable() {
+        Waitable<Object> waitable = new Waitable() {
             @Override
             protected Object evaluate() {
                 serverGamePacketListener.disconnect(pTextComponent);

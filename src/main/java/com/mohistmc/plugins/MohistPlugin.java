@@ -1,6 +1,8 @@
 package com.mohistmc.plugins;
 
 import com.mohistmc.MohistConfig;
+import com.mohistmc.ai.koukou.AIConfig;
+import com.mohistmc.ai.koukou.ApiController;
 import com.mohistmc.plugins.back.BackCommands;
 import com.mohistmc.plugins.back.BackConfig;
 import com.mohistmc.plugins.ban.BanConfig;
@@ -44,13 +46,9 @@ public class MohistPlugin {
 
     public static void init(Server server) {
         if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
-        ItemsConfig.init();
-        BackConfig.init();
-        WarpsConfig.init();
-        BanConfig.init();
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
-            String data = null;
+            String data;
             try {
                 data = Files.readString(out.toPath());
             } catch (IOException e) {
@@ -67,6 +65,15 @@ public class MohistPlugin {
             }
         }
         EntityClear.start();
+        ApiController.init();
+    }
+
+    public static void initConfig() {
+        ItemsConfig.init();
+        BackConfig.init();
+        WarpsConfig.init();
+        BanConfig.init();
+        AIConfig.init();
     }
 
     public static void registerCommands(Map<String, Command> map) {

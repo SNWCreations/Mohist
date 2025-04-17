@@ -1,12 +1,16 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -1,5 +_,6 @@
+@@ -1,8 +_,10 @@
  package net.minecraft.world.entity.player;
  
 +import com.google.common.base.Function;
  import com.google.common.collect.ImmutableList;
  import com.google.common.collect.ImmutableMap;
  import com.google.common.collect.Lists;
++import com.mohistmc.plugins.KeepInventory;
+ import com.mojang.authlib.GameProfile;
+ import com.mojang.datafixers.util.Either;
+ import com.mojang.logging.LogUtils;
 @@ -11,6 +_,8 @@
  import java.util.Map;
  import java.util.Optional;
@@ -195,6 +199,14 @@
        super.m_6667_(p_36152_);
        this.m_20090_();
        if (!this.m_5833_()) {
+@@ -594,6 +_,7 @@
+    }
+ 
+    protected void m_5907_() {
++      if (KeepInventory.inventory(this)) return;
+       super.m_5907_();
+       if (!this.m_9236_().m_46469_().m_46207_(GameRules.f_46133_)) {
+          this.m_36345_();
 @@ -622,8 +_,17 @@
  
     @Nullable
@@ -384,15 +396,23 @@
           if (!this.m_9236_().f_46443_) {
              this.m_36246_(Stats.f_12982_.m_12902_(this.f_20935_.m_41720_()));
           }
-@@ -865,6 +_,8 @@
+@@ -863,10 +_,15 @@
+          if (p_36383_ >= 3.0F) {
+             int i = 1 + Mth.m_14143_(p_36383_);
              InteractionHand interactionhand = this.m_7655_();
++            // FORGE: cache this.useItem -- if this.stopUsingItem() is called, it will be set to ItemStack.EMPTY
++            ItemStack currentItem = this.f_20935_;
              this.f_20935_.m_41622_(i, this, (p_219739_) -> {
                 p_219739_.m_21190_(interactionhand);
 +               net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(this, this.f_20935_, interactionhand);
-+               m_5810_(); // Forge: fix MC-168573
++               if (this.f_20935_ == currentItem) m_5810_(); // Forge: fix MC-168573
              });
-             if (this.f_20935_.m_41619_()) {
+-            if (this.f_20935_.m_41619_()) {
++            // FORGE: use cached item since this.useItem could be ItemStack.EMPTY
++            if (currentItem.m_41619_()) {
                 if (interactionhand == InteractionHand.MAIN_HAND) {
+                   this.m_8061_(EquipmentSlot.MAINHAND, ItemStack.f_41583_);
+                } else {
 @@ -874,33 +_,48 @@
                 }
  
@@ -898,6 +918,14 @@
  
     public Optional<WardenSpawnTracker> m_245217_() {
        return Optional.empty();
+@@ -1658,6 +_,7 @@
+    }
+ 
+    public int m_213860_() {
++      if (KeepInventory.exp(this)) return 0;
+       if (!this.m_9236_().m_46469_().m_46207_(GameRules.f_46133_) && !this.m_5833_()) {
+          int i = this.f_36078_ * 7;
+          return i > 100 ? 100 : i;
 @@ -1715,6 +_,16 @@
  
     }

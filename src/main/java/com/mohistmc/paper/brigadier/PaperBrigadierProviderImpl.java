@@ -7,7 +7,6 @@ import net.kyori.adventure.text.ComponentLike;
 import net.minecraft.network.chat.ComponentUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-
 import static java.util.Objects.requireNonNull;
 
 public enum PaperBrigadierProviderImpl implements PaperBrigadierProvider {

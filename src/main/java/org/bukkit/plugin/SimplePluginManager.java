@@ -616,7 +616,7 @@ public final class SimplePluginManager implements PluginManager {
                             )));
                 }
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE,MohistMC.i18n.as( "mohist.i18n.57", event.getEventName(), registration.getPlugin().getDescription().getFullName()), ex);
+                server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
             }
         }
     }

@@ -7,13 +7,11 @@ package net.minecraftforge.event;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
-
-
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 
 /**
  * Commands are rebuilt whenever {@link ReloadableServerResources} is recreated.

@@ -6,14 +6,13 @@
 package net.minecraftforge.client;
 
 import com.google.common.collect.ImmutableList;
+import java.util.Map;
 import net.minecraft.client.color.block.BlockTintCache;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.ApiStatus;
-
-import java.util.Map;
 
 /**
  * Manager for custom {@link ColorResolver} instances, collected via {@link RegisterColorHandlersEvent.ColorResolvers}.

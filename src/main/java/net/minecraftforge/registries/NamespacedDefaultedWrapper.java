@@ -7,7 +7,6 @@ package net.minecraftforge.registries;
 
 import java.util.Optional;
 import java.util.function.Function;
-
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -15,13 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
-class NamespacedDefaultedWrapper<T> extends NamespacedWrapper<T> implements DefaultedRegistry<T>
+public class NamespacedDefaultedWrapper<T> extends NamespacedWrapper<T> implements DefaultedRegistry<T>
 {
     private final ForgeRegistry<T> delegate;
     private final ResourceLocation defaultKey;
     private Holder.Reference<T> defaultHolder;
 
-    NamespacedDefaultedWrapper(ForgeRegistry<T> fowner, Function<T, Holder.Reference<T>> intrusiveHolderCallback, RegistryManager stage) {
+    public NamespacedDefaultedWrapper(ForgeRegistry<T> fowner, Function<T, Holder.Reference<T>> intrusiveHolderCallback, RegistryManager stage) {
         super(fowner, intrusiveHolderCallback, stage);
         this.delegate = fowner;
         this.defaultKey = fowner.getDefaultKey();

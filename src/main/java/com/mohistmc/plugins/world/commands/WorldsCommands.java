@@ -138,12 +138,13 @@ public class WorldsCommands extends Command {
                     File loadWorld = new File(worldName); // TODO forge and bukkit world file path?
                     if (loadWorld.exists()) {
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.loadworld"));
-                        Bukkit.createWorld(new WorldCreator(worldName));
-                        World w = Bukkit.getWorld(worldName);
-                        Location location = w.getSpawnLocation();
-                        player.teleport(location);
+                        World w = Bukkit.createWorld(new WorldCreator(worldName));
+                        if (w != null) {
+                            Location location = w.getSpawnLocation();
+                            player.teleport(location);
+                            ConfigByWorlds.addSpawn(location);
+                        }
                         ConfigByWorlds.addWorld(worldName, true);
-                        ConfigByWorlds.addSpawn(location);
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.loadWorldSuccessful"));
                         return true;
                     } else {
@@ -207,12 +208,14 @@ public class WorldsCommands extends Command {
                             ConfigByWorlds.setnandu(player, "HARD");
                             player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
                         }
+                        return true;
                     } else {
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
                     }
                 } else {
                     player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
                 }
+                return false;
             }
 
             if (args.length == 1 && args[0].equalsIgnoreCase("cleardropitem")) {

@@ -5,10 +5,10 @@
 
 package net.minecraftforge.common.crafting;
 
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.CraftingContainer;
 
 /**
  * This interface is to be implemented on Container objects.

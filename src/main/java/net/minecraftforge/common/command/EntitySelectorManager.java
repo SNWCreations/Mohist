@@ -8,11 +8,10 @@ package net.minecraftforge.common.command;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.commands.arguments.selector.EntitySelectorParser;
-
 import java.util.Arrays;
 import java.util.HashMap;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.arguments.selector.EntitySelectorParser;
 
 /**
  * Allows modders to register custom entity selectors by assigning an {@link IEntitySelectorType} to a String token. <br>

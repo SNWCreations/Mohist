@@ -6,7 +6,8 @@
 package net.minecraftforge.fluids.capability;
 
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 import org.jetbrains.annotations.NotNull;
 
 /**

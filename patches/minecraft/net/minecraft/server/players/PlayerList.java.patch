@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -8,21 +_,26 @@
+@@ -8,21 +_,29 @@
  import com.mojang.serialization.Dynamic;
  import io.netty.buffer.Unpooled;
  import java.io.File;
@@ -10,8 +10,11 @@
  import java.nio.file.Path;
  import java.text.SimpleDateFormat;
 -import java.time.Instant;
++import java.util.Collections;
  import java.util.EnumSet;
++import java.util.HashMap;
  import java.util.List;
++import java.util.Locale;
  import java.util.Map;
  import java.util.Optional;
  import java.util.Set;
@@ -41,11 +44,19 @@
  import net.minecraft.sounds.SoundEvents;
  import net.minecraft.sounds.SoundSource;
  import net.minecraft.stats.ServerStatsCounter;
-@@ -102,6 +_,19 @@
+@@ -102,7 +_,31 @@
  import net.minecraft.world.scores.Objective;
  import net.minecraft.world.scores.PlayerTeam;
  import net.minecraft.world.scores.Team;
++import net.minecraftforge.common.MinecraftForge;
++import net.minecraftforge.common.util.FakePlayer;
++import net.minecraftforge.event.ForgeEventFactory;
++import net.minecraftforge.event.OnDatapackSyncEvent;
++import net.minecraftforge.network.DualStackUtils;
++import net.minecraftforge.network.NetworkHooks;
 +import org.bukkit.Location;
++import org.bukkit.WeatherType;
++import org.bukkit.World;
 +import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 +import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 +import org.bukkit.craftbukkit.v1_20_R1.command.ColouredConsoleSender;
@@ -59,8 +70,12 @@
 +import org.bukkit.event.player.PlayerRespawnEvent;
 +import org.bukkit.event.player.PlayerSpawnChangeEvent;
  import org.slf4j.Logger;
++import org.spigotmc.AsyncCatcher;
++import org.spigotmc.SpigotConfig;
++import org.spigotmc.event.player.PlayerSpawnLocationEvent;
  
  public abstract class PlayerList {
+    public static final File f_11189_ = new File("banned-players.json");
 @@ -114,7 +_,7 @@
     private static final int f_143987_ = 600;
     private static final SimpleDateFormat f_11194_ = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
@@ -81,11 +96,11 @@
     private boolean f_11209_;
     private static final boolean f_143988_ = false;
     private int f_11210_;
-+   private final List<ServerPlayer> playersView = java.util.Collections.unmodifiableList(f_11196_);
++   private final List<ServerPlayer> playersView = Collections.unmodifiableList(f_11196_);
 +
 +   // CraftBukkit start
 +   private CraftServer cserver;
-+   private final Map<String,ServerPlayer> playersByName = new java.util.HashMap<>();
++   private final Map<String,ServerPlayer> playersByName = new HashMap<>();
  
     public PlayerList(MinecraftServer p_203842_, LayeredRegistryAccess<RegistryLayer> p_251844_, PlayerDataStorage p_203844_, int p_203845_) {
 +      this.cserver = p_203842_.server = new CraftServer((DedicatedServer) p_203842_, this);
@@ -112,13 +127,13 @@
        String s1 = "local";
        if (p_11262_.m_129523_() != null) {
 -         s1 = p_11262_.m_129523_().toString();
-+         s1 = net.minecraftforge.network.DualStackUtils.getAddressString(p_11262_.m_129523_());
++         s1 = DualStackUtils.getAddressString(p_11262_.m_129523_());
        }
  
 -      f_11188_.info("{}[{}] logged in with entity id {} at ({}, {}, {})", p_11263_.m_7755_().getString(), s1, p_11263_.m_19879_(), p_11263_.m_20185_(), p_11263_.m_20186_(), p_11263_.m_20189_());
 +      // Spigot start - spawn location event
 +      org.bukkit.entity.Player spawnPlayer = p_11263_.getBukkitEntity();
-+      org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(spawnPlayer, spawnPlayer.getLocation());
++      PlayerSpawnLocationEvent ev = new PlayerSpawnLocationEvent(spawnPlayer, spawnPlayer.getLocation());
 +      cserver.getPluginManager().callEvent(ev);
 +
 +      Location loc = ev.getSpawnLocation();
@@ -132,7 +147,7 @@
        LevelData leveldata = serverlevel1.m_6106_();
        p_11263_.m_143427_(compoundtag);
        ServerGamePacketListenerImpl servergamepacketlistenerimpl = new ServerGamePacketListenerImpl(this.f_11195_, p_11262_, p_11263_);
-+      net.minecraftforge.network.NetworkHooks.sendMCRegistryPackets(p_11262_, "PLAY_TO_CLIENT");
++      NetworkHooks.sendMCRegistryPackets(p_11262_, "PLAY_TO_CLIENT");
        GameRules gamerules = serverlevel1.m_46469_();
        boolean flag = gamerules.m_46207_(GameRules.f_46156_);
        boolean flag1 = gamerules.m_46207_(GameRules.f_46145_);
@@ -145,11 +160,11 @@
        servergamepacketlistenerimpl.m_9829_(new ClientboundChangeDifficultyPacket(leveldata.m_5472_(), leveldata.m_5474_()));
        servergamepacketlistenerimpl.m_9829_(new ClientboundPlayerAbilitiesPacket(p_11263_.m_150110_()));
        servergamepacketlistenerimpl.m_9829_(new ClientboundSetCarriedItemPacket(p_11263_.m_150109_().f_35977_));
-+      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.OnDatapackSyncEvent(this, p_11263_));
++      MinecraftForge.EVENT_BUS.post(new OnDatapackSyncEvent(this, p_11263_));
        servergamepacketlistenerimpl.m_9829_(new ClientboundUpdateRecipesPacket(this.f_11195_.m_129894_().m_44051_()));
        servergamepacketlistenerimpl.m_9829_(new ClientboundUpdateTagsPacket(TagNetworkSerialization.m_245799_(this.f_243858_)));
        this.m_11289_(p_11263_);
-@@ -197,20 +_,72 @@
+@@ -197,20 +_,71 @@
           mutablecomponent = Component.m_237110_("multiplayer.player.joined.renamed", p_11263_.m_5446_(), s);
        }
  
@@ -167,7 +182,7 @@
 -      p_11263_.f_8906_.m_9829_(ClientboundPlayerInfoUpdatePacket.m_247122_(this.f_11196_));
 +      // pPlayer.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // CraftBukkit - replaced with loop below
        this.f_11196_.add(p_11263_);
-+      this.playersByName.put(p_11263_.m_6302_().toLowerCase(java.util.Locale.ROOT), p_11263_); // Spigot
++      this.playersByName.put(p_11263_.m_6302_().toLowerCase(Locale.ROOT), p_11263_); // Spigot
        this.f_11197_.put(p_11263_.m_20148_(), p_11263_);
 -      this.m_11268_(ClientboundPlayerInfoUpdatePacket.m_247122_(List.of(p_11263_)));
 +
@@ -180,7 +195,7 @@
 +      PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(bukkitPlayer, joinMessage);
 +      cserver.getPluginManager().callEvent(playerJoinEvent);
 +
-+      if (!p_11263_.f_8906_.f_9742_.m_129536_()) {
++      if (!p_11263_.f_8906_.m_6198_()) {
 +         return;
 +      }
 +
@@ -197,7 +212,6 @@
 +      ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket.m_247122_(List.of(p_11263_));
 +
 +      for (ServerPlayer player : this.f_11196_) {
-+
 +         if (player.getBukkitEntity().canSee(bukkitPlayer)) {
 +            player.f_8906_.m_9829_(packet);
 +         }
@@ -243,7 +257,7 @@
        }
  
        p_11263_.m_143429_();
-+      net.minecraftforge.event.ForgeEventFactory.firePlayerLoggedIn( p_11263_ );
++      ForgeEventFactory.firePlayerLoggedIn( p_11263_ );
 +      f_11188_.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", p_11263_.m_7755_().getString(), s1, p_11263_.m_19879_(), serverlevel1.K.m_5462_(), p_11263_.m_20185_(), p_11263_.m_20186_(), p_11263_.m_20189_());
     }
  
@@ -264,7 +278,7 @@
           compoundtag1 = compoundtag;
           p_11225_.m_20258_(compoundtag);
           f_11188_.debug("loading single player");
-+         net.minecraftforge.event.ForgeEventFactory.firePlayerLoadingEvent(p_11225_, this.f_11204_, p_11225_.m_20148_().toString());
++         ForgeEventFactory.firePlayerLoadingEvent(p_11225_, this.f_11204_, p_11225_.m_20148_().toString());
        } else {
           compoundtag1 = this.f_11204_.m_78435_(p_11225_);
        }
@@ -276,18 +290,13 @@
        this.f_11204_.m_78433_(p_11277_);
        ServerStatsCounter serverstatscounter = this.f_11202_.get(p_11277_.m_20148_());
        if (serverstatscounter != null) {
-@@ -336,9 +_,30 @@
+@@ -336,9 +_,25 @@
  
     }
  
-+   public @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component quitMessage;
++   public String quitMessage;
     public void m_11286_(ServerPlayer p_11287_) {
-+      // Paper start
-+      this.remove(p_11287_, net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, com.mohistmc.paper.adventure.PaperAdventure.asAdventure(p_11287_.m_5446_())));
-+   }
-+   public void remove(ServerPlayer p_11287_, net.kyori.adventure.text.Component leaveMessage) {
-+      // Paper end
-+      net.minecraftforge.event.ForgeEventFactory.firePlayerLoggedOut(p_11287_);
++      ForgeEventFactory.firePlayerLoggedOut(p_11287_);
        ServerLevel serverlevel = p_11287_.m_284548_();
        p_11287_.m_36220_(Stats.f_12989_);
 +
@@ -297,7 +306,7 @@
 +         p_11287_.m_6915_();
 +      }
 +
-+      PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), leaveMessage); // Paper - Adventure
++      PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), p_11287_.kickLeaveMessage != null ? p_11287_.kickLeaveMessage : "\u00A7e" + p_11287_.m_6302_() + " left the game");
 +      cserver.getPluginManager().callEvent(playerQuitEvent);
 +      p_11287_.getBukkitEntity().disconnect(playerQuitEvent.getQuitMessage());
 +
@@ -311,11 +320,11 @@
        serverlevel.m_143261_(p_11287_, Entity.RemovalReason.UNLOADED_WITH_PLAYER);
        p_11287_.m_8960_().m_135978_();
        this.f_11196_.remove(p_11287_);
-+      this.playersByName.remove(p_11287_.m_6302_().toLowerCase(java.util.Locale.ROOT)); // Spigot
++      this.playersByName.remove(p_11287_.m_6302_().toLowerCase(Locale.ROOT)); // Spigot
        this.f_11195_.m_129901_().m_136305_(p_11287_);
        UUID uuid = p_11287_.m_20148_();
        ServerPlayer serverplayer = this.f_11197_.get(uuid);
-@@ -364,35 +_,76 @@
+@@ -364,35 +_,94 @@
           this.f_11203_.remove(uuid);
        }
  
@@ -335,7 +344,7 @@
 +      // This removes the scoreboard (and player reference) for the specific player in the manager
 +      cserver.getScoreboardManager().removePlayer(p_11287_.getBukkitEntity());
 +      // CraftBukkit end
-+      quitMessage = playerQuitEvent.quitMessage();
++      quitMessage = playerQuitEvent.getQuitMessage();
 +   }
 +
 +   // Mohist start
@@ -354,45 +363,66 @@
 +      ServerLoginPacketListenerImpl handleR = handler.getAndSet(null);
 +      String hostname = handleR == null ? "" : handleR.f_10013_.hostname;
 +      InetAddress realAddress = handleR == null ? ((InetSocketAddress) p_11257_).getAddress() : ((InetSocketAddress) handleR.f_10013_.f_129468_.remoteAddress()).getAddress();
-+
-+      PlayerLoginEvent event = new PlayerLoginEvent(player, hostname, ((InetSocketAddress) p_11257_).getAddress(), realAddress);
++      PlayerLoginEvent event = null;
++      if (!AsyncCatcher.catchAsync()) {
++         event = new PlayerLoginEvent(player, hostname, ((InetSocketAddress) p_11257_).getAddress(), realAddress);
++      }
 +      if (m_11295_().m_11406_(p_11258_) && !m_11295_().m_11388_(p_11258_).m_7524_()) {
           UserBanListEntry userbanlistentry = this.f_11198_.m_11388_(p_11258_);
           MutableComponent mutablecomponent1 = Component.m_237110_("multiplayer.disconnect.banned.reason", userbanlistentry.m_10962_());
           if (userbanlistentry.m_10961_() != null) {
              mutablecomponent1.m_7220_(Component.m_237110_("multiplayer.disconnect.banned.expiration", f_11194_.format(userbanlistentry.m_10961_())));
           }
- 
+-
 -         return mutablecomponent1;
-+         event.disallow(PlayerLoginEvent.Result.KICK_BANNED, org.spigotmc.SpigotConfig.whitelistMessage); // Spigot
++         if (event != null) {
++            event.disallow(PlayerLoginEvent.Result.KICK_BANNED, SpigotConfig.whitelistMessage); // Spigot
++         } else {
++            return mutablecomponent1;
++         }
        } else if (!this.m_5764_(p_11258_)) {
 -         return Component.m_237115_("multiplayer.disconnect.not_whitelisted");
 -      } else if (this.f_11199_.m_11041_(p_11257_)) {
 +         MutableComponent mutablecomponent1 = Component.m_237115_("multiplayer.disconnect.not_whitelisted");
-+         event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, CraftChatMessage.fromComponent(mutablecomponent1));
++         if (event != null) {
++            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, CraftChatMessage.fromComponent(mutablecomponent1));
++         } else {
++            return mutablecomponent1;
++         }
 +      } else if (m_11299_().m_11041_(p_11257_) && !m_11299_().m_11043_(p_11257_).m_7524_()) {
           IpBanListEntry ipbanlistentry = this.f_11199_.m_11043_(p_11257_);
 -         MutableComponent mutablecomponent = Component.m_237110_("multiplayer.disconnect.banned_ip.reason", ipbanlistentry.m_10962_());
 +         MutableComponent mutablecomponent1 = Component.m_237110_("multiplayer.disconnect.banned_ip.reason", ipbanlistentry.m_10962_());
           if (ipbanlistentry.m_10961_() != null) {
 -            mutablecomponent.m_7220_(Component.m_237110_("multiplayer.disconnect.banned_ip.expiration", f_11194_.format(ipbanlistentry.m_10961_())));
-+            mutablecomponent1.m_7220_(Component.m_237110_("multiplayer.disconnect.banned_ip.expiration", f_11194_.format(ipbanlistentry.m_10961_())));
-          }
- 
+-         }
+-
 -         return mutablecomponent;
-+         event.disallow(PlayerLoginEvent.Result.KICK_BANNED, CraftChatMessage.fromComponent(mutablecomponent1));
++            mutablecomponent1.m_7220_(Component.m_237110_("multiplayer.disconnect.banned_ip.expiration", f_11194_.format(ipbanlistentry.m_10961_())));
++         }
++         if (event != null) {
++            event.disallow(PlayerLoginEvent.Result.KICK_BANNED, CraftChatMessage.fromComponent(mutablecomponent1));
++         } else {
++            return mutablecomponent1;
++         }
        } else {
 -         return this.f_11196_.size() >= this.f_11193_ && !this.m_5765_(p_11258_) ? Component.m_237115_("multiplayer.disconnect.server_full") : null;
 -      }
 +         if (this.f_11196_.size() >= this.f_11193_ && !this.m_5765_(p_11258_)) {
-+            event.disallow(PlayerLoginEvent.Result.KICK_FULL, org.spigotmc.SpigotConfig.serverFullMessage); // Spigot
++            if (event != null) {
++               event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage); // Spigot
++            } else {
++               return Component.m_237113_(SpigotConfig.serverFullMessage);
++            }
 +         }
 +      }
 +
-+      cserver.getPluginManager().callEvent(event);
-+      if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
-+         entity.set(null);
-+         return Component.m_237113_(event.getKickMessage());
++      if (event != null) {
++         cserver.getPluginManager().callEvent(event);
++         if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
++            entity.set(null);
++            return Component.m_237113_(event.getKickMessage());
++         }
 +      }
 +      return null;
     }
@@ -417,7 +447,7 @@
     public ServerPlayer m_11236_(ServerPlayer p_11237_, boolean p_11238_) {
 +      p_11237_.m_8127_(); // CraftBukkit
        this.f_11196_.remove(p_11237_);
-+      this.playersByName.remove(p_11237_.m_6302_().toLowerCase(java.util.Locale.ROOT)); // Spigot
++      this.playersByName.remove(p_11237_.m_6302_().toLowerCase(Locale.ROOT)); // Spigot
        p_11237_.m_284548_().m_143261_(p_11237_, Entity.RemovalReason.DISCARDED);
        BlockPos blockpos = p_11237_.m_8961_();
        float f = p_11237_.m_8962_();
@@ -427,7 +457,7 @@
 -      if (serverlevel != null && blockpos != null) {
 -         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +
-+      org.bukkit.World fromWorld = p_11237_.getBukkitEntity().getWorld();
++      World fromWorld = p_11237_.getBukkitEntity().getWorld();
 +      p_11237_.f_8944_ = false;
 +
 +      boolean flag2 = false;
@@ -555,12 +585,12 @@
 +      if (!p_11237_.f_8906_.isDisconnected()) {
 +         serverlevel1.m_8845_(serverplayer);
 +         this.f_11196_.add(serverplayer);
-+         this.playersByName.put(serverplayer.m_6302_().toLowerCase(java.util.Locale.ROOT), serverplayer); // Spigot
++         this.playersByName.put(serverplayer.m_6302_().toLowerCase(Locale.ROOT), serverplayer); // Spigot
 +         this.f_11197_.put(serverplayer.m_20148_(), serverplayer);
 +      }
        serverplayer.m_143429_();
        serverplayer.m_21153_(serverplayer.m_21223_());
-+      net.minecraftforge.event.ForgeEventFactory.firePlayerRespawnEvent(serverplayer, p_11238_);
++      ForgeEventFactory.firePlayerRespawnEvent(serverplayer, p_11238_);
        if (flag2) {
 -         serverplayer.f_8906_.m_9829_(new ClientboundSoundPacket(SoundEvents.f_12377_, SoundSource.BLOCKS, (double)blockpos.m_123341_(), (double)blockpos.m_123342_(), (double)blockpos.m_123343_(), 1.0F, 1.0F, serverlevel1.m_213780_().m_188505_()));
 -      }
@@ -661,7 +691,7 @@
     }
  
     public void m_5749_(GameProfile p_11254_) {
-+      if (net.minecraftforge.event.ForgeEventFactory.onPermissionChanged(p_11254_, this.f_11195_.m_7022_(), this)) return;
++      if (ForgeEventFactory.onPermissionChanged(p_11254_, this.f_11195_.m_7022_(), this)) return;
        this.f_11200_.m_11381_(new ServerOpListEntry(p_11254_, this.f_11195_.m_7022_(), this.f_11200_.m_11351_(p_11254_)));
        ServerPlayer serverplayer = this.m_11259_(p_11254_.getId());
        if (serverplayer != null) {
@@ -669,7 +699,7 @@
     }
  
     public void m_5750_(GameProfile p_11281_) {
-+      if (net.minecraftforge.event.ForgeEventFactory.onPermissionChanged(p_11281_, 0, this)) return;
++      if (ForgeEventFactory.onPermissionChanged(p_11281_, 0, this)) return;
        this.f_11200_.m_11393_(p_11281_);
        ServerPlayer serverplayer = this.m_11259_(p_11281_.getId());
        if (serverplayer != null) {
@@ -709,7 +739,7 @@
 -         p_11230_.f_8906_.m_9829_(new ClientboundGameEventPacket(ClientboundGameEventPacket.f_132160_, p_11231_.m_46722_(1.0F)));
 -         p_11230_.f_8906_.m_9829_(new ClientboundGameEventPacket(ClientboundGameEventPacket.f_132161_, p_11231_.m_46661_(1.0F)));
 +          // CraftBukkit start - handle player weather
-+          p_11230_.setPlayerWeather(org.bukkit.WeatherType.DOWNFALL, false);
++          p_11230_.setPlayerWeather(WeatherType.DOWNFALL, false);
 +          p_11230_.updateWeather(-p_11231_.f_46438_, p_11231_.f_46438_, -p_11231_.f_46440_, p_11231_.f_46440_);
 +          // CraftBukkit end
        }
@@ -743,7 +773,7 @@
 -   }
 +      // CraftBukkit start - disconnect safely
 +      for (ServerPlayer player : this.f_11196_) {
-+         player.f_8906_.m_9942_(com.mohistmc.paper.adventure.PaperAdventure.asVanilla(this.f_11195_.server.shutdownMessage())); // CraftBukkit - add custom shutdown message // Paper - Adventure // Mohist - Adventure -> Vanilla instead of new method for better mod compatibility
++         player.f_8906_.disconnect(this.f_11195_.server.getShutdownMessage()); // CraftBukkit - add custom shutdown message
 +      }
 +      // CraftBukkit end
 +
@@ -816,7 +846,7 @@
        }
  
 +      // Forge: don't overwrite active player with a fake one.
-+      if (!(p_11297_ instanceof net.minecraftforge.common.util.FakePlayer))
++      if (!(p_11297_ instanceof FakePlayer))
        playeradvancements.m_135979_(p_11297_);
        return playeradvancements;
     }
@@ -841,7 +871,7 @@
 +          player.m_8960_().m_135992_(player); // CraftBukkit - trigger immediate flush of advancements
 +       }
  
-+      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.OnDatapackSyncEvent(this, null));
++      MinecraftForge.EVENT_BUS.post(new OnDatapackSyncEvent(this, null));
        this.m_11268_(new ClientboundUpdateTagsPacket(TagNetworkSerialization.m_245799_(this.f_243858_)));
        ClientboundUpdateRecipesPacket clientboundupdaterecipespacket = new ClientboundUpdateRecipesPacket(this.f_11195_.m_129894_().m_44051_());
  

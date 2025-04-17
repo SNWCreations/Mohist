@@ -6,21 +6,20 @@
 package net.minecraftforge.network;
 
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceArrayMap;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
-import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
+import net.minecraft.network.protocol.login.ServerboundCustomQueryPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.LogicalSide;
+import org.apache.commons.lang3.tuple.Pair;
 
 public enum NetworkDirection
 {

@@ -2,6 +2,7 @@ package org.bukkit.craftbukkit.v1_20_R1;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.mohistmc.bukkit.entity.MohistModsEntity;
 import java.util.function.Function;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -527,6 +528,13 @@ public abstract class CraftRegionAccessor implements RegionAccessor {
     }
 
     @Override
+    public <T extends Entity> T spawn(Location location, EntityType entityType, Class<T> clazz, Consumer<T> function) throws IllegalArgumentException {
+        net.minecraft.world.entity.Entity entity = createEntity(location, entityType, clazz, true);
+
+        return addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM, function, true);
+    }
+
+    @Override
     public <T extends Entity> T spawn(Location location, Class<T> clazz, boolean randomizeData, Consumer<T> function) throws IllegalArgumentException {
         return spawn(location, clazz, function, CreatureSpawnEvent.SpawnReason.CUSTOM, randomizeData);
     }
@@ -573,11 +581,17 @@ public abstract class CraftRegionAccessor implements RegionAccessor {
         return createEntity(location, clazz, true);
     }
 
-    @SuppressWarnings("unchecked")
     public net.minecraft.world.entity.Entity createEntity(Location location, Class<? extends Entity> clazz, boolean randomizeData) throws IllegalArgumentException {
+        return createEntity(location, null, clazz, randomizeData);
+    }
+
+        @SuppressWarnings("unchecked")
+    public net.minecraft.world.entity.Entity createEntity(Location location, EntityType entityType, Class<? extends Entity> clazz, boolean randomizeData) throws IllegalArgumentException {
         Preconditions.checkArgument(location != null, "Location cannot be null");
         Preconditions.checkArgument(clazz != null, "Entity class cannot be null");
-
+        if (entityType != null && MohistModsEntity.class.isAssignableFrom(clazz)) {
+            return entityType.getFactory().apply(location);
+        }
         net.minecraft.world.entity.Entity entity = null;
         net.minecraft.world.level.Level world = getHandle().getMinecraftWorld();
 

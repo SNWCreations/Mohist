@@ -5,16 +5,14 @@
 
 package net.minecraftforge.event;
 
+import com.google.common.base.Preconditions;
+import java.util.Locale;
+import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.StructuresBecomeConfiguredFix;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
-
-import java.util.Locale;
-import java.util.Map;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Fired for registering structure conversions for pre-1.18.2 worlds. This is used by {@link StructuresBecomeConfiguredFix}

@@ -6,6 +6,7 @@
 package net.minecraftforge.client.model.renderable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.Arrays;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -19,8 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4f;
-
-import java.util.Arrays;
 
 /**
  * {@linkplain IRenderable Renderable} wrapper for {@linkplain BakedModel baked models}.

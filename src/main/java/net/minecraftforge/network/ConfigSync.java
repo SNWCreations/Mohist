@@ -5,11 +5,6 @@
 
 package net.minecraftforge.network;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.config.ConfigTracker;
-import net.minecraftforge.fml.config.ModConfig;
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -17,6 +12,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.config.ConfigTracker;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class ConfigSync {
     public static final ConfigSync INSTANCE = new ConfigSync(ConfigTracker.INSTANCE);

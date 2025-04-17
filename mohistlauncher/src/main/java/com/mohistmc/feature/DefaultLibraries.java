@@ -19,14 +19,11 @@
 package com.mohistmc.feature;
 
 import com.mohistmc.action.v_1_20_1;
-import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.libraries.Libraries;
 import com.mohistmc.libraries.LibrariesDownloadQueue;
-import com.mohistmc.tools.ConnectionUtil;
 import com.mohistmc.util.I18n;
 import com.mohistmc.util.JarLoader;
 import java.io.File;
-import java.util.Objects;
 
 public class DefaultLibraries {
 

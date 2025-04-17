@@ -5,20 +5,19 @@
 
 package net.minecraftforge.client.gui.widget;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.locale.Language;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.ModListScreen;
-import net.minecraftforge.versions.forge.ForgeVersion;
 import net.minecraftforge.common.util.MavenVersionStringHelper;
 import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.forgespi.language.IModInfo;
-
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class ModListWidget extends ObjectSelectionList<ModListWidget.ModEntry>
 {
@@ -26,7 +25,7 @@ public class ModListWidget extends ObjectSelectionList<ModListWidget.ModEntry>
     private static final ResourceLocation VERSION_CHECK_ICONS = new ResourceLocation(ForgeVersion.MOD_ID, "textures/gui/version_check_icons.png");
     private final int listWidth;
 
-    private ModListScreen parent;
+    private final ModListScreen parent;
 
     public ModListWidget(ModListScreen parent, int listWidth, int top, int bottom)
     {

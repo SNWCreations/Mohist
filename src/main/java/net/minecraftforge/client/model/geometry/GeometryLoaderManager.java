@@ -6,15 +6,13 @@
 package net.minecraftforge.client.model.geometry;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.ElementsModel;
 import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.stream.Collectors;
 
 /**
  * Manager for {@linkplain IGeometryLoader geometry loaders}.

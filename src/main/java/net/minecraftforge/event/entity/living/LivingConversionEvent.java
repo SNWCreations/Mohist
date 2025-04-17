@@ -5,11 +5,10 @@
 
 package net.minecraftforge.event.entity.living;
 
+import java.util.function.Consumer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Cancelable;
-
-import java.util.function.Consumer;
 
 public class LivingConversionEvent extends LivingEvent
 {

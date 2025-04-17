@@ -5,13 +5,12 @@
 
 package net.minecraftforge.common.data;
 
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags.Fluids;
-
-import java.util.concurrent.CompletableFuture;
 
 public final class ForgeFluidTagsProvider extends FluidTagsProvider
 {

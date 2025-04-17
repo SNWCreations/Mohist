@@ -7,15 +7,6 @@ package net.minecraftforge.common;
 
 import com.google.common.base.CharMatcher;
 import com.mohistmc.MohistMC;
-import net.minecraftforge.common.util.MavenVersionStringHelper;
-import net.minecraftforge.fml.Logging;
-import net.minecraftforge.fml.loading.StringUtils;
-import net.minecraftforge.forgespi.language.IModInfo;
-import org.apache.commons.lang3.text.ExtendedMessageFormat;
-import org.apache.commons.lang3.text.FormatFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -24,6 +15,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import net.minecraftforge.common.util.MavenVersionStringHelper;
+import net.minecraftforge.fml.Logging;
+import net.minecraftforge.fml.loading.StringUtils;
+import net.minecraftforge.forgespi.language.IModInfo;
+import org.apache.commons.lang3.text.ExtendedMessageFormat;
+import org.apache.commons.lang3.text.FormatFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //TODO, this should be re-evaluated now that ITextComponents are passed everywhere instaed of strings.
 public class ForgeI18n {

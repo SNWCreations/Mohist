@@ -512,6 +512,7 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
 
         if (type == null) {
             MohistMC.LOGGER.error(MohistMC.i18n.as("bukkit.ItemStack.typenull", args.get("type")));
+            type = Material.BROWN_MUSHROOM;
         }
         ItemStack result = new ItemStack(type, amount, damage);
 

@@ -5,17 +5,15 @@
 
 package net.minecraftforge.server.command;
 
+import java.util.Locale;
 import net.minecraft.commands.CommandSource;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.locale.Language;
 import net.minecraftforge.network.ConnectionType;
 import net.minecraftforge.network.NetworkHooks;
-import org.spongepowered.asm.mixin.Mutable;
-
-import java.util.Locale;
 
 public class TextComponentHelper
 {

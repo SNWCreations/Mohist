@@ -323,7 +323,7 @@ public final class JavaPluginLoader implements PluginLoader {
         Preconditions.checkArgument(plugin instanceof JavaPlugin, "Plugin is not associated with this PluginLoader");
 
         if (!plugin.isEnabled()) {
-            plugin.getLogger().info(I18n.as("minecraftserver.plugin.load.enabling", plugin.getDescription().getFullName()));
+            MohistMC.LOGGER.info(I18n.as("minecraftserver.plugin.load.enabling", plugin.getDescription().getFullName()));
 
             JavaPlugin jPlugin = (JavaPlugin) plugin;
 
@@ -331,13 +331,14 @@ public final class JavaPluginLoader implements PluginLoader {
 
             if (!loaders.contains(pluginLoader)) {
                 loaders.add(pluginLoader);
-                server.getLogger().log(Level.WARNING,MohistMC.i18n.as( "mohist.i18n.20", plugin.getDescription().getFullName()));
+                MohistMC.LOGGER.warn(MohistMC.i18n.as( "mohist.i18n.20", plugin.getDescription().getFullName()));
             }
 
             try {
                 jPlugin.setEnabled(true);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE,MohistMC.i18n.as("mohist.i18n.21", plugin.getDescription().getFullName()), ex);
+                ex.printStackTrace();
+                MohistMC.LOGGER.error(MohistMC.i18n.as("mohist.i18n.21", plugin.getDescription().getFullName()), ex);
                 // Mohist start - Disable plugins that fail to load
                 this.server.getPluginManager().disablePlugin(jPlugin);
                 return;
@@ -368,8 +369,7 @@ public final class JavaPluginLoader implements PluginLoader {
                 server.getLogger().log(Level.SEVERE, MohistMC.i18n.as( "mohist.i18n.22", plugin.getDescription().getFullName()), ex);
             }
 
-            if (cloader instanceof PluginClassLoader) {
-                PluginClassLoader loader = (PluginClassLoader) cloader;
+            if (cloader instanceof PluginClassLoader loader) {
                 loaders.remove(loader);
 
                 Collection<Class<?>> classes = loader.getClasses();

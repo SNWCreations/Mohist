@@ -5,6 +5,7 @@
 
 package net.minecraftforge.event;
 
+import java.util.Objects;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
@@ -17,7 +18,6 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.Objects;
 
 /**
  * PlayLevelSoundEvent is fired when a sound is played on a {@link Level}.

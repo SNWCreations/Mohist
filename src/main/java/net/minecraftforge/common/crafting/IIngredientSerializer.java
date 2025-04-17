@@ -6,9 +6,8 @@
 package net.minecraftforge.common.crafting;
 
 import com.google.gson.JsonObject;
-
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public interface IIngredientSerializer<T extends Ingredient>
 {

@@ -9,16 +9,15 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.IQuadTransformer;
 import net.minecraftforge.client.textures.UnitTextureAtlasSprite;
-
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Vertex consumer that outputs {@linkplain BakedQuad baked quads}.

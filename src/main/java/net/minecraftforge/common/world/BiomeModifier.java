@@ -6,6 +6,7 @@
 package net.minecraftforge.common.world;
 
 import com.mojang.serialization.Codec;
+import java.util.function.Function;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -15,7 +16,6 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.world.ModifiableBiomeInfo.BiomeInfo;
 import net.minecraftforge.registries.ForgeRegistries;
-import java.util.function.Function;
 
 /**
  * JSON-serializable biome modifier.

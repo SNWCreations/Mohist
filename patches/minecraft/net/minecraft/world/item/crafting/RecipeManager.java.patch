@@ -23,7 +23,7 @@
  import org.slf4j.Logger;
  
  public class RecipeManager extends SimpleJsonResourceReloadListener {
-@@ -37,35 +_,62 @@
+@@ -37,34 +_,63 @@
     public Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> f_44007_ = ImmutableMap.of();
     private Map<ResourceLocation, Recipe<?>> f_199900_ = ImmutableMap.of();
     private boolean f_44008_;
@@ -40,17 +40,18 @@
        super(f_44005_, "recipes");
 +      this.context = context;
     }
++
++   protected Map<RecipeType<?>, Object2ObjectLinkedOpenHashMap<ResourceLocation, Recipe<?>>> map1 = Maps.newHashMap();
  
     protected void m_5787_(Map<ResourceLocation, JsonElement> p_44037_, ResourceManager p_44038_, ProfilerFiller p_44039_) {
        this.f_44008_ = false;
--      Map<RecipeType<?>, ImmutableMap.Builder<ResourceLocation, Recipe<?>>> map = Maps.newHashMap();
 +
 +      // CraftBukkit start - SPIGOT-5667 make sure all types are populated and mutable
-+      Map<RecipeType<?>, Object2ObjectLinkedOpenHashMap<ResourceLocation, Recipe<?>>> map1 = Maps.newHashMap();
 +      for (RecipeType<?> recipeType : BuiltInRegistries.f_256990_) {
 +         map1.put(recipeType, new Object2ObjectLinkedOpenHashMap<>());
 +      }
 +      // CraftBukkit end
+       Map<RecipeType<?>, ImmutableMap.Builder<ResourceLocation, Recipe<?>>> map = Maps.newHashMap();
        ImmutableMap.Builder<ResourceLocation, Recipe<?>> builder = ImmutableMap.builder();
  
        for(Map.Entry<ResourceLocation, JsonElement> entry : p_44037_.entrySet()) {
@@ -72,13 +73,13 @@
 +               continue;
 +            }
 +
++            ((ImmutableMap.Builder)map.computeIfAbsent(recipe.m_6671_(), (p_44075_) -> ImmutableMap.builder())).put(resourcelocation, recipe);
+             builder.put(resourcelocation, recipe);
 +            // CraftBukkit start
 +            map1.computeIfAbsent(recipe.m_6671_(), (recipes) -> {
 +               return new Object2ObjectLinkedOpenHashMap<>();
 +               // CraftBukkit end
 +            }).putAndMoveToFirst(resourcelocation, recipe);
-+
-             builder.put(resourcelocation, recipe);
           } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
 -            f_44006_.error("Parsing error loading recipe {}", resourcelocation, jsonparseexception);
 +            if (MohistConfig.recipe_warn) f_44006_.error("Parsing error loading recipe {}", resourcelocation, jsonparseexception);
@@ -89,14 +90,12 @@
 -         return p_44033_.getValue().build();
 -      }));
 -      this.f_199900_ = builder.build();
--      f_44006_.info("Loaded {} recipes", (int)map.size());
-+      this.f_44007_ = (Map) map1;
++      this.f_44007_ = (Map)map.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, (p_44033_) -> ((ImmutableMap.Builder)p_44033_.getValue()).build()));
 +      this.recipesCB = map1;
 +      this.f_199900_ = Maps.newHashMap(builder.build());
-+      f_44006_.info("Loaded {} recipes", (int)map1.size());
+       f_44006_.info("Loaded {} recipes", (int)map.size());
     }
  
-    public boolean m_151269_() {
 @@ -73,9 +_,11 @@
     }
  
@@ -129,7 +128,7 @@
     }
  
     public void m_44024_(Iterable<Recipe<?>> p_44025_) {
-@@ -189,4 +_,58 @@
+@@ -189,4 +_,74 @@
     public interface CachedCheck<C extends Container, T extends Recipe<C>> {
        Optional<T> m_213657_(C p_220280_, Level p_220281_);
     }
@@ -159,7 +158,9 @@
 +            this.f_199900_ = new HashMap<>(f_199900_);
 +         }
 +         map0.putAndMoveToFirst(irecipe.m_6423_(), irecipe);
-+         craftbukkit.putAndMoveToFirst(irecipe.m_6423_(), irecipe); // CraftBukkit - SPIGOT-4638: last recipe gets priority
++         if (craftbukkit != null) {
++            craftbukkit.putAndMoveToFirst(irecipe.m_6423_(), irecipe); // CraftBukkit - SPIGOT-4638: last recipe gets priority
++         }
 +         this.f_199900_.put(irecipe.m_6423_(), irecipe);
 +      }
 +   }
@@ -178,8 +179,22 @@
 +   }
 +
 +   public boolean removeRecipe(ResourceLocation mcKey) {
-+      for (Map<ResourceLocation, Recipe<?>> recipes : f_44007_.values()) {
-+         recipes.remove(mcKey);
++      // Create a temporary mutable map for modification
++      Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> mutableRecipes = new HashMap<>(this.f_44007_);
++      boolean removed = false;
++
++      for (Map.Entry<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> entry : mutableRecipes.entrySet()) {
++         RecipeType<?> type = entry.getKey();
++         Map<ResourceLocation, Recipe<?>> recipeMap = new HashMap<>(entry.getValue());
++
++         if (recipeMap.remove(mcKey) != null) {
++            removed = true;
++            mutableRecipes.put(type, Collections.unmodifiableMap(recipeMap));
++         }
++      }
++
++      if (removed) {
++         this.f_44007_ = ImmutableMap.copyOf(mutableRecipes);
 +      }
 +      for (Object2ObjectLinkedOpenHashMap<ResourceLocation, Recipe<?>> recipes0 : recipesCB.values()) {
 +         recipes0.remove(mcKey);

@@ -5,13 +5,12 @@
 
 package net.minecraftforge.client.loading;
 
+import java.util.Optional;
+import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.server.packs.resources.ReloadInstance;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * This is an implementation of the LoadingOverlay that calls back into the early window rendering, as part of the

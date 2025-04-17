@@ -6,6 +6,7 @@
 package net.minecraftforge.client.event;
 
 import com.mojang.blaze3d.platform.Window;
+import java.util.ArrayList;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,8 +14,6 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.ApiStatus;
-
-import java.util.ArrayList;
 
 /**
  * Fired when an overlay is about to be rendered to the screen to allow the user to modify it.

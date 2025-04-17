@@ -34,6 +34,7 @@ public class BackConfig extends MohistPluginConfig {
 
     public Location getLocation(Player player) {
         final World world = Bukkit.getWorld(yaml.getString(player.getUniqueId() + ".location.world"));
+        if (world == null) return null;
         final double x = yaml.getInt(player.getUniqueId() + ".location.x");
         final double y = yaml.getInt(player.getUniqueId() + ".location.y");
         final double z = yaml.getInt(player.getUniqueId() + ".location.z");

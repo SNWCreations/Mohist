@@ -270,7 +270,7 @@ public class Metrics {
 
     public static class MohistMetrics {
         public static void startMetrics() {
-            File configFile = new File(new File((File) MinecraftServer.options.valueOf("plugins"), "bStats"), "config.yml");
+            File configFile = new File(new File((File) ServerAPI.getNMSServer().options.valueOf("plugins"), "bStats"), "config.yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
             if (!config.isSet("serverUuid")) {

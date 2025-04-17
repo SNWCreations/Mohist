@@ -5,6 +5,20 @@
 
 package net.minecraftforge.common;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.Config;
+import com.electronwill.nightconfig.core.ConfigSpec.CorrectionAction;
+import com.electronwill.nightconfig.core.ConfigSpec.CorrectionListener;
+import com.electronwill.nightconfig.core.EnumGetMethod;
+import com.electronwill.nightconfig.core.InMemoryFormat;
+import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import com.electronwill.nightconfig.core.file.FileConfig;
+import com.electronwill.nightconfig.core.utils.UnmodifiableConfigWrapper;
+import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.mohistmc.MohistMC;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,28 +33,13 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import com.mohistmc.MohistMC;
 import net.minecraftforge.fml.Logging;
 import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
-
-import com.electronwill.nightconfig.core.CommentedConfig;
-import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.EnumGetMethod;
-import com.electronwill.nightconfig.core.ConfigSpec.CorrectionAction;
-import com.electronwill.nightconfig.core.ConfigSpec.CorrectionListener;
-import com.electronwill.nightconfig.core.InMemoryFormat;
-import com.electronwill.nightconfig.core.UnmodifiableConfig;
-import com.electronwill.nightconfig.core.file.FileConfig;
-import com.electronwill.nightconfig.core.utils.UnmodifiableConfigWrapper;
-import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,15 +49,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfig> implements IConfigSpec<ForgeConfigSpec>//TODO: Remove extends and pipe everything through getSpec/getValues?
 {
-    private Map<List<String>, String> levelComments;
-    private Map<List<String>, String> levelTranslationKeys;
+    private final Map<List<String>, String> levelComments;
+    private final Map<List<String>, String> levelTranslationKeys;
 
-    private UnmodifiableConfig values;
+    private final UnmodifiableConfig values;
     private Config childConfig;
 
     private boolean isCorrecting = false;
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Pattern WINDOWS_NEWLINE = Pattern.compile("\r\n");
 
     private ForgeConfigSpec(UnmodifiableConfig storage, UnmodifiableConfig values, Map<List<String>, String> levelComments, Map<List<String>, String> levelTranslationKeys) {
         super(storage);
@@ -120,11 +120,9 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
 
     private void resetCaches(final Iterable<Object> configValues) {
         configValues.forEach(value -> {
-            if (value instanceof ConfigValue) {
-                final ConfigValue<?> configValue = (ConfigValue<?>) value;
+            if (value instanceof ConfigValue<?> configValue) {
                 configValue.clearCache();
-            } else if (value instanceof Config) {
-                final Config innerConfig = (Config) value;
+            } else if (value instanceof Config innerConfig) {
                 this.resetCaches(innerConfig.valueMap().values());
             }
         });
@@ -265,10 +263,10 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
     {
         if (obj1 instanceof String string1 && obj2 instanceof String string2)
         {
-            if (string1.length() > 0 && string2.length() > 0)
+            if (!string1.isEmpty() && !string2.isEmpty())
             {
-                return string1.replaceAll("\r\n", "\n")
-                        .equals(string2.replaceAll("\r\n", "\n"));
+                return WINDOWS_NEWLINE.matcher(string1).replaceAll("\n")
+                        .equals(WINDOWS_NEWLINE.matcher(string2).replaceAll("\n"));
 
             }
         }
@@ -280,10 +278,10 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
     {
         private final Config storage = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport()); // Use LinkedHashMap for consistent ordering
         private BuilderContext context = new BuilderContext();
-        private Map<List<String>, String> levelComments = new HashMap<>();
-        private Map<List<String>, String> levelTranslationKeys = new HashMap<>();
-        private List<String> currentPath = new ArrayList<>();
-        private List<ConfigValue<?>> values = new ArrayList<>();
+        private final Map<List<String>, String> levelComments = new HashMap<>();
+        private final Map<List<String>, String> levelTranslationKeys = new HashMap<>();
+        private final List<String> currentPath = new ArrayList<>();
+        private final List<ConfigValue<?>> values = new ArrayList<>();
 
         //Object
         public <T> ConfigValue<T> define(String path, T defaultValue) {
@@ -367,7 +365,7 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
                         LOGGER.debug(Logging.CORE,MohistMC.i18n.as("mohist.i18n.91", path.get(path.size() - 1)));
                         return getDefault();
                     }
-                    List<?> list = Lists.newArrayList((List<?>) value);
+                    List<?> list = new ArrayList<>((List<?>) value);
                     list.removeIf(elementValidator.negate());
                     if (list.isEmpty()) {
                         LOGGER.debug(Logging.CORE,MohistMC.i18n.as("mohist.i18n.92", path.get(path.size() - 1)));
@@ -395,7 +393,7 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
                         LOGGER.debug(Logging.CORE,MohistMC.i18n.as("mohist.i18n.93", path.get(path.size() - 1)));
                         return getDefault();
                     }
-                    List<?> list = Lists.newArrayList((List<?>) value);
+                    List<?> list = new ArrayList<>((List<?>) value);
                     list.removeIf(elementValidator.negate());
                     if (list.isEmpty()) {
                         LOGGER.debug(Logging.CORE,MohistMC.i18n.as("mohist.i18n.94", path.get(path.size() - 1)));
@@ -696,7 +694,7 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
     }
 
     @SuppressWarnings("unused")
-    private static class Range<V extends Comparable<? super V>> implements Predicate<Object>
+    public static class Range<V extends Comparable<? super V>> implements Predicate<Object>
     {
         private final Class<? extends V> clazz;
         private final V min;
@@ -826,7 +824,7 @@ public class ForgeConfigSpec extends UnmodifiableConfigWrapper<UnmodifiableConfi
 
         public List<String> getPath()
         {
-            return Lists.newArrayList(path);
+            return new ArrayList<>(path);
         }
 
         /**

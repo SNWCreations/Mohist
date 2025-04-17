@@ -30,7 +30,7 @@ public class TicksPerSecondCommand extends Command
         for ( int i = 0; i < tps.length; i++) {
             tpsAvg[i] = TicksPerSecondCommand.format( tps[i] );
         }
-        sender.sendMessage(ChatColor.GOLD + "TPS from last 5s, 1m, 5m, 15m: " + org.apache.commons.lang3.StringUtils.join(tpsAvg, ", ")); // Purpur
+        sender.sendMessage(ChatColor.GOLD + "TPS from last 5s, 1m, 5m: " + org.apache.commons.lang3.StringUtils.join(tpsAvg, ", ")); // Purpur
         if (args.length > 0 && args[0].equals("mem") && sender.hasPermission("bukkit.command.tpsmemory")) {
             sender.sendMessage(ChatColor.GOLD + "Current Memory Usage: " + ChatColor.GREEN + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024)) + "/" + (Runtime.getRuntime().totalMemory() / (1024 * 1024)) + " mb (Max: " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + " mb)");
             if (!hasShownMemoryWarning) {

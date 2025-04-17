@@ -5,6 +5,7 @@
 
 package net.minecraftforge.common.data;
 
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
@@ -14,8 +15,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.Tags;
-
-import java.util.concurrent.CompletableFuture;
 
 public final class ForgeBiomeTagsProvider extends BiomeTagsProvider
 {

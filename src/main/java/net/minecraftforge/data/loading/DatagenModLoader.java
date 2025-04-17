@@ -6,22 +6,21 @@
 package net.minecraftforge.data.loading;
 
 import com.mohistmc.MohistMC;
-import net.minecraft.Util;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.registries.VanillaRegistries;
-import net.minecraft.server.Bootstrap;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.ModLoader;
-import net.minecraftforge.fml.ModWorkManager;
-import net.minecraftforge.data.event.GatherDataEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.server.Bootstrap;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.fml.ModLoader;
+import net.minecraftforge.fml.ModWorkManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DatagenModLoader {
     private static final Logger LOGGER = LogManager.getLogger();

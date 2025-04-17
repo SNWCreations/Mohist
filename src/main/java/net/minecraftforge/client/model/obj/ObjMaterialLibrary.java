@@ -6,13 +6,12 @@
 package net.minecraftforge.client.model.obj;
 
 import com.google.common.collect.Maps;
-import joptsimple.internal.Strings;
-import org.joml.Vector4f;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import joptsimple.internal.Strings;
+import org.joml.Vector4f;
 
 /**
  * An OBJ material library (MTL), composed of named {@link Material materials}.

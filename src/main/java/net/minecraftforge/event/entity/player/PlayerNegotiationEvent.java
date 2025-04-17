@@ -6,13 +6,12 @@
 package net.minecraftforge.event.entity.player;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.network.Connection;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import net.minecraft.network.Connection;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
 
 /**
  * This event is fired on the server when a connection has started the Forge handshake,

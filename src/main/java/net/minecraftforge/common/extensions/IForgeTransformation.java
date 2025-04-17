@@ -5,9 +5,8 @@
 
 package net.minecraftforge.common.extensions;
 
-import net.minecraft.core.Direction;
-
 import com.mojang.math.Transformation;
+import net.minecraft.core.Direction;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;

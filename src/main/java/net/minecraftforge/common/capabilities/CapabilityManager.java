@@ -5,16 +5,15 @@
 
 package net.minecraftforge.common.capabilities;
 
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.List;
 import net.minecraftforge.fml.Logging;
 import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Type;
-
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.List;
 
 public enum CapabilityManager
 {

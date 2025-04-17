@@ -5,19 +5,15 @@
 
 package net.minecraftforge.common;
 
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.entity.ai.behavior.ShufflingList;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 
 public class BiomeManager
 {

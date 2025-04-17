@@ -11,7 +11,8 @@
  
  public abstract class ChunkGenerator {
     public static final Codec<ChunkGenerator> f_62136_ = BuiltInRegistries.f_256914_.m_194605_().dispatchStable(ChunkGenerator::m_6909_, Function.identity());
-    protected final BiomeSource f_62137_;
+-   protected final BiomeSource f_62137_;
++   protected BiomeSource f_62137_;
     private final Supplier<List<FeatureSorter.StepFeatureData>> f_223020_;
 -   private final Function<Holder<Biome>, BiomeGenerationSettings> f_223021_;
 +   public final Function<Holder<Biome>, BiomeGenerationSettings> f_223021_;
@@ -72,6 +73,17 @@
     }
  
     private static BoundingBox m_187717_(ChunkAccess p_187718_) {
+@@ -387,6 +_,10 @@
+       return this.f_62137_;
+    }
+ 
++   public void setBiomeSource(BiomeSource biomeSource) {
++      this.f_62137_ = biomeSource;
++   }
++
+    public abstract int m_6331_();
+ 
+    public WeightedRandomList<MobSpawnSettings.SpawnerData> m_223133_(Holder<Biome> p_223134_, StructureManager p_223135_, MobCategory p_223136_, BlockPos p_223137_) {
 @@ -480,6 +_,16 @@
        Predicate<Holder<Biome>> predicate = holderset::m_203333_;
        StructureStart structurestart = structure.m_226596_(p_223107_, this, this.f_62137_, p_223108_, p_223109_, p_223110_, p_223112_, i, p_223111_, predicate);

@@ -6,8 +6,8 @@
 package net.minecraftforge.network;
 
 import io.netty.util.AttributeKey;
+import java.util.List;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.IExtensionPoint.DisplayTest;
 import net.minecraftforge.network.ConnectionData.ModMismatchData;
 import net.minecraftforge.network.HandshakeMessages.S2CModList;
@@ -15,8 +15,6 @@ import net.minecraftforge.network.event.EventNetworkChannel;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-
-import java.util.List;
 /**
  * Constants related to networking
  */

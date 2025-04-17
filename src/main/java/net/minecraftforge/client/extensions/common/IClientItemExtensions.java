@@ -6,6 +6,7 @@
 package net.minecraftforge.client.extensions.common;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.HumanoidModel;
@@ -26,8 +27,6 @@ import net.minecraftforge.client.IArmPoseTransformer;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * {@linkplain LogicalSide#CLIENT Client-only} extensions to {@link Item}.

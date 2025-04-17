@@ -5,6 +5,7 @@
 
 package net.minecraftforge.client.model;
 
+import java.util.List;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -15,8 +16,6 @@ import net.minecraftforge.client.extensions.IForgeBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Convenience interface with default implementation of {@link IForgeBakedModel#getQuads(BlockState, Direction, RandomSource, ModelData, RenderType)}.

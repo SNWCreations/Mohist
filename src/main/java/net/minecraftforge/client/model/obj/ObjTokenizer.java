@@ -6,9 +6,6 @@
 package net.minecraftforge.client.model.obj;
 
 import com.google.common.base.Charsets;
-import joptsimple.internal.Strings;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +13,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import joptsimple.internal.Strings;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A tokenizer for OBJ and MTL files.

@@ -5,16 +5,14 @@
 
 package net.minecraftforge.server.permission.handler;
 
+import java.util.Set;
+import java.util.UUID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.server.permission.PermissionAPI;
 import net.minecraftforge.server.permission.events.PermissionGatherEvent;
 import net.minecraftforge.server.permission.nodes.PermissionDynamicContext;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
-
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * This is the Heart of the PermissionAPI, it manages {@link PermissionNode}s

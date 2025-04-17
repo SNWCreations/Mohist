@@ -2,6 +2,7 @@ package com.mohistmc.plugins;
 
 import com.mohistmc.MohistConfig;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,24 +22,36 @@ public class EntityClear {
 
     public static final ScheduledExecutorService ENTITYCLEAR_ITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
     public static final ScheduledExecutorService ENTITYCLEAR_MONSTER = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
+    private static final ScheduledExecutorService COUNTDOWN_SERVICE = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear-Countdown"));
+    private static final AtomicInteger countdownSeconds = new AtomicInteger(15);
+    private static ScheduledFuture<?> countdownFuture;
 
     public static void start() {
-        if (MohistConfig.clear_item) {
+        if (MohistConfig.clear_enable) {
             ENTITYCLEAR_ITEM.scheduleAtFixedRate(() -> {
                 if (MinecraftServer.getServer().hasStopped()) {
                     return;
                 }
-                run_item();
-            }, 1000 * 60, 1000L * MohistConfig.clear_item_time, TimeUnit.MILLISECONDS);
+                startCountdown();
+            }, MohistConfig.clear_time, MohistConfig.clear_time, TimeUnit.SECONDS);
         }
-        if (MohistConfig.clear_monster) {
-            ENTITYCLEAR_MONSTER.scheduleAtFixedRate(() -> {
-                if (MinecraftServer.getServer().hasStopped()) {
-                    return;
-                }
-                run_monster();
-            }, 1000 * 60, 1000L * MohistConfig.clear_monster_time, TimeUnit.MILLISECONDS);
-        }
+    }
+
+    public static void startCountdown() {
+        countdownFuture = COUNTDOWN_SERVICE.scheduleAtFixedRate(() -> {
+            int remaining = countdownSeconds.decrementAndGet();
+            if (remaining > 0) {
+                String msg = MohistConfig.clear_countdown_msg
+                        .replace("&", "§")
+                        .replace("%seconds%", String.valueOf(remaining));
+                if (remaining == 14 || remaining == 10 || remaining < 4) Bukkit.broadcastMessage(msg);
+            } else {
+                countdownSeconds.set(15);
+                if (MohistConfig.clear_item)run_item();
+                if (MohistConfig.clear_monster)run_monster();
+                countdownFuture.cancel(false);
+            }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     public static void stop() {

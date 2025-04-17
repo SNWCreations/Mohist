@@ -5,13 +5,12 @@
 
 package net.minecraftforge.event;
 
+import java.util.function.Consumer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.IModBusEvent;
-
-import java.util.function.Consumer;
 
 /**
  * Fired on {@link PackRepository} creation to allow mods to add new pack finders.

@@ -7,7 +7,6 @@ package net.minecraftforge.client.model.geometry;
 
 import java.util.Set;
 import java.util.function.Function;
-
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

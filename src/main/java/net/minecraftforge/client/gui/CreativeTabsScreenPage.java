@@ -5,12 +5,11 @@
 
 package net.minecraftforge.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.CreativeModeTabRegistry;
 import net.minecraftforge.common.util.ConcatenatedListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class CreativeTabsScreenPage
 {

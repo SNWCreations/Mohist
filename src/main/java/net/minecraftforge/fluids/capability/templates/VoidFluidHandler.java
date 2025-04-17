@@ -7,7 +7,6 @@ package net.minecraftforge.fluids.capability.templates;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

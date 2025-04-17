@@ -5,12 +5,11 @@
 
 package net.minecraftforge.event.entity.player;
 
-import net.minecraft.world.entity.player.Player;
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Event.HasResult;
-
-import java.util.Optional;
 
 /**
  * This event is fired when the game checks if players can sleep at this time.<br>

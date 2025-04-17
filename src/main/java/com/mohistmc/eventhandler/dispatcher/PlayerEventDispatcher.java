@@ -23,7 +23,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
@@ -45,10 +44,10 @@ public class PlayerEventDispatcher {
     public void onContainerClose(PlayerContainerEvent.Close event) {
         // Mohist start - Custom Container compatible with mods
         AbstractContainerMenu abstractcontainermenu = event.getContainer();
+        abstractcontainermenu.containerOwner = event.getEntity();
         if (abstractcontainermenu.getBukkitView() == null) {
             org.bukkit.inventory.Inventory inventory = new CraftInventory(new MohistModsInventory(abstractcontainermenu, event.getEntity()));
             inventory.getType().setMods(true);
-            abstractcontainermenu.containerOwner = event.getEntity();
             abstractcontainermenu.bukkitView = new CraftInventoryView(event.getEntity().getBukkitEntity(), inventory, abstractcontainermenu);
         }
         // Mohist end

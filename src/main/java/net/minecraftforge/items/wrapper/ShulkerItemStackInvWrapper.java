@@ -8,10 +8,8 @@ package net.minecraftforge.items.wrapper;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -25,9 +23,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-import java.util.Set;
 
 @ApiStatus.Internal
 public class ShulkerItemStackInvWrapper implements IItemHandlerModifiable, ICapabilityProvider

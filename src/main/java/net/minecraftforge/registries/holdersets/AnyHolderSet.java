@@ -5,17 +5,15 @@
 
 package net.minecraftforge.registries.holdersets;
 
+import com.mohistmc.MohistMC;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import com.mohistmc.MohistMC;
-import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
-
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;

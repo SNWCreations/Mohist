@@ -11,45 +11,48 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
-
+import net.minecraft.SharedConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.RepositorySource;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.DataPackConfig;
+import net.minecraftforge.client.gui.LoadingErrorScreen;
+import net.minecraftforge.common.ForgeConfig;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.fml.*;
+import net.minecraftforge.fml.LoadingFailedException;
+import net.minecraftforge.fml.Logging;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
+import net.minecraftforge.fml.ModLoadingStage;
+import net.minecraftforge.fml.ModLoadingWarning;
+import net.minecraftforge.fml.ModWorkManager;
+import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.loading.ImmediateWindowHandler;
+import net.minecraftforge.forgespi.language.IModInfo;
+import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.internal.BrandingControl;
 import net.minecraftforge.logging.CrashReportExtender;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.forgespi.locating.IModFile;
+import net.minecraftforge.resource.DelegatingPackResources;
 import net.minecraftforge.resource.PathPackResources;
+import net.minecraftforge.resource.ResourcePackLoader;
+import net.minecraftforge.server.LanguageHook;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.SharedConstants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeConfig;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.client.gui.LoadingErrorScreen;
-import net.minecraftforge.resource.DelegatingPackResources;
-import net.minecraftforge.resource.ResourcePackLoader;
-import net.minecraftforge.server.LanguageHook;
-import net.minecraftforge.forgespi.language.IModInfo;
-
-@OnlyIn(Dist.CLIENT)
 public class ClientModLoader
 {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -111,8 +114,8 @@ public class ClientModLoader
     {
         boolean anyOutdated = ModList.get().getMods().stream()
                 .map(VersionChecker::getResult)
-                .map(result -> result.status())
-                .anyMatch(status -> status == VersionChecker.Status.OUTDATED || status == VersionChecker.Status.BETA_OUTDATED);
+                .map(VersionChecker.CheckResult::status)
+                .anyMatch(VersionChecker.Status::isOutdated);
         return anyOutdated ? VersionChecker.Status.OUTDATED : null;
     }
 

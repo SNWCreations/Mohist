@@ -5,14 +5,13 @@
 
 package net.minecraftforge.client.gui.widget;
 
+import java.text.DecimalFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
-
-import java.text.DecimalFormat;
 
 /**
  * Slider widget implementation which allows inputting values in a certain range with optional step size.

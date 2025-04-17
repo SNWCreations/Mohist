@@ -7,8 +7,8 @@ package net.minecraftforge.event.entity.living;
 
 import java.util.Collection;
 import java.util.Collections;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
 

@@ -5,12 +5,11 @@
 
 package net.minecraftforge.network;
 
+import java.util.Arrays;
+import java.util.List;
 import net.minecraftforge.network.event.EventNetworkChannel;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.RegistryManager;
-
-import java.util.Arrays;
-import java.util.List;
 
 class NetworkInitialization {
 

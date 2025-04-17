@@ -5,8 +5,8 @@
 
 package net.minecraftforge.common.util;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Proxy object for a value that is calculated on first access.

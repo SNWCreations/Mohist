@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface CommandSender extends Permissible, net.kyori.adventure.audience.Audience { // Paper
+public interface CommandSender extends net.kyori.adventure.audience.Audience, Permissible {
 
     /**
      * Sends this sender a message
@@ -103,7 +103,9 @@ public interface CommandSender extends Permissible, net.kyori.adventure.audience
     @NotNull
     Spigot spigot();
     // Spigot end
+
     // Paper start
+
     /**
      * Gets the name of this command sender
      *
@@ -112,7 +114,7 @@ public interface CommandSender extends Permissible, net.kyori.adventure.audience
     public net.kyori.adventure.text.@NotNull Component name();
 
     @Override
-    default void sendMessage(final net.kyori.adventure.identity.@NotNull Identity identity, final net.kyori.adventure.text.@NotNull Component message, final net.kyori.adventure.audience.@NotNull MessageType type) {
+    default void sendMessage(final @NotNull net.kyori.adventure.identity.Identity identity, final @NotNull net.kyori.adventure.text.Component message, final @NotNull net.kyori.adventure.audience.MessageType type) {
         this.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(message));
     }
 
@@ -137,7 +139,7 @@ public interface CommandSender extends Permissible, net.kyori.adventure.audience
      * @param message MiniMessage content
      * @param resolvers resolvers to use
      */
-    default void sendRichMessage(final @NotNull String message, final net.kyori.adventure.text.minimessage.tag.resolver.@NotNull TagResolver... resolvers) {
+    default void sendRichMessage(final @NotNull String message, final @NotNull net.kyori.adventure.text.minimessage.tag.resolver.TagResolver... resolvers) {
         this.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message, resolvers));
     }
 

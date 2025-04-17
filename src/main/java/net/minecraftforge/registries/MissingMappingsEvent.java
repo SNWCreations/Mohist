@@ -5,15 +5,14 @@
 
 package net.minecraftforge.registries;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 import org.apache.commons.lang3.Validate;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Fired on the {@link net.minecraftforge.common.MinecraftForge#EVENT_BUS forge bus}.

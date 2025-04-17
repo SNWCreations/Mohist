@@ -5,12 +5,15 @@
 
 package net.minecraftforge.server.permission.handler;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.permission.nodes.PermissionDynamicContext;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
-
-import java.util.*;
 
 public final class DefaultPermissionHandler implements IPermissionHandler
 {

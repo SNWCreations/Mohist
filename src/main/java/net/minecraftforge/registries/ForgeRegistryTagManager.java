@@ -6,14 +6,6 @@
 package net.minecraftforge.registries;
 
 import com.google.common.collect.Iterators;
-import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.tags.IReverseTag;
-import net.minecraftforge.registries.tags.ITag;
-import net.minecraftforge.registries.tags.ITagManager;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,6 +14,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraftforge.registries.tags.IReverseTag;
+import net.minecraftforge.registries.tags.ITag;
+import net.minecraftforge.registries.tags.ITagManager;
+import org.jetbrains.annotations.NotNull;
 
 class ForgeRegistryTagManager<V> implements ITagManager<V>
 {

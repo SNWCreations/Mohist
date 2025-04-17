@@ -6,7 +6,6 @@ import net.kyori.adventure.text.ComponentLike;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-
 import static java.util.Objects.requireNonNull;
 
 interface PaperBrigadierProvider {

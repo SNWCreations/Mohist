@@ -6,14 +6,18 @@ package com.mohistmc.plugins.ban;
  */
 public enum BanType {
 
-    ITEM("ban.item.list"),
-    ITEM_MOSHOU(null),
-    ENTITY("ban.entity.list"),
-    ENCHANTMENT("ban.enchantment.list");
+    ITEM("ban.item.list", "bans.add.item", "bans.remove.item"),
+    ITEM_MOSHOU(null, "bans.add.item_moshou", "bans.remove.item_moshou"),
+    ENTITY("ban.entity.list", "bans.add.entity", "bans.remove.entity"),
+    ENCHANTMENT("ban.enchantment.list", "bans.add.enchantment", "bans.remove.enchantment");
 
     public final String key;
+    public final String i18n_key_add;
+    public final String i18n_key_remove;
 
-    BanType(String key) {
+    BanType(String key, String i18n_key_add, String i18n_key_remove) {
         this.key = key;
+        this.i18n_key_add = i18n_key_add;
+        this.i18n_key_remove = i18n_key_remove;
     }
 }

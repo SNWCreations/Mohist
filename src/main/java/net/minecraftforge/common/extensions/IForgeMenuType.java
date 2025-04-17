@@ -5,11 +5,11 @@
 
 package net.minecraftforge.common.extensions;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.IContainerFactory;
 
 public interface IForgeMenuType<T>

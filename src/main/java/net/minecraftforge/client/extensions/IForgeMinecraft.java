@@ -5,11 +5,10 @@
 
 package net.minecraftforge.client.extensions;
 
+import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ForgeHooksClient;
-
-import java.util.Locale;
 
 /**
  * Extension interface for {@link IForgeMinecraft}.

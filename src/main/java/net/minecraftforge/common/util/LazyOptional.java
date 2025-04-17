@@ -5,14 +5,11 @@
 
 package net.minecraftforge.common.util;
 
-import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraftforge.common.capabilities.Capability;
 import org.apache.commons.lang3.mutable.Mutable;

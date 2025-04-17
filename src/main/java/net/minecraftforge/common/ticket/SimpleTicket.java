@@ -6,10 +6,9 @@
 package net.minecraftforge.common.ticket;
 
 import com.google.common.base.Preconditions;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * Common class for a simple ticket based system.

@@ -10,6 +10,8 @@ import java.lang.management.ThreadInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.bukkit.Bukkit.shutdown;
+
 public class WatchdogThread extends Thread {
 
     private static WatchdogThread instance;
@@ -42,7 +44,6 @@ public class WatchdogThread extends Thread {
         if (MohistConfig.watchdog_spigot) {
             instance.lastTick = monotonicMillis();
         }
-        instance.lastTick = monotonicMillis();
     }
 
     public static void doStop() {
@@ -57,17 +58,12 @@ public class WatchdogThread extends Thread {
             //
             if (lastTick != 0 && timeoutTime > 0 && monotonicMillis() > lastTick + timeoutTime) {
                 Logger log = Bukkit.getServer().getLogger();
+                log.log( Level.SEVERE, "The server has stopped responding!" );
+                log.log( Level.SEVERE, "Mohist version: " + Bukkit.getServer().getVersion() );
+                log.log( Level.SEVERE, "Memory using: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576) + "MB/" + (Runtime.getRuntime().totalMemory() / 1048576) + "MB/" + (Runtime.getRuntime().maxMemory() / 1048576) + "MB" );
+                //
                 log.log(Level.SEVERE, "------------------------------");
-                log.log(Level.SEVERE, "The server has stopped responding! This is (probably) not a Spigot bug.");
-                log.log(Level.SEVERE, "If you see a plugin in the Server thread dump below, then please report it to that author");
-                log.log(Level.SEVERE, "\t *Especially* if it looks like HTTP or MySQL operations are occurring");
-                log.log(Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once");
-                log.log(Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes");
-                log.log(Level.SEVERE, "If you are unsure or still think this is a Spigot bug, please report to https://www.spigotmc.org/");
-                log.log(Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports");
-                log.log(Level.SEVERE, "Spigot version: " + Bukkit.getServer().getVersion());
-                log.log(Level.SEVERE, "------------------------------");
-                log.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Spigot!):");
+                log.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Mohist!):");
                 dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE), log);
                 log.log(Level.SEVERE, "------------------------------");
                 //
@@ -77,7 +73,7 @@ public class WatchdogThread extends Thread {
                     dumpThread(thread, log);
                 }
                 log.log(Level.SEVERE, "------------------------------");
-
+                shutdown();
                 break;
             }
 

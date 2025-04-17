@@ -6,12 +6,11 @@
 package net.minecraftforge.common;
 
 import com.google.common.collect.Sets;
-import net.minecraftforge.common.extensions.IForgeBlock;
-import net.minecraftforge.common.extensions.IForgeItem;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.minecraftforge.common.extensions.IForgeBlock;
+import net.minecraftforge.common.extensions.IForgeItem;
 
 public class ToolActions
 {

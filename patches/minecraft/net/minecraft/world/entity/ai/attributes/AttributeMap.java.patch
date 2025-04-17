@@ -1,6 +1,12 @@
 --- a/net/minecraft/world/entity/ai/attributes/AttributeMap.java
 +++ b/net/minecraft/world/entity/ai/attributes/AttributeMap.java
-@@ -150,4 +_,11 @@
+@@ -145,9 +_,16 @@
+             }
+ 
+          }, () -> {
+-            f_22138_.warn("Ignoring unknown attribute '{}'", (Object)s);
++            if (false) f_22138_.warn("Ignoring unknown attribute '{}'", (Object)s);
+          });
        }
  
     }

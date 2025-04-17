@@ -6,17 +6,15 @@
 package net.minecraftforge.client.loading;
 
 import com.mojang.blaze3d.platform.Monitor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.LoadingOverlay;
-import net.minecraft.server.packs.resources.ReloadInstance;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.LoadingOverlay;
+import net.minecraft.server.packs.resources.ReloadInstance;
 import org.lwjgl.glfw.GLFW;
 
 public final class NoVizFallback {

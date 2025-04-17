@@ -8,17 +8,16 @@ package net.minecraftforge.client.model.geometry;
 import com.google.common.base.Predicates;
 import com.mojang.math.Transformation;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * A {@linkplain IGeometryBakingContext geometry baking context} that is not bound to block/item model loading.

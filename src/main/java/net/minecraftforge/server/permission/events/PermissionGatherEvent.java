@@ -6,15 +6,18 @@
 package net.minecraftforge.server.permission.events;
 
 import com.google.common.base.Preconditions;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.server.permission.handler.DefaultPermissionHandler;
 import net.minecraftforge.server.permission.handler.IPermissionHandler;
 import net.minecraftforge.server.permission.handler.IPermissionHandlerFactory;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
-
-import java.util.*;
-import java.util.function.Function;
 
 /**
  * Fired to gather information for the permissions API, such as the {@link IPermissionHandler} and {@link PermissionNode}s.

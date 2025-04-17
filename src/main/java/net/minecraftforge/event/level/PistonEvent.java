@@ -5,10 +5,10 @@
 
 package net.minecraftforge.event.level;
 
-import net.minecraft.world.level.block.piston.PistonStructureResolver;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraftforge.eventbus.api.Cancelable;
 import org.jetbrains.annotations.Nullable;
 

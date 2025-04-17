@@ -5,14 +5,13 @@
 
 package net.minecraftforge.client.model.generators;
 
+import java.util.Objects;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * Stub class to extend for item model data providers, eliminates some

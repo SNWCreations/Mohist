@@ -7,14 +7,13 @@ package net.minecraftforge.client.model.renderable;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A renderable object composed of a hierarchy of parts, each made up of a number of meshes.

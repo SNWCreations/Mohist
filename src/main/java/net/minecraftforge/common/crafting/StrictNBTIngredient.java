@@ -5,14 +5,12 @@
 
 package net.minecraftforge.common.crafting;
 
-import java.util.stream.Stream;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import java.util.stream.Stream;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 

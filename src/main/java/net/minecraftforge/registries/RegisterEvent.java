@@ -5,6 +5,8 @@
 
 package net.minecraftforge.registries;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -13,9 +15,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.IModBusEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * This event fires for each forge and vanilla registry when all registries are ready to have modded objects registered.

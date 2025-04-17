@@ -312,6 +312,9 @@ public interface RegionAccessor {
     @NotNull
     <T extends Entity> T spawn(@NotNull Location location, @NotNull Class<T> clazz, @Nullable Consumer<T> function) throws IllegalArgumentException;
 
+    @NotNull
+    <T extends Entity> T spawn(@NotNull Location location, EntityType entityType, @NotNull Class<T> clazz, @Nullable Consumer<T> function) throws IllegalArgumentException;
+
     /**
      * Creates a new entity at the given {@link Location} with the supplied
      * function run before the entity is added to the world.

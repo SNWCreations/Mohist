@@ -6,7 +6,6 @@
 package net.minecraftforge.common.extensions;
 
 import com.google.gson.JsonObject;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagEntry;

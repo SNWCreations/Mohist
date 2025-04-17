@@ -5,22 +5,19 @@
 
 package net.minecraftforge.registries.holdersets;
 
+import com.mojang.datafixers.util.Either;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import net.minecraft.core.HolderOwner;
-import org.jetbrains.annotations.Nullable;
-
-import com.mojang.datafixers.util.Either;
-
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Composite holdersets have component holdersets and possibly owner holdersets

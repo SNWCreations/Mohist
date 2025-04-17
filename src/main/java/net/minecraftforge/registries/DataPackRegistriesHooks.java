@@ -6,21 +6,19 @@
 package net.minecraftforge.registries;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistrySynchronization;
-import net.minecraft.resources.RegistryDataLoader;
-import net.minecraft.resources.ResourceKey;
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistrySynchronization;
+import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.ResourceKey;
+import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public final class DataPackRegistriesHooks

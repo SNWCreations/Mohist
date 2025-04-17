@@ -5,7 +5,6 @@
 
 package net.minecraftforge.resource;
 
-import com.google.common.base.Joiner;
 import com.mohistmc.MohistMC;
 import com.mojang.logging.LogUtils;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;

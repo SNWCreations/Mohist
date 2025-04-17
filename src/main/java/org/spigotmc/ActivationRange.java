@@ -117,20 +117,21 @@ public class ActivationRange
         maxRange = Math.max( maxRange, miscActivationRange );
         maxRange = Math.min( ( world.spigotConfig.simulationDistance << 4 ) - 8, maxRange );
 
-        for ( Player player : world.players() )
-        {
+        for ( Player player : world.players() ) {
             player.activatedTick = MinecraftServer.currentTick;
-            if ( world.spigotConfig.ignoreSpectatorActivation && player.isSpectator() )
-            {
+            if (world.spigotConfig.ignoreSpectatorActivation && player.isSpectator()) {
                 continue;
             }
 
-            ActivationRange.maxBB = player.getBoundingBox().inflate( maxRange, 256, maxRange );
-            ActivationType.MISC.boundingBox = player.getBoundingBox().inflate( miscActivationRange, 256, miscActivationRange );
-            ActivationType.RAIDER.boundingBox = player.getBoundingBox().inflate( raiderActivationRange, 256, raiderActivationRange );
-            ActivationType.ANIMAL.boundingBox = player.getBoundingBox().inflate( animalActivationRange, 256, animalActivationRange );
-            ActivationType.MONSTER.boundingBox = player.getBoundingBox().inflate( monsterActivationRange, 256, monsterActivationRange );
-			world.getEntities().get(maxBB, ActivationRange::activateEntity);
+            ActivationRange.maxBB = player.getBoundingBox().inflate(maxRange, 256, maxRange);
+            ActivationType.MISC.boundingBox = player.getBoundingBox().inflate(miscActivationRange, 256, miscActivationRange);
+            ActivationType.RAIDER.boundingBox = player.getBoundingBox().inflate(raiderActivationRange, 256, raiderActivationRange);
+            ActivationType.ANIMAL.boundingBox = player.getBoundingBox().inflate(animalActivationRange, 256, animalActivationRange);
+            ActivationType.MONSTER.boundingBox = player.getBoundingBox().inflate(monsterActivationRange, 256, monsterActivationRange);
+            try {
+                world.getEntities().get(maxBB, ActivationRange::activateEntity);
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -146,7 +147,6 @@ public class ActivationRange
             if ( entity.defaultActivationState )
             {
                 entity.activatedTick = MinecraftServer.currentTick;
-                return;
             }
             if ( entity.activationType.boundingBox.intersects( entity.getBoundingBox() ) )
             {

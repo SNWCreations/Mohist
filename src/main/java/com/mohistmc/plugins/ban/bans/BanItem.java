@@ -2,12 +2,11 @@ package com.mohistmc.plugins.ban.bans;
 
 import com.mohistmc.MohistConfig;
 import com.mohistmc.api.ItemAPI;
-import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.plugins.ban.BanConfig;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 
 /**
@@ -15,6 +14,8 @@ import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
  * @date 2023/7/27 2:54:23
  */
 public class BanItem {
+
+    private static final String moshou_permission = "mohist.ban.item.moshou.";
 
     public static boolean check(UseOnContext use) {
         return check(use.getPlayer(), use.getItemInHand());
@@ -38,27 +39,24 @@ public class BanItem {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getMainHandItem();
         if (player.getBukkitEntity().isOp()) return false;
-        if (check(main)) {
-            return true;
-        }
-        if (check(off)) {
-            return true;
-        }
         if (checkMoShou(main)) {
-            if (player.getBukkitEntity().hasPermission("mohist.ban.item.moshou." + main.asBukkitCopy().getType().name())) {
+            if (player.getBukkitEntity().hasPermission(moshou_permission + main.asBukkitCopy().getType().name())) {
                 return false;
             }
             player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             return true;
         }
         if (checkMoShou(off)) {
-            if (player.getBukkitEntity().hasPermission("mohist.ban.item.moshou." + off.asBukkitCopy().getType().name())) {
+            if (player.getBukkitEntity().hasPermission(moshou_permission + off.asBukkitCopy().getType().name())) {
                 return false;
             }
             player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
             return true;
         }
-        return false;
+        if (check(main)) {
+            return true;
+        }
+        return check(off);
     }
 
     public static boolean check(ItemStack itemStack) {
@@ -67,12 +65,16 @@ public class BanItem {
     }
 
     public static boolean checkMoShou(ItemStack itemStack) {
+        if (itemStack.isEmpty()) return false;
         if (!MohistConfig.ban_item_enable) return false;
         return BanConfig.MOSHOU.getMoShouList().contains(CraftItemStack.asCraftMirror(itemStack).getType().name());
     }
 
     public static boolean checkMoShou(net.minecraft.world.entity.player.Player player, ItemStack itemStack) {
-        if (player.getBukkitEntity().isOp()) return false;
-        return checkMoShou(itemStack);
+        if (itemStack == null) return false;
+        CraftHumanEntity bukkitPlayer = player.getBukkitEntity();
+        if (bukkitPlayer.isOp()) return false;
+        String permission = moshou_permission + CraftItemStack.asCraftMirror(itemStack).getType().name().toLowerCase();
+        return checkMoShou(itemStack) && !bukkitPlayer.hasPermission(permission);
     }
 }

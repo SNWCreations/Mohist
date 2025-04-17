@@ -6,14 +6,13 @@
 package net.minecraftforge.common.data;
 
 import com.google.gson.JsonObject;
+import com.mohistmc.MohistMC;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-
-import com.mohistmc.MohistMC;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;

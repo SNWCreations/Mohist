@@ -5,18 +5,16 @@
 
 package net.minecraftforge.client.textures;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
+import java.util.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.GsonHelper;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * The "forge" section of texture metadata files (.mcmeta). Currently used only to specify custom

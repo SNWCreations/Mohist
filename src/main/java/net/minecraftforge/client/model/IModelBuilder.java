@@ -5,6 +5,7 @@
 
 package net.minecraftforge.client.model;
 
+import java.util.List;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -13,8 +14,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.RenderTypeGroup;
-
-import java.util.List;
 
 /**
  * Base interface for any object that collects culled and unculled faces and bakes them into a model.

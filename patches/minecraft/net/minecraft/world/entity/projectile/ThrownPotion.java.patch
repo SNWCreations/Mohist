@@ -53,7 +53,7 @@
              if (livingentity.m_5801_()) {
                 double d0 = this.m_20280_(livingentity);
                 if (d0 < 16.0D) {
-@@ -140,20 +_,43 @@
+@@ -140,20 +_,44 @@
                    } else {
                       d1 = 1.0D - Math.sqrt(d0) / 4.0D;
                    }
@@ -107,7 +107,8 @@
 +                  });
 +                  MobEffectInstance mobeffectinstance1 = new MobEffectInstance(mobeffect, i, mobeffectinstance.m_19564_(), mobeffectinstance.m_19571_(), mobeffectinstance.m_19572_());
 +                  if (!mobeffectinstance1.m_267633_(20)) {
-+                     livingentity.addEffect(mobeffectinstance1, entity, org.bukkit.event.entity.EntityPotionEffectEvent.Cause.POTION_SPLASH); // CraftBukkit
++                     livingentity.pushEffectCause(org.bukkit.event.entity.EntityPotionEffectEvent.Cause.POTION_SPLASH); // CraftBukkit // Mohist
++                     livingentity.m_147207_(mobeffectinstance1, entity);
                    }
                 }
              }

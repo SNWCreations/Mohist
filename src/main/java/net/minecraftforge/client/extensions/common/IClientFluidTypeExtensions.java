@@ -7,9 +7,7 @@ package net.minecraftforge.client.extensions.common;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.vertex.PoseStack;
-import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

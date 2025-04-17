@@ -1,5 +1,7 @@
 package org.bukkit.craftbukkit.v1_20_R1.command;
 
+import com.mohistmc.ai.koukou.KouKou;
+import java.util.concurrent.atomic.AtomicLong;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -21,8 +23,9 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
     private static final String RGB_STRING = String.valueOf(ANSI_ESC_CHAR) + "[38;2;%d;%d;%dm";
     private static final Pattern RBG_TRANSLATE = Pattern.compile(String.valueOf(ChatColor.COLOR_CHAR) + "x(" + String.valueOf(ChatColor.COLOR_CHAR) + "[A-F0-9]){6}", Pattern.CASE_INSENSITIVE);
     private static final Logger LOGGER = LogManager.getLogger("Console");
+    private final AtomicLong contactID = new AtomicLong(-1);
 
-    protected ColouredConsoleSender() {
+    public ColouredConsoleSender() {
         super();
 
         replacements.put(ChatColor.BLACK, Ansi.ansi().a(Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
@@ -49,10 +52,20 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
         replacements.put(ChatColor.RESET, Ansi.ansi().a(Attribute.RESET).toString());
     }
 
+    public CraftConsoleCommandSender group(long group) {
+        contactID.set(group);
+        return this;
+    }
+
+
     @Override
     public void sendMessage(String message) {
         if (!this.conversationTracker.isConversingModaly()) {
-            LOGGER.info(message);
+            if (contactID.get() != -1) {
+                KouKou.sendToGroup(String.valueOf(contactID.getAndSet(-1)), message.replaceAll("§\\S", ""));
+                return;
+            }
+            LOGGER.info(convertRGBColors(message));
         }
     }
 

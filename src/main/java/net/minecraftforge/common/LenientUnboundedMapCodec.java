@@ -12,7 +12,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.codecs.BaseMapCodec;
-
 import java.util.Map;
 import java.util.Objects;
 

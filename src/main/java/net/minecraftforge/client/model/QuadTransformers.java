@@ -7,13 +7,12 @@ package net.minecraftforge.client.model;
 
 import com.google.common.base.Preconditions;
 import com.mojang.math.Transformation;
+import java.util.Arrays;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import java.util.Arrays;
 
 /**
  * A collection of {@link IQuadTransformer} implementations.

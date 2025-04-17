@@ -5,13 +5,12 @@
 
 package net.minecraftforge.internal;
 
+import java.util.function.Consumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.common.ForgeI18n;
-
-import java.util.function.Consumer;
 
 public class TextComponentMessageFormatHandler {
     public static int handle(final TranslatableContents parent, final Consumer<FormattedText> addChild, final Object[] formatArgs, final String format) {

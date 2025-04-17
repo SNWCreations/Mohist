@@ -8,12 +8,11 @@ package net.minecraftforge.client.extensions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
+import java.nio.ByteBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraftforge.client.model.IQuadTransformer;
 import org.joml.Matrix3f;
 import org.joml.Vector3f;
-
-import java.nio.ByteBuffer;
 
 /**
  * Extension interface for {@link VertexConsumer}.

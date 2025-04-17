@@ -5,15 +5,14 @@
 
 package net.minecraftforge.event;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Set;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestGenerator;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.gametest.ForgeGameTestHooks;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Set;
 
 /**
  * Game tests are registered on client or server startup.

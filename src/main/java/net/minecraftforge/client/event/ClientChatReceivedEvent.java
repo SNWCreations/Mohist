@@ -5,6 +5,7 @@
 
 package net.minecraftforge.client.event;
 
+import java.util.UUID;
 import net.minecraft.Util;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,6 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.ApiStatus;
-import java.util.UUID;
 
 /**
  * Fired when a chat message is received on the client.

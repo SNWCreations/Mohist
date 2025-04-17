@@ -5,6 +5,11 @@
 
 package net.minecraftforge.network;
 
+import com.mohistmc.MohistMC;
+import com.mohistmc.bukkit.inventory.MohistModsInventory;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,36 +17,29 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import com.mohistmc.MohistMC;
-import com.mohistmc.bukkit.inventory.MohistModsInventory;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerLoginPacketListenerImpl;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.fml.config.ConfigTracker;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 import net.minecraftforge.network.ConnectionData.ModMismatchData;
 import net.minecraftforge.network.filters.NetworkFilters;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import io.netty.buffer.Unpooled;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
-import net.minecraft.server.network.ServerLoginPacketListenerImpl;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.fml.config.ConfigTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory;
@@ -51,6 +49,11 @@ import org.jetbrains.annotations.Nullable;
 public class NetworkHooks
 {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public static void init()
+    {
+        LOGGER.debug("Loading Network data for FML net version: {}", NetworkConstants.init());
+    }
 
     public static String getFMLVersion(final String ip)
     {
@@ -211,13 +214,14 @@ public class NetworkHooks
         if (c == null) return;
         // Mohist start - Custom Container compatible with mods
         c.setTitle(containerSupplier.getDisplayName());
+        c.containerOwner = player;
         if (c.getBukkitView() == null) {
             org.bukkit.inventory.Inventory inventory = new CraftInventory(new MohistModsInventory(c, player));
             inventory.getType().setMods(true);
             c.bukkitView = new CraftInventoryView(player.getBukkitEntity(), inventory, c);
         }
-        c.containerOwner = player;
         c = CraftEventFactory.callInventoryOpenEvent(player, c);
+        if (c == null) return;
         // Mohist end
         MenuType<?> type = c.getType();
         PlayMessages.OpenContainer msg = new PlayMessages.OpenContainer(type, openContainerId, c.getTitle(), output);

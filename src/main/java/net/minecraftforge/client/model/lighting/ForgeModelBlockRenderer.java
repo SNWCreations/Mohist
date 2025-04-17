@@ -7,6 +7,7 @@ package net.minecraftforge.client.model.lighting;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.RenderType;
@@ -21,8 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.ForgeConfig;
-
-import java.util.List;
 
 /**
  * Wrapper around {@link ModelBlockRenderer} to allow rendering blocks via Forge's lighting pipeline.

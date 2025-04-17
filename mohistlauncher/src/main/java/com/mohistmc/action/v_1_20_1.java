@@ -4,7 +4,7 @@ import com.mohistmc.MohistMCStart;
 import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.tools.FileUtils;
 import com.mohistmc.tools.JarTool;
-import com.mohistmc.tools.MD5Util;
+import com.mohistmc.tools.SHA256;
 import com.mohistmc.util.I18n;
 import com.mohistmc.util.MohistModuleManager;
 import java.io.File;
@@ -19,15 +19,6 @@ import java.util.List;
 public class v_1_20_1 {
 
     public static final List<String> loadedLibsPaths = new ArrayList<>();
-
-    public static void restartServer(List<String> cmd, boolean shutdown) throws Exception {
-        ProcessBuilder pb = new ProcessBuilder(cmd);
-        pb.inheritIO().start().waitFor();
-        Thread.sleep(2000);
-        if (shutdown) {
-            System.exit(0);
-        }
-    }
 
     public static void run() {
         try {
@@ -157,43 +148,43 @@ public class v_1_20_1 {
                 unmute();
             }
 
-            String storedServerMD5 = null;
-            String storedMohistMD5 = null;
-            String serverMD5 = MD5Util.get(serverJar);
-            String mohistMD5 = MD5Util.get(MohistMCStart.jarTool.getFile());
+            String storedServerSHA256 = null;
+            String storedMohistSHA256 = null;
+            String serverSHA256 = SHA256.as(serverJar);
+            String mohistSHA256 = SHA256.as(MohistMCStart.jarTool.getFile());
 
             if (installInfo.exists()) {
                 List<String> infoLines = Files.readAllLines(installInfo.toPath());
                 if (!infoLines.isEmpty()) {
-                    storedServerMD5 = infoLines.get(0);
+                    storedServerSHA256 = infoLines.get(0);
                 }
                 if (infoLines.size() > 1) {
-                    storedMohistMD5 = infoLines.get(1);
+                    storedMohistSHA256 = infoLines.get(1);
                 }
             }
 
             if (!serverJar.exists()
-                    || storedServerMD5 == null
-                    || storedMohistMD5 == null
-                    || !storedServerMD5.equals(serverMD5)
-                    || !storedMohistMD5.equals(mohistMD5)) {
+                    || storedServerSHA256 == null
+                    || storedMohistSHA256 == null
+                    || !storedServerSHA256.equals(serverSHA256)
+                    || !storedMohistSHA256.equals(mohistSHA256)) {
                 mute();
                 run("net.minecraftforge.binarypatcher.ConsoleTool",
                         new String[]{"--clean", srg.getPath(), "--output", serverJar.getPath(), "--apply", lzma.getPath()},
                         stringToUrl(loadedLibsPaths));
                 unmute();
-                serverMD5 = MD5Util.get(serverJar);
+                serverSHA256 = SHA256.as(serverJar);
             }
 
             FileWriter fw = new FileWriter(installInfo);
-            fw.write(serverMD5 + "\n");
-            fw.write(mohistMD5);
+            fw.write(serverSHA256 + "\n");
+            fw.write(mohistSHA256);
             fw.close();
 
             System.out.println(I18n.as("installation.finished"));
             MohistConfigUtil.yml.set("mohist.installation-finished", true);
             MohistConfigUtil.save();
-            restartServer(launchArgs, true);
+            JarTool.restartServer(launchArgs, true);
         }
 
         protected void libPath() throws Exception {

@@ -8,9 +8,8 @@ package net.minecraftforge.common.world;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.jetbrains.annotations.Nullable;
 

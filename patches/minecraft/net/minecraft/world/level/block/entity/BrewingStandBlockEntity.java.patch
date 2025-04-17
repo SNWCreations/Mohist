@@ -151,9 +151,9 @@
 +      // CraftBukkit start
 +      List<org.bukkit.inventory.ItemStack> brewResults = new ArrayList<>(3);
 +      for (int i = 0; i < 3; ++i) {
-+         ItemStack input = p_155293_.get(i);
-+         ItemStack output = BrewingRecipeRegistry.getOutput(input, itemstack);
-+         brewResults.add(i, CraftItemStack.asCraftMirror(output.m_41619_() ? input : output));
++         var input = p_155293_.get(i);
++         var output = BrewingRecipeRegistry.getOutput(input, itemstack);
++         brewResults.add(i, CraftItemStack.asCraftMirror(PotionBrewing.m_43529_(itemstack, output)));
 +      }
 +      BrewingStandBlockEntity brewingStandBlockEntity = brewingStandBlock;
 +      InventoryHolder owner = brewingStandBlockEntity == null ? null : brewingStandBlockEntity.getOwner();
@@ -177,7 +177,7 @@
 -      itemstack.m_41774_(1);
 -      if (itemstack.m_41720_().m_41470_()) {
 -         ItemStack itemstack1 = new ItemStack(itemstack.m_41720_().m_41469_());
-+      net.minecraftforge.common.brewing.BrewingRecipeRegistry.brewPotions(p_155293_, itemstack, f_58974_);
++      // net.minecraftforge.common.brewing.BrewingRecipeRegistry.brewPotions(p_155293_, itemstack, SLOTS_FOR_SIDES); // Mohist remove it
 +      net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(p_155293_);
 +      if (itemstack.hasCraftingRemainingItem()) {
 +         ItemStack itemstack1 = itemstack.getCraftingRemainingItem();

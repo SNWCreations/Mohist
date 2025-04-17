@@ -6,13 +6,12 @@
 package net.minecraftforge.common.extensions;
 
 import com.google.common.collect.Maps;
+import java.util.function.Consumer;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import java.util.function.Consumer;
 
 public interface IForgeAdvancementBuilder
 {

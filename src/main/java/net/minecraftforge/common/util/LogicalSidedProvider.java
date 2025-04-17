@@ -5,16 +5,15 @@
 
 package net.minecraftforge.common.util;
 
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.LogicalSide;
-
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class LogicalSidedProvider<T>
 {

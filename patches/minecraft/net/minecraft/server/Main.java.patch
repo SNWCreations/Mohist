@@ -172,7 +172,7 @@
                       WorldDimensions.Complete worlddimensions$complete = worlddimensions.m_245300_(registry);
                       Lifecycle lifecycle = worlddimensions$complete.m_245945_().add(p_248079_.f_244104_().m_211816_());
                       return new WorldLoader.DataLoadOutput<>(new PrimaryLevelData(levelsettings, worldoptions, worlddimensions$complete.f_244634_(), lifecycle), worlddimensions$complete.m_245593_());
-@@ -190,22 +_,37 @@
+@@ -190,22 +_,35 @@
  
           WorldData worlddata = worldstem.f_206895_();
           levelstoragesource$levelstorageaccess.m_78287_(registryaccess$frozen, worlddata);
@@ -187,9 +187,7 @@
 +               dedicatedserver1 = new net.minecraft.gametest.framework.GameTestServer(p_129697_, levelstoragesource$levelstorageaccess, packrepository, worldstem, testBatches, spawnPos);
 +            } else {
 +               // Mohist start - fix mixin
-+               dedicatedserver1 = new DedicatedServer(p_129697_, levelstoragesource$levelstorageaccess, packrepository, worldstem, dedicatedserversettings, DataFixers.m_14512_(), services, LoggerChunkProgressListener::new);
-+               MinecraftServer.options = optionset;
-+               MinecraftServer.worldLoader = worldLoader.get();
++               dedicatedserver1 = new DedicatedServer(p_129697_, levelstoragesource$levelstorageaccess, packrepository, worldstem, dedicatedserversettings, DataFixers.m_14512_(), services, LoggerChunkProgressListener::new).worldLoader(worldLoader.get(), optionset);
 +               // Mohist end
 +            }
              dedicatedserver1.m_236740_(optionset.has(optionspec8) ? new GameProfile((UUID)null, optionset.valueOf(optionspec8)) : null);

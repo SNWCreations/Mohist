@@ -5,26 +5,22 @@
 
 package net.minecraftforge.network;
 
-import com.mojang.logging.LogUtils;
 import com.google.common.net.InetAddresses;
+import com.mojang.logging.LogUtils;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import net.minecraft.client.multiplayer.resolver.ResolvedServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
 import net.minecraft.util.HttpUtil;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
-
-import javax.annotation.Nullable;
-import java.net.Inet4Address;
-import net.minecraftforge.common.ForgeConfig;
-
-import javax.annotation.Nullable;
-import java.net.SocketAddress;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
-import java.util.Optional;
 
 public class DualStackUtils
 {

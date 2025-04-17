@@ -8,6 +8,5 @@
 @MethodsReturnNonnullByDefault
 package net.minecraftforge.common.crafting;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;

@@ -173,7 +173,6 @@ public final class PaperAdventure {
 
     public static net.minecraft.network.chat.Component asVanilla(final Component component) {
         if (component == null) return null;
-        if (true) return new AdventureComponent(component);
         return net.minecraft.network.chat.Component.Serializer.fromJson(GsonComponentSerializer.gson().serializer().toJsonTree(component));
     }
 

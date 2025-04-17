@@ -5,14 +5,13 @@
 
 package net.minecraftforge.event.entity;
 
+import java.util.Objects;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Cancelable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * This event is fired on the {@link MinecraftForge#EVENT_BUS}.<br>

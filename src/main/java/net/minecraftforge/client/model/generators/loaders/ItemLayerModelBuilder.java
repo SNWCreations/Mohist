@@ -5,19 +5,17 @@
 
 package net.minecraftforge.client.model.generators.loaders;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.ForgeFaceData;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;

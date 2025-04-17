@@ -26,7 +26,7 @@
  import net.minecraft.core.BlockPos;
  import net.minecraft.core.Direction;
  import net.minecraft.core.Holder;
-@@ -22,6 +_,7 @@
+@@ -22,10 +_,12 @@
  import net.minecraft.core.registries.Registries;
  import net.minecraft.nbt.CompoundTag;
  import net.minecraft.network.protocol.Packet;
@@ -34,7 +34,12 @@
  import net.minecraft.resources.ResourceKey;
  import net.minecraft.resources.ResourceLocation;
  import net.minecraft.server.MinecraftServer;
-@@ -38,6 +_,7 @@
+ import net.minecraft.server.level.FullChunkStatus;
++import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.sounds.SoundEvent;
+ import net.minecraft.sounds.SoundSource;
+ import net.minecraft.util.AbortableIterationConsumer;
+@@ -38,26 +_,32 @@
  import net.minecraft.world.entity.Entity;
  import net.minecraft.world.entity.boss.EnderDragonPart;
  import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -42,7 +47,12 @@
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.item.ItemStack;
  import net.minecraft.world.item.crafting.RecipeManager;
-@@ -49,11 +_,13 @@
+ import net.minecraft.world.level.biome.Biome;
+ import net.minecraft.world.level.biome.BiomeManager;
++import net.minecraft.world.level.biome.BiomeSource;
+ import net.minecraft.world.level.block.BaseFireBlock;
+ import net.minecraft.world.level.block.Block;
+ import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.entity.BlockEntity;
  import net.minecraft.world.level.block.entity.TickingBlockEntity;
  import net.minecraft.world.level.block.state.BlockState;
@@ -56,7 +66,18 @@
  import net.minecraft.world.level.entity.EntityTypeTest;
  import net.minecraft.world.level.entity.LevelEntityGetter;
  import net.minecraft.world.level.gameevent.GameEvent;
-@@ -69,8 +_,19 @@
++import net.minecraft.world.level.levelgen.FlatLevelSource;
+ import net.minecraft.world.level.levelgen.Heightmap;
++import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+ import net.minecraft.world.level.lighting.LevelLightEngine;
+ import net.minecraft.world.level.material.FluidState;
+ import net.minecraft.world.level.material.Fluids;
+@@ -65,12 +_,28 @@
+ import net.minecraft.world.level.redstone.NeighborUpdater;
+ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+ import net.minecraft.world.level.storage.LevelData;
++import net.minecraft.world.level.storage.ServerLevelData;
+ import net.minecraft.world.level.storage.WritableLevelData;
  import net.minecraft.world.phys.AABB;
  import net.minecraft.world.phys.Vec3;
  import net.minecraft.world.scores.Scoreboard;
@@ -68,9 +89,13 @@
 +import org.bukkit.craftbukkit.v1_20_R1.block.CapturedBlockState;
 +import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 +import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CraftWorldInfo;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomChunkGenerator;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomWorldChunkManager;
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftSpawnCategory;
 +import org.bukkit.entity.SpawnCategory;
 +import org.bukkit.event.block.BlockPhysicsEvent;
++import org.bukkit.generator.WorldInfo;
  
 -public abstract class Level implements LevelAccessor, AutoCloseable {
 +public abstract class Level extends net.minecraftforge.common.capabilities.CapabilityProvider<Level> implements LevelAccessor, AutoCloseable, net.minecraftforge.common.extensions.IForgeLevel {
@@ -86,7 +111,7 @@
     protected final NeighborUpdater f_220350_;
     private final List<TickingBlockEntity> f_151503_ = Lists.newArrayList();
     private boolean f_151504_;
-@@ -101,19 +_,64 @@
+@@ -101,19 +_,72 @@
     private final RandomSource f_220348_ = RandomSource.m_216337_();
     private final ResourceKey<DimensionType> f_220349_;
     private final Holder<DimensionType> f_204147_;
@@ -111,9 +136,9 @@
 +   public CraftWorld world;
 +   public boolean pvpMode;
 +   public boolean keepSpawnInMemory = true;
-+   public static org.bukkit.generator.ChunkGenerator generator;
-+   public static org.bukkit.World.Environment environment;
-+   public static org.bukkit.generator.BiomeProvider biomeProvider;
++   public org.bukkit.generator.ChunkGenerator generator;
++   public org.bukkit.World.Environment environment;
++   public org.bukkit.generator.BiomeProvider biomeProvider;
 +
 +   public boolean preventPoiUpdated = false; // CraftBukkit - SPIGOT-5710
 +   public boolean captureBlockStates = false;
@@ -124,21 +149,29 @@
 +   public final it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<SpawnCategory> ticksPerSpawnCategory = new it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<>();
 +   public boolean populating;
 +   public org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
++   public String name;
 +
-+   public CraftWorld getWorld() {
-+      return this.world;
-+   }
 +   public CraftServer getCraftServer() {
 +      return (CraftServer) Bukkit.getServer();
 +   }
 +   public ResourceKey<LevelStem> getTypeKey() {
 +      return Registries.m_257452_(f_46421_);
 +   }
-+   public static void craftWorldData(org.bukkit.generator.ChunkGenerator gen, org.bukkit.World.Environment env, org.bukkit.generator.BiomeProvider bp) {
++   public Level craftWorldData(org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator generator, org.bukkit.generator.BiomeProvider bp) {
++      this.environment = env;
++      this.biomeProvider = bp;
++      this.generator = generator;
++      return this;
++   }
++
++   /*
++   protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider bp) {
++      this(p_270739_, p_270683_, p_270200_, p_270240_, p_270692_, p_270904_, p_270470_, p_270248_, p_270466_);
 +      generator = gen;
 +      environment = env;
 +      biomeProvider = bp;
 +   }
++    */
  
     protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_) {
 +      super(Level.class);
@@ -167,14 +200,11 @@
              }
           };
        } else {
-@@ -141,6 +_,46 @@
+@@ -141,6 +_,43 @@
        this.f_220350_ = new CollectingNeighborUpdater(this, p_270466_);
        this.f_268710_ = p_270200_;
        this.f_268497_ = new DamageSources(p_270200_);
 +      // CraftBukkit start
-+      if (environment == null) {
-+         environment = ForgeInjectBukkit.environment.getOrDefault(getTypeKey(), World.Environment.CUSTOM);
-+      }
 +      m_6857_().world = this;
 +      // From PlayerList.setPlayerFileData
 +      m_6857_().m_61929_(new BorderChangeListener() {
@@ -214,17 +244,22 @@
     }
  
     public boolean m_5776_() {
-@@ -191,6 +_,26 @@
+@@ -190,7 +_,31 @@
+       return this.m_6933_(p_46601_, p_46602_, p_46603_, 512);
     }
  
++   public AtomicBoolean setBlock$captured = new AtomicBoolean(false);
++
     public boolean m_6933_(BlockPos p_46605_, BlockState p_46606_, int p_46607_, int p_46608_) {
 +      {
-+         SetBlockEvent event = new SetBlockEvent(new Location(this.getWorld(), p_46605_.m_123341_(), p_46605_.m_123342_(), p_46605_.m_123343_()));
-+         Bukkit.getPluginManager().callEvent(event);
-+         if (event.isCancelled()) {
-+            org.bukkit.block.Block block = event.getLocation().getBlock();
-+            block.getState().update();
-+            return false;
++         if (SetBlockEvent.getHandlerList().getRegisteredListeners().length > 0 && this.getWorld() != null) {
++            SetBlockEvent event = new SetBlockEvent(new Location(this.getWorld(), p_46605_.m_123341_(), p_46605_.m_123342_(), p_46605_.m_123343_()));
++            Bukkit.getPluginManager().callEvent(event);
++            if (event.isCancelled()) {
++               org.bukkit.block.Block block = event.getLocation().getBlock();
++               block.getState().update();
++               return false;
++            }
 +         }
 +      }
 +      // CraftBukkit start - tree generation
@@ -241,17 +276,16 @@
        if (this.m_151570_(p_46605_)) {
           return false;
        } else if (!this.f_46443_ && this.m_46659_()) {
-@@ -198,11 +_,60 @@
+@@ -198,11 +_,59 @@
        } else {
           LevelChunk levelchunk = this.m_46745_(p_46605_);
           Block block = p_46606_.m_60734_();
 +
 +         // CraftBukkit start - capture blockstates
-+         boolean captured = false;
 +         if (this.captureBlockStates && !this.capturedBlockStates.containsKey(p_46605_)) {
 +            CapturedBlockState blockstate = CapturedBlockState.getBlockState(this, p_46605_, p_46607_);
 +            this.capturedBlockStates.put(p_46605_.m_7949_(), blockstate);
-+            captured = true;
++            setBlock$captured.set(true);
 +         }
 +         // CraftBukkit end
 +
@@ -270,7 +304,7 @@
 +
           if (blockstate == null) {
 +            // CraftBukkit start - remove blockstate if failed (or the same)
-+            if (this.captureBlockStates && captured) {
++            if (this.captureBlockStates && setBlock$captured.getAndSet(false)) {
 +               this.capturedBlockStates.remove(p_46605_);
 +            }
 +            // CraftBukkit end
@@ -323,7 +357,7 @@
 +         bukkit = WorldAPI.destroyBlockProgress.get(p_46626_).getBukkitEntity();
 +         WorldAPI.destroyBlockProgress.remove(p_46626_);
 +      }
-+      if (bukkit != null) {
++      if (ModsEntityDestroyBlockEvent.getHandlerList().getRegisteredListeners().length > 0 && bukkit != null) {
 +         ModsEntityDestroyBlockEvent event = new ModsEntityDestroyBlockEvent(new Location(this.getWorld(), p_46626_.m_123341_(), p_46626_.m_123342_(), p_46626_.m_123343_()), bukkit);
 +         Bukkit.getPluginManager().callEvent(event);
 +         if (event.isCancelled()) {
@@ -407,12 +441,7 @@
        if (!this.f_151503_.isEmpty()) {
           this.f_151512_.addAll(this.f_151503_);
           this.f_151503_.clear();
-@@ -420,16 +_,17 @@
- 
-       this.f_151504_ = false;
-       profilerfiller.m_7238_();
-+      spigotConfig.currentPrimedTnt = 0; // Spigot
-    }
+@@ -424,12 +_,12 @@
  
     public <T extends Entity> void m_46653_(Consumer<T> p_46654_, T p_46655_) {
        try {
@@ -463,29 +492,26 @@
        explosion.m_46061_();
        explosion.m_46075_(p_256377_);
        return explosion;
-@@ -495,16 +_,32 @@
+@@ -495,6 +_,10 @@
  
     @Nullable
     public BlockEntity m_7702_(BlockPos p_46716_) {
--      if (this.m_151570_(p_46716_)) {
-+      // CraftBukkit start
-+      return getBlockEntity(p_46716_, true);
-+   }
-+
-+   @Nullable
-+   public BlockEntity getBlockEntity(BlockPos pPos, boolean validate) {
-+      if (capturedTileEntities.containsKey(pPos)) {
-+         return capturedTileEntities.get(pPos);
++      if (capturedTileEntities.containsKey(p_46716_)) {
++         return capturedTileEntities.get(p_46716_);
 +      }
 +      // CraftBukkit end
-+      if (this.m_151570_(pPos)) {
+       if (this.m_151570_(p_46716_)) {
           return null;
        } else {
--         return !this.f_46443_ && Thread.currentThread() != this.f_46423_ ? null : this.m_46745_(p_46716_).m_5685_(p_46716_, LevelChunk.EntityCreationType.IMMEDIATE);
-+         return !this.f_46443_ && Thread.currentThread() != this.f_46423_ ? null : this.m_46745_(pPos).m_5685_(pPos, LevelChunk.EntityCreationType.IMMEDIATE);
+@@ -502,9 +_,20 @@
        }
     }
  
++   @Nullable
++   public BlockEntity getBlockEntity(BlockPos pPos, boolean validate) {
++      return m_7702_(pPos);
++   }
++
     public void m_151523_(BlockEntity p_151524_) {
        BlockPos blockpos = p_151524_.m_58899_();
        if (!this.m_151570_(blockpos)) {
@@ -606,7 +632,7 @@
     }
  
     public static enum ExplosionInteraction {
-@@ -880,4 +_,53 @@
+@@ -880,4 +_,83 @@
        MOB,
        TNT;
     }
@@ -657,6 +683,36 @@
 +         }
 +         // CraftBukkit end
 +      }
++   }
++
++
++   public CraftWorld getWorld() {
++      if (this.world == null) {
++         if (environment == null) {
++            environment = ForgeInjectBukkit.environment.getOrDefault(getTypeKey(), World.Environment.CUSTOM);
++         }
++         if (generator == null) {
++            generator = this.getCraftServer().getGenerator(((ServerLevelData) this.m_6106_()).m_5462_());
++
++            if (this instanceof net.minecraft.server.level.ServerLevel serverLevel && generator != null) {
++               CraftWorldInfo info = new CraftWorldInfo((ServerLevelData) m_6106_(), serverLevel.convertable, environment, m_6042_());
++
++               net.minecraft.world.level.chunk.ChunkGenerator NMSgenerator = serverLevel.m_7726_().m_8481_();
++               if (biomeProvider != null) {
++                  net.minecraft.world.level.biome.BiomeSource source = new CustomWorldChunkManager(info, biomeProvider, serverLevel.m_9598_().m_175515_(Registries.f_256952_));
++                  NMSgenerator.setBiomeSource(source);
++               } else {
++                  biomeProvider = generator.getDefaultBiomeProvider(info);
++               }
++
++               CustomChunkGenerator gen = new CustomChunkGenerator(serverLevel, NMSgenerator, generator);
++               serverLevel.m_7726_().setChunkGenerator(gen);
++            }
++         }
++         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
++         getCraftServer().addWorld(this.world);
++      }
++      return this.world;
 +   }
 +   // CraftBukkit end
  }

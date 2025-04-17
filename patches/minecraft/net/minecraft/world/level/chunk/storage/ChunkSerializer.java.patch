@@ -19,18 +19,6 @@
  
        UpgradeData upgradedata = p_188234_.m_128425_("UpgradeData", 10) ? new UpgradeData(p_188234_.m_128469_("UpgradeData"), p_188231_) : UpgradeData.f_63320_;
        boolean flag = p_188234_.m_128471_("isLightOn");
-@@ -108,9 +_,9 @@
-                palettedcontainer = new PalettedContainer<>(Block.f_49791_, Blocks.f_50016_.m_49966_(), PalettedContainer.Strategy.f_188137_);
-             }
- 
--            PalettedContainerRO<Holder<Biome>> palettedcontainerro;
-+            PalettedContainer<Holder<Biome>> palettedcontainerro; // CraftBukkit - read/write
-             if (compoundtag.m_128425_("biomes", 10)) {
--               palettedcontainerro = codec.parse(NbtOps.f_128958_, compoundtag.m_128469_("biomes")).promotePartial((p_188274_) -> {
-+               palettedcontainerro = (PalettedContainer<Holder<Biome>>) codec.parse(NbtOps.f_128958_, compoundtag.m_128469_("biomes")).promotePartial((p_188274_) -> {
-                   m_188239_(p_188233_, k, p_188274_);
-                }).getOrThrow(false, f_63449_::error);
-             } else {
 @@ -159,6 +_,7 @@
              return BuiltInRegistries.f_257020_.m_6612_(ResourceLocation.m_135820_(p_258990_));
           }, p_188233_);
@@ -60,7 +48,7 @@
           return new ImposterProtoChunk((LevelChunk)chunkaccess, false);
        } else {
           ProtoChunk protochunk1 = (ProtoChunk)chunkaccess;
-@@ -235,6 +_,7 @@
+@@ -235,11 +_,13 @@
              protochunk1.m_188186_(generationstep$carving, new CarvingMask(compoundtag4.m_128467_(s1), chunkaccess.m_141937_()));
           }
  
@@ -68,6 +56,12 @@
           return protochunk1;
        }
     }
+ 
+    private static void m_188239_(ChunkPos p_188240_, int p_188241_, String p_188242_) {
++      if (true) return;
+       f_63449_.error("Recoverable errors when loading section [" + p_188240_.f_45578_ + ", " + p_188241_ + ", " + p_188240_.f_45579_ + "]: " + p_188242_);
+    }
+ 
 @@ -247,6 +_,12 @@
        return PalettedContainer.m_238418_(p_188261_.m_206115_(), p_188261_.m_206110_(), PalettedContainer.Strategy.f_188138_, p_188261_.m_246971_(Biomes.f_48202_));
     }

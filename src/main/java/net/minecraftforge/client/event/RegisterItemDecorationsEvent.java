@@ -5,20 +5,18 @@
 
 package net.minecraftforge.client.event;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.client.IItemDecorator;
-
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Allows users to register custom {@linkplain IItemDecorator IItemDecorator} to Items.

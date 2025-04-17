@@ -5,12 +5,11 @@
 
 package net.minecraftforge.event.entity.living;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * LivingBreatheEvent is fired whenever a living entity ticks.<br>

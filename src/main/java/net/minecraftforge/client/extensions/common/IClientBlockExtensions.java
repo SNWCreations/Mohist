@@ -5,6 +5,7 @@
 
 package net.minecraftforge.client.extensions.common;
 
+import java.util.function.Consumer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
@@ -22,8 +23,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.fml.LogicalSide;
 import org.joml.Vector3d;
-
-import java.util.function.Consumer;
 
 /**
  * {@linkplain LogicalSide#CLIENT Client-only} extensions to {@link Block}.

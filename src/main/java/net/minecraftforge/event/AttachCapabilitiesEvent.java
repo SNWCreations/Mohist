@@ -5,11 +5,11 @@
 
 package net.minecraftforge.event;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.eventbus.api.GenericEvent;

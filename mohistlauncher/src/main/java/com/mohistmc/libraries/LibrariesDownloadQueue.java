@@ -19,9 +19,7 @@
 package com.mohistmc.libraries;
 
 import com.mohistmc.MohistMCStart;
-import com.mohistmc.tools.ConnectionUtil;
-import com.mohistmc.tools.FileUtils;
-import com.mohistmc.tools.MD5Util;
+import com.mohistmc.tools.SHA256;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import lombok.ToString;
 import me.tongfei.progressbar.ProgressBar;
@@ -110,8 +107,8 @@ public class LibrariesDownloadQueue {
                 for (Libraries lib : need_download) {
                     File file = new File(parentDirectory, lib.path);
                     file.getParentFile().mkdirs();
-                    String url = "META-INF/" + file.getPath();
-                    if (copyFileFromJar(file, url.replaceAll("\\\\", "/"), lib)) {
+                    String url = "META-INF/" + file.getPath().replaceAll("\\\\", "/");
+                    if (copyFileFromJar(file, url, lib)) {
                         debug("downloadFile: OK");
                         fail.remove(lib);
                     } else {
@@ -129,8 +126,8 @@ public class LibrariesDownloadQueue {
 
     protected boolean copyFileFromJar(File file, String pathInJar, Libraries lib) {
         InputStream is = MohistMCStart.class.getClassLoader().getResourceAsStream(pathInJar);
-
-        if (!file.exists() || !MD5Util.get(file).equals(lib.getMd5()) || file.length() <= 1) {
+        if (file.exists()) return true;
+        if (!SHA256.is(is, lib.getSha256()) || file.length() <= 1) {
             file.getParentFile().mkdirs();
             if (is != null) {
                 try {
@@ -150,9 +147,10 @@ public class LibrariesDownloadQueue {
     public boolean needDownload() {
         for (Libraries libraries : allLibraries) {
             File lib = new File(parentDirectory, libraries.path);
-            if (lib.exists() && Objects.equals(MD5Util.get(lib), libraries.md5)) {
+            if (lib.exists() && SHA256.is(lib, libraries.sha256)) {
                 continue;
             }
+            debug("sha256: %s : %s %s%n".formatted(lib, SHA256.as(lib), libraries.sha256));
             need_download.add(libraries);
         }
         return !need_download.isEmpty();

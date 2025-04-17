@@ -12,6 +12,13 @@ import org.bukkit.entity.Player;
  */
 public class KeepInventory {
 
+    public static boolean inventory(net.minecraft.world.entity.player.Player player) {
+        if (player instanceof ServerPlayer nmsPlayer) {
+            return inventory(nmsPlayer);
+        }
+        return false;
+    }
+
     public static boolean inventory(ServerPlayer player) {
         if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
             return true;
@@ -25,6 +32,14 @@ public class KeepInventory {
         player.getBukkitEntity().getWorld().setGameRule(GameRule.KEEP_INVENTORY, i);
         return i;
     }
+
+    public static boolean exp(net.minecraft.world.entity.player.Player player) {
+        if (player instanceof ServerPlayer nmsPlayer) {
+            return exp(nmsPlayer);
+        }
+        return false;
+    }
+
 
     public static boolean exp(ServerPlayer player) {
         if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {

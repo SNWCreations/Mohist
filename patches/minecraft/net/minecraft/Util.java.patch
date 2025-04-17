@@ -6,12 +6,21 @@
  
 +   // We add these inner classes to compensate for Mojang's missing inner classes and shift the anonymous class index.
 +   // This allows us to obfuscate subsequent anonymous inner classes correctly.
-+   @SuppressWarnings("unused") private static java.util.function.LongSupplier INNER_CLASS_SHIFT1 = new java.util.function.LongSupplier() { public long getAsLong() { return 0; } };
-+   @SuppressWarnings("unused") private static java.util.function.LongSupplier INNER_CLASS_SHIFT2 = new java.util.function.LongSupplier() { public long getAsLong() { return 0; } };
++   @SuppressWarnings("unused") private static java.util.function.LongSupplier INNER_CLASS_SHIFT1 = () -> 0;
++   @SuppressWarnings("unused") private static java.util.function.LongSupplier INNER_CLASS_SHIFT2 = () -> 0;
 +
     public static ExecutorService m_183991_() {
        return f_137444_;
     }
+@@ -213,7 +_,7 @@
+       throw p_137560_ instanceof RuntimeException ? (RuntimeException)p_137560_ : new RuntimeException(p_137560_);
+    }
+ 
+-   private static void m_137495_(Thread p_137496_, Throwable p_137497_) {
++   public static void m_137495_(Thread p_137496_, Throwable p_137497_) {
+       m_137570_(p_137497_);
+       if (p_137497_ instanceof CompletionException) {
+          p_137497_ = p_137497_.getCause();
 @@ -239,7 +_,7 @@
        try {
           type = DataFixers.m_14512_().getSchema(DataFixUtils.makeKey(SharedConstants.m_183709_().m_183476_().m_193006_())).getChoiceType(p_137552_, p_137553_);
@@ -57,3 +66,40 @@
        boolean flag = Duration.between(instant, Instant.now()).toMillis() > 500L;
        if (!flag) {
           f_183937_.accept(p_183985_);
+@@ -695,30 +_,30 @@
+ 
+    public static <T, R> Function<T, R> m_143827_(final Function<T, R> p_143828_) {
+       return new Function<T, R>() {
+-         private final Map<T, R> f_211548_ = new ConcurrentHashMap<>();
++         private final Map<T, R> cache = new ConcurrentHashMap<>();
+ 
+          public R apply(T p_214691_) {
+-            return this.f_211548_.computeIfAbsent(p_214691_, p_143828_);
++            return this.cache.computeIfAbsent(p_214691_, p_143828_);
+          }
+ 
+          public String toString() {
+-            return "memoize/1[function=" + p_143828_ + ", size=" + this.f_211548_.size() + "]";
++            return "memoize/1[function=" + p_143828_ + ", size=" + this.cache.size() + "]";
+          }
+       };
+    }
+ 
+    public static <T, U, R> BiFunction<T, U, R> m_143821_(final BiFunction<T, U, R> p_143822_) {
+       return new BiFunction<T, U, R>() {
+-         private final Map<Pair<T, U>, R> f_214693_ = new ConcurrentHashMap<>();
++         private final Map<Pair<T, U>, R> cache = new ConcurrentHashMap<>();
+ 
+          public R apply(T p_214700_, U p_214701_) {
+-            return this.f_214693_.computeIfAbsent(Pair.of(p_214700_, p_214701_), (p_214698_) -> {
++            return this.cache.computeIfAbsent(Pair.of(p_214700_, p_214701_), (p_214698_) -> {
+                return p_143822_.apply(p_214698_.getFirst(), p_214698_.getSecond());
+             });
+          }
+ 
+          public String toString() {
+-            return "memoize/2[function=" + p_143822_ + ", size=" + this.f_214693_.size() + "]";
++            return "memoize/2[function=" + p_143822_ + ", size=" + this.cache.size() + "]";
+          }
+       };
+    }

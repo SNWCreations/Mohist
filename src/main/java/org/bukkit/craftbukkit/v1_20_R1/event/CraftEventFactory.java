@@ -4,10 +4,11 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.mohistmc.MohistMC;
 import com.mohistmc.bukkit.inventory.MohistModsInventory;
+import com.mohistmc.dynamicenum.MohistDynamEnum;
 import com.mohistmc.forge.ForgeInjectBukkit;
 import com.mojang.datafixers.util.Either;
-import java.util.concurrent.atomic.AtomicBoolean;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
@@ -243,6 +244,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -862,96 +864,33 @@ public class CraftEventFactory {
         return !event.isCancelled();
     }
 
-    public static EntityDeathEvent callEntityDeathEvent(net.minecraft.world.entity.LivingEntity victim) {
-        return CraftEventFactory.callEntityDeathEvent(victim, new ArrayList<org.bukkit.inventory.ItemStack>(0));
+    public static EntityDeathEvent callEntityDeathEvent(LivingEntity victim) {
+        return callEntityDeathEvent(victim, new ArrayList<org.bukkit.inventory.ItemStack>(0));
     }
 
-    public static EntityDeathEvent callEntityDeathEvent(net.minecraft.world.entity.LivingEntity victim, List<org.bukkit.inventory.ItemStack> drops) {
-        // Paper start
-        return CraftEventFactory.callEntityDeathEvent(victim, drops, com.google.common.util.concurrent.Runnables.doNothing());
-    }
-    public static EntityDeathEvent callEntityDeathEvent(net.minecraft.world.entity.LivingEntity victim, List<org.bukkit.inventory.ItemStack> drops, Runnable lootCheck) {
-        // Paper end
+    public static EntityDeathEvent callEntityDeathEvent(LivingEntity victim, List<org.bukkit.inventory.ItemStack> drops) {
         CraftLivingEntity entity = (CraftLivingEntity) victim.getBukkitEntity();
-        EntityDeathEvent event = new EntityDeathEvent(entity, drops, victim.getExpReward());
-        populateFields(victim, event); // Paper - make cancellable
+        EntityDeathEvent event = new EntityDeathEvent(entity, drops, victim.getExperienceReward());
         CraftWorld world = (CraftWorld) entity.getWorld();
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        // Paper start - make cancellable
-        if (event.isCancelled()) {
-            return event;
-        }
-        playDeathSound(victim, event);
-        // Paper end
-        victim.expToDrop = event.getDroppedExp();
-        lootCheck.run(); // Paper - advancement triggers before destroying items
-
-        for (org.bukkit.inventory.ItemStack stack : event.getDrops()) {
-            if (stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0) continue;
-
-            world.dropItem(entity.getLocation(), stack); // Paper - note: dropItem already clones due to this being bukkit -> NMS
-            if (stack instanceof CraftItemStack) stack.setAmount(0); // Paper - destroy this item - if this ever leaks due to game bugs, ensure it doesn't dupe, but don't nuke bukkit stacks of manually added items
-        }
-
         return event;
     }
 
-    public static PlayerDeathEvent callPlayerDeathEvent(ServerPlayer victim, List<org.bukkit.inventory.ItemStack> drops, net.kyori.adventure.text.Component deathMessage, String stringDeathMessage, boolean keepInventory) { // Paper - Adventure
+    public static PlayerDeathEvent callPlayerDeathEvent(ServerPlayer victim, List<org.bukkit.inventory.ItemStack> drops, String deathMessage, boolean keepInventory) {
         CraftPlayer entity = victim.getBukkitEntity();
-        PlayerDeathEvent event = new PlayerDeathEvent(entity, drops, victim.getExpReward(), 0, deathMessage, stringDeathMessage); // Paper - Adventure
+        PlayerDeathEvent event = new PlayerDeathEvent(entity, drops, victim.getExperienceReward(), 0, deathMessage);
         event.setKeepInventory(keepInventory);
         event.setKeepLevel(victim.keepLevel); // SPIGOT-2222: pre-set keepLevel
-        populateFields(victim, event); // Paper - make cancellable
         org.bukkit.World world = entity.getWorld();
         Bukkit.getServer().getPluginManager().callEvent(event);
-        // Paper start - make cancellable
-        if (event.isCancelled()) {
-            return event;
-        }
-        playDeathSound(victim, event);
-        // Paper end
-
         victim.keepLevel = event.getKeepLevel();
         victim.newLevel = event.getNewLevel();
         victim.newTotalExp = event.getNewTotalExp();
-        victim.expToDrop = event.getDroppedExp();
         victim.newExp = event.getNewExp();
-
-        for (org.bukkit.inventory.ItemStack stack : event.getDrops()) {
-            if (stack == null || stack.getType() == Material.AIR) continue;
-
-            world.dropItem(entity.getLocation(), stack);
-        }
 
         return event;
     }
-
-    // Paper start - helper methods for making death event cancellable
-    // Add information to death event
-    private static void populateFields(net.minecraft.world.entity.LivingEntity victim, EntityDeathEvent event) {
-        event.setReviveHealth(event.getEntity().getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getValue());
-        event.setShouldPlayDeathSound(!victim.silentDeath && !victim.isSilent());
-        net.minecraft.sounds.SoundEvent soundEffect = victim.getDeathSound0(); // Mohist - use delegate to avoid a lot of AT
-        event.setDeathSound(soundEffect != null ? org.bukkit.craftbukkit.v1_20_R1.CraftSound.getBukkit(soundEffect) : null);
-        event.setDeathSoundCategory(org.bukkit.SoundCategory.valueOf(victim.getSoundSource().name()));
-        event.setDeathSoundVolume(victim.getSoundVolume0()); // Mohist - use delegate to avoid a lot of AT
-        event.setDeathSoundPitch(victim.getVoicePitch());
-    }
-
-    // Play death sound manually
-    private static void playDeathSound(net.minecraft.world.entity.LivingEntity victim, EntityDeathEvent event) {
-        if (event.shouldPlayDeathSound() && event.getDeathSound() != null && event.getDeathSoundCategory() != null) {
-            net.minecraft.world.entity.player.Player source = victim instanceof net.minecraft.world.entity.player.Player ? (net.minecraft.world.entity.player.Player) victim : null;
-            double x = event.getEntity().getLocation().getX();
-            double y = event.getEntity().getLocation().getY();
-            double z = event.getEntity().getLocation().getZ();
-            net.minecraft.sounds.SoundEvent soundEffect = org.bukkit.craftbukkit.v1_20_R1.CraftSound.getSoundEffect(event.getDeathSound());
-            net.minecraft.sounds.SoundSource soundCategory = net.minecraft.sounds.SoundSource.valueOf(event.getDeathSoundCategory().name());
-            victim.level().playSound(source, x, y, z, soundEffect, soundCategory, event.getDeathSoundVolume(), event.getDeathSoundPitch());
-        }
-    }
-    // Paper end
 
     /**
      * Server methods
@@ -1525,7 +1464,15 @@ public class CraftEventFactory {
     }
 
     public static void handleInventoryCloseEvent(net.minecraft.world.entity.player.Player human) {
-        InventoryCloseEvent event = new InventoryCloseEvent(human.containerMenu.getBukkitView());
+        human.inventoryMenu.containerOwner = human;
+        human.containerMenu.containerOwner = human;
+        InventoryView view = human.containerMenu.getBukkitView();
+        if (view == null) {
+            org.bukkit.inventory.Inventory inventory = new CraftInventory(new MohistModsInventory(human.containerMenu, human));
+            inventory.getType().setMods(true);
+            view = new CraftInventoryView(human.getBukkitEntity(), inventory, human.containerMenu);
+        }
+        InventoryCloseEvent event = new InventoryCloseEvent(view);
         human.level.getCraftServer().getPluginManager().callEvent(event);
         human.containerMenu.transferTo(human.inventoryMenu, human.getBukkitEntity());
     }
@@ -1852,7 +1799,14 @@ public class CraftEventFactory {
     }
 
     public static boolean handleEntitySpellCastEvent(SpellcasterIllager caster, SpellcasterIllager.IllagerSpell spell) {
-        EntitySpellCastEvent event = new EntitySpellCastEvent((Spellcaster) caster.getBukkitEntity(), CraftSpellcaster.toBukkitSpell(spell));
+        Spellcaster.Spell bukkit_spell;
+        try {
+            bukkit_spell = CraftSpellcaster.toBukkitSpell(spell);
+        } catch (Exception e) {
+            bukkit_spell = MohistDynamEnum.addEnum(Spellcaster.Spell.class, spell.name());
+            MohistMC.LOGGER.debug("Registered forge Spellcaster.Spell as Spellcaster.Spell(Bukkit) {}", bukkit_spell);
+        }
+        EntitySpellCastEvent event = new EntitySpellCastEvent((Spellcaster) caster.getBukkitEntity(), bukkit_spell);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

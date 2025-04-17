@@ -41,12 +41,7 @@ public class ModFileParser {
         }
 
         final FileConfig fileConfig = FileConfig.builder(modsjson).build();
-        try {
-            fileConfig.load();
-        } catch (Exception e) {
-            LOGGER.error(LogMarkers.LOADING, "Failed to read mods.toml file from mod: {}", modFile.getFilePath(), e);
-            System.exit(0);
-        }
+        fileConfig.load();
         fileConfig.close();
         final NightConfigWrapper configWrapper = new NightConfigWrapper(fileConfig);
         return new ModFileInfo(modFile, configWrapper, configWrapper::setFile);

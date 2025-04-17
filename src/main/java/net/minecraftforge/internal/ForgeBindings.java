@@ -5,6 +5,7 @@
 
 package net.minecraftforge.internal;
 
+import java.util.function.Supplier;
 import net.minecraftforge.common.ForgeI18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -12,8 +13,6 @@ import net.minecraftforge.fml.I18NParser;
 import net.minecraftforge.fml.IBindingsProvider;
 import net.minecraftforge.fml.config.IConfigEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-
-import java.util.function.Supplier;
 
 public class ForgeBindings implements IBindingsProvider {
     @Override

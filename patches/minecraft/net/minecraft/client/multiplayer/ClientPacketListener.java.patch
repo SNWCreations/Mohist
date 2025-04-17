@@ -94,6 +94,17 @@
           }
        } finally {
           if (friendlybytebuf != null) {
+@@ -2204,7 +_,9 @@
+             for(ClientboundUpdateAttributesPacket.AttributeSnapshot clientboundupdateattributespacket$attributesnapshot : p_105128_.m_133591_()) {
+                AttributeInstance attributeinstance = attributemap.m_22146_(clientboundupdateattributespacket$attributesnapshot.m_133601_());
+                if (attributeinstance == null) {
+-                  f_104883_.warn("Entity {} does not have attribute {}", entity, BuiltInRegistries.f_256951_.m_7981_(clientboundupdateattributespacket$attributesnapshot.m_133601_()));
++                  if (Boolean.valueOf(false)) {
++                     f_104883_.warn("Entity {} does not have attribute {}", entity, BuiltInRegistries.f_256951_.m_7981_(clientboundupdateattributespacket$attributesnapshot.m_133601_()));
++                  }
+                } else {
+                   attributeinstance.m_22100_(clientboundupdateattributespacket$attributesnapshot.m_133602_());
+                   attributeinstance.m_22132_();
 @@ -2399,6 +_,8 @@
     }
  

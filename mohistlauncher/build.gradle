@@ -13,13 +13,13 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains:annotations:24.1.0'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.projectlombok:lombok:1.18.36'
 
     implementation 'com.mohistmc:yaml:0.8'
     implementation 'com.mohistmc:i18n:0.6'
     implementation 'com.mohistmc:json:0.5'
-    implementation 'com.mohistmc:tools:0.5.1'
+    implementation 'com.mohistmc:tools:0.6'
     implementation "cpw.mods:bootstraplauncher:1.1.2"
     implementation 'me.tongfei:progressbar:0.10.0'
     implementation 'org.jline:jline:3.25.1'

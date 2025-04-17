@@ -6,13 +6,12 @@
 package net.minecraftforge.client.textures;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterTextureAtlasSpriteLoadersEvent;
 import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
 
 /**
  * Manager for {@link ITextureAtlasSpriteLoader} instances.

@@ -5,14 +5,13 @@
 
 package net.minecraftforge.common.util;
 
+import java.util.function.Supplier;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
 
 /**
  * A subclass of {@link SoundType} that uses {@link Supplier<SoundEvent>}s.

@@ -5,13 +5,12 @@
 
 package net.minecraftforge.fluids.capability.templates;
 
+import java.util.function.Predicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Predicate;
 
 /**
  * Flexible implementation of a Fluid Storage object. NOT REQUIRED.

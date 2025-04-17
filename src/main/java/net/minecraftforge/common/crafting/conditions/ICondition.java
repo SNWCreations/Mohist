@@ -7,17 +7,16 @@ package net.minecraftforge.common.crafting.conditions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraftforge.common.crafting.CraftingHelper;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
 
 public interface ICondition
 {

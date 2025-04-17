@@ -18,7 +18,7 @@
 
 package com.mohistmc.libraries;
 
-import com.mohistmc.tools.MD5Util;
+import com.mohistmc.tools.SHA256;
 import java.io.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +28,7 @@ import lombok.Data;
 public class Libraries {
 
     String path;
-    String md5;
+    String sha256;
     long size;
     boolean installer;
 
@@ -38,6 +38,6 @@ public class Libraries {
     }
 
     public static Libraries from(File file) {
-        return new Libraries(file.getAbsolutePath(), MD5Util.get(file), file.length(), false);
+        return new Libraries(file.getAbsolutePath(), SHA256.as(file), file.length(), false);
     }
 }

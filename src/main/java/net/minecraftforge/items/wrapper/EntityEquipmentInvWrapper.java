@@ -7,16 +7,16 @@ package net.minecraftforge.items.wrapper;
 
 import com.google.common.collect.ImmutableList;
 import com.mohistmc.MohistMC;
-import net.minecraft.world.entity.LivingEntity;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Exposes the armor or hands inventory of an {@link LivingEntity} as an {@link IItemHandler} using {@link LivingEntity#getItemBySlot(EquipmentSlot)} and

@@ -6,6 +6,9 @@
 package net.minecraftforge.client.event;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.SkullModel;
 import net.minecraft.client.model.SkullModelBase;
@@ -36,10 +39,6 @@ import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * Fired for on different events/actions relating to {@linkplain EntityRenderer entity renderers}.

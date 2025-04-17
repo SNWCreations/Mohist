@@ -5,9 +5,9 @@
 
 package net.minecraftforge.common;
 
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.phys.AABB;
 
 /**
  * This class defines a replacement for the default minecart collision code.

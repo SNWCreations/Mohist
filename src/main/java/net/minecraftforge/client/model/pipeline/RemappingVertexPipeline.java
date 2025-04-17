@@ -9,14 +9,13 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
-
 import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 /**
  * Vertex pipeline element that remaps incoming data to another format.

@@ -8,11 +8,9 @@ package net.minecraftforge.common;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.StringRepresentable;
-
 import java.util.function.Function;
 import java.util.function.Supplier;
+import net.minecraft.util.StringRepresentable;
 
 /**
  * To be implemented on vanilla enums that should be enhanced with ASM to be

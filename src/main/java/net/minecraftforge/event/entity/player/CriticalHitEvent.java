@@ -5,11 +5,11 @@
 
 package net.minecraftforge.event.entity.player;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event.HasResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 
 /**
  * This event is fired whenever a player attacks an Entity in

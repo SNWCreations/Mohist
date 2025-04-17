@@ -7,14 +7,13 @@ package net.minecraftforge.common.util;
 
 import com.google.common.collect.Streams;
 import com.mohistmc.MohistMC;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility to format data into a textual (markdown-compliant) table.

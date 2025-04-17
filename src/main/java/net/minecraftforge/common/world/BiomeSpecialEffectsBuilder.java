@@ -6,7 +6,6 @@
 package net.minecraftforge.common.world;
 
 import java.util.Optional;
-
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;

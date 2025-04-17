@@ -5,12 +5,11 @@
 
 package net.minecraftforge.event.entity.player;
 
+import java.util.Optional;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Player.BedSleepingProblem;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.Optional;
 
 /**
  * PlayerSleepInBedEvent is fired when a player sleeps in a bed.

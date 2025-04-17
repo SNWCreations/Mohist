@@ -5,12 +5,10 @@
 
 package net.minecraftforge.common.world;
 
+import com.mojang.serialization.Codec;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import com.mojang.serialization.Codec;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.EntityType;

@@ -5,15 +5,14 @@
 
 package net.minecraftforge.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.forgespi.language.IModInfo;
-
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.fml.IExtensionPoint;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.IModInfo;
 
 public class ConfigScreenHandler
 {

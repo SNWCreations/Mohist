@@ -19,9 +19,12 @@
 package com.mohistmc.commands;
 
 import com.mohistmc.MohistMC;
+import com.mohistmc.ai.koukou.AIConfig;
 import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.ServerAPI;
+import com.mohistmc.plugins.MohistPlugin;
 import com.mohistmc.util.I18n;
+import com.mohistmc.util.MemoryUtils;
 import com.mohistmc.util.MohistThreadCost;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,24 +33,27 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.spigotmc.SpigotConfig;
 
 public class MohistCommand extends Command {
 
-    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost", "cleardropitem");
+    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost", "cleardropitem", "memoryfix");
 
     public MohistCommand(String name) {
         super(name);
         this.description = "Mohist related commands";
-        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed|cleardropitem]";
+        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed|cleardropitem|memoryfix]";
         this.setPermission("mohist.command.mohist");
     }
 
@@ -108,13 +114,21 @@ public class MohistCommand extends Command {
                 return true;
             }
             case "reload" -> {
-                Command.broadcastCommandMessage(sender, ChatColor.RED + I18n.as("mohistcmd.reload.line1"));
-                Command.broadcastCommandMessage(sender, ChatColor.RED + I18n.as("mohistcmd.reload.line2"));
+                MinecraftServer console = MinecraftServer.getServer();
+                com.mohistmc.MohistConfig.init((File) console.options.valueOf("mohist-settings"));
+                ((CraftServer)Bukkit.getServer()).initConfig();
+                ((CraftServer)Bukkit.getServer()).loadCustomPermissions();
+                SpigotConfig.init((File) console.options.valueOf("spigot-settings"));
+                for (ServerLevel world : console.getAllLevels()) {
+                    world.spigotConfig.init();
+                }
+                MohistPlugin.initConfig();
 
-                com.mohistmc.MohistConfig.init((File) MinecraftServer.options.valueOf("mohist-settings"));
-
-                MinecraftServer.getServer().server.reloadCount++;
-                sender.sendMessage(ChatColor.GREEN + "mohist-config/mohist.yml directory reload complete.");
+                console.server.reloadCount++;
+                sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.reload.complete"));
+                if (AIConfig.INSTANCE.enable()) {
+                    sender.sendMessage(ChatColor.GREEN + "QQ 机器人模块已启用！");
+                }
                 return true;
             }
             case "version" -> {
@@ -182,12 +196,14 @@ public class MohistCommand extends Command {
                     return false;
                 }
             }
+            case "memoryfix" -> {
+                sender.sendMessage(ChatColor.GREEN + MemoryUtils.setProcessWorkingSetSize(-1, -1));
+            }
             default -> {
                 sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);
                 return false;
             }
         }
-
 
         return true;
     }

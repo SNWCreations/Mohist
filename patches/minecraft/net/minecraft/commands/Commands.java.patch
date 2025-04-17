@@ -37,14 +37,6 @@
  import org.slf4j.Logger;
  
  public class Commands {
-@@ -128,6 +_,7 @@
-    public static final int f_165685_ = 3;
-    public static final int f_165686_ = 4;
-    private final CommandDispatcher<CommandSourceStack> f_82090_ = new CommandDispatcher<>();
-+   public final java.util.List<CommandNode<CommandSourceStack>> vanillaCommandNodes = new java.util.ArrayList<>(); // Paper
- 
-    public Commands(Commands.CommandSelection p_230943_, CommandBuildContext p_230944_) {
-       AdvancementCommands.m_136310_(this.f_82090_);
 @@ -193,7 +_,7 @@
           JfrCommand.m_183645_(this.f_82090_);
        }
@@ -54,12 +46,11 @@
           TestCommand.m_127946_(this.f_82090_);
           SpawnArmorTrimsCommand.m_266283_(this.f_82090_);
        }
-@@ -218,7 +_,15 @@
+@@ -218,7 +_,14 @@
        if (p_230943_.f_82144_) {
           PublishCommand.m_138184_(this.f_82090_);
        }
 -
-+      this.vanillaCommandNodes.addAll(this.f_82090_.getRoot().getChildren()); // Paper
 +      net.minecraftforge.event.ForgeEventFactory.onCommandRegister(this.f_82090_, p_230943_, p_230944_);
 +
 +      this.f_82090_.setConsumer((p_230954_, p_230955_, p_230956_) -> {
@@ -127,7 +118,7 @@
 +   }
 +
 +   // Mohist start - add field to compat with mods
-+   private AtomicReference<String> mohist$label = new AtomicReference<>();
++   private final AtomicReference<String> mohist$label = new AtomicReference<>();
  
     public int m_242674_(ParseResults<CommandSourceStack> p_242844_, String p_242841_) {
 +      var label = mohist$label.get();
@@ -176,7 +167,7 @@
 -               commandsourcestack.m_81352_(mutablecomponent1);
 +            // Paper start
 +            final net.kyori.adventure.text.TextComponent.Builder builder = net.kyori.adventure.text.Component.text();
-+            if ((p_242844_.getContext().getNodes().isEmpty() || !this.vanillaCommandNodes.contains(p_242844_.getContext().getNodes().get(0).getNode()))) {
++            if ((p_242844_.getContext().getNodes().isEmpty())) {
 +               if (!org.spigotmc.SpigotConfig.unknownCommandMessage.isEmpty()) {
 +                  builder.append(LegacyComponentSerializer.legacySection().deserialize(org.spigotmc.SpigotConfig.unknownCommandMessage));
 +               }

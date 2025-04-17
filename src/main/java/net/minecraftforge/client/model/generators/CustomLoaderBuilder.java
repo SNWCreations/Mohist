@@ -7,11 +7,10 @@ package net.minecraftforge.client.model.generators;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.ExistingFileHelper;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public abstract class CustomLoaderBuilder<T extends ModelBuilder<T>>
 {

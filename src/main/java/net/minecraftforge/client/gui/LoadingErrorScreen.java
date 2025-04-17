@@ -6,30 +6,29 @@
 package net.minecraftforge.client.gui;
 
 import com.google.common.base.Strings;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.ErrorScreen;
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.common.ForgeI18n;
-import net.minecraftforge.fml.LoadingFailedException;
-import net.minecraftforge.fml.ModLoadingException;
-import net.minecraftforge.fml.ModLoadingWarning;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
-import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.ErrorScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.minecraftforge.common.ForgeI18n;
+import net.minecraftforge.fml.LoadingFailedException;
+import net.minecraftforge.fml.ModLoadingException;
+import net.minecraftforge.fml.ModLoadingWarning;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LoadingErrorScreen extends ErrorScreen {
     private static final Logger LOGGER = LogManager.getLogger();

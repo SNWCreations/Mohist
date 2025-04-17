@@ -44,7 +44,7 @@
  import org.slf4j.Logger;
  
  public abstract class AbstractContainerMenu {
-@@ -60,6 +_,54 @@
+@@ -60,6 +_,70 @@
     private ContainerSynchronizer f_150397_;
     private boolean f_150398_;
  
@@ -63,18 +63,34 @@
 +      return bukkitView;
 +   }
 +
++   public InventoryView getBukkitView(AbstractContainerMenu other){
++      if (other.bukkitView == null && other.containerOwner != null) {
++         org.bukkit.inventory.Inventory view = new CraftInventory(new MohistModsInventory(other, containerOwner));
++         view.getType().setMods(true);
++         return new CraftInventoryView(other.containerOwner.getBukkitEntity(), view, other);
++      }
++      return other.bukkitView;
++   }
++
 +   // Mohist end
 +   public void transferTo(AbstractContainerMenu other, CraftHumanEntity player) {
++      other.containerOwner = player.getHandle();
++      this.containerOwner = player.getHandle();
 +      InventoryView source = this.getBukkitView(), destination = other.getBukkitView();
 +      if (destination == null) {
-+         destination = getBukkitView();
++         destination = this.getBukkitView(other);
++      }
++      if (source == null) {
++         org.bukkit.inventory.Inventory view = new CraftInventory(new MohistModsInventory(this, containerOwner));
++         view.getType().setMods(true);
++         source = new CraftInventoryView(containerOwner.getBukkitEntity(), view, this);
 +      }
 +      ((CraftInventory) source.getTopInventory()).getInventory().onClose(player);
 +      ((CraftInventory) source.getBottomInventory()).getInventory().onClose(player);
 +      ((CraftInventory) destination.getTopInventory()).getInventory().onOpen(player);
 +      ((CraftInventory) destination.getBottomInventory()).getInventory().onOpen(player);
 +   }
-+   private Component title;
++   private Component title = null;
 +   public Component getTitle() {
 +      // Mohist: null title -> empty title
 +      if (this.title == null) {
@@ -108,6 +124,16 @@
                 this.f_150397_.m_142074_(this, p_150436_, itemstack1);
              }
           }
+@@ -282,6 +_,9 @@
+    }
+ 
+    public Slot m_38853_(int p_38854_) {
++      if (p_38854_ > this.f_150394_.size()) {
++         p_38854_ = this.f_150394_.size() - 1;
++      }
+       return this.f_38839_.get(p_38854_);
+    }
+ 
 @@ -332,7 +_,7 @@
              }
           } else if (this.f_38846_ == 2) {

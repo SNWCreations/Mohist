@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -1,6 +_,14 @@
+@@ -1,6 +_,15 @@
  package net.minecraft.server.dedicated;
  
  import com.google.common.collect.Lists;
@@ -11,6 +11,7 @@
 +import com.mohistmc.api.ServerAPI;
 +import com.mohistmc.api.color.ColorsAPI;
 +import com.mohistmc.paper.brigadier.PaperBrigadierProviderImpl;
++import com.mohistmc.plugins.MohistPlugin;
 +import com.mohistmc.util.I18n;
  import com.mojang.authlib.GameProfile;
  import com.mojang.datafixers.DataFixer;
@@ -173,7 +174,7 @@
        }
  
        if (this.m_139668_()) {
-@@ -153,14 +_,31 @@
+@@ -153,14 +_,32 @@
           return false;
        } else {
           this.m_129823_(new DedicatedPlayerList(this, this.m_247573_(), this.f_129745_));
@@ -183,6 +184,7 @@
 +         // Spigot end
 +         // Mohsit start
 +         MohistConfig.init((java.io.File) options.valueOf("mohist-settings"));
++         MohistPlugin.initConfig();
 +         MohistConfig.registerCommands();
 +         if (MohistConfig.motdEnable) {
 +            this.m_129989_(MohistConfig.motd());
@@ -215,7 +217,7 @@
              Thread thread1 = new Thread(new ServerWatchdog(this));
              thread1.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandlerWithName(f_139598_));
              thread1.setName("Server Watchdog");
-@@ -188,7 +_,14 @@
+@@ -188,7 +_,13 @@
              f_139598_.info("JMX monitoring enabled");
           }
  
@@ -224,7 +226,6 @@
 +            this.dediLanPinger = new net.minecraft.client.server.LanServerPinger(this.m_129916_(), String.valueOf(this.m_7448_()));
 +            this.dediLanPinger.start();
 +         }
-+         if (MohistMC.i18n.isCN()) f_139598_.info(ColorsAPI.of("&b小小墨提醒您: Mohist 核心已装载完毕，有任何问题可以加官方群 [158638] 进行反馈"));
 +         Metrics.MohistMetrics.startMetrics();
 +         WatchMohist.start();
 +         return net.minecraftforge.server.ServerLifecycleHooks.handleServerStarting(this);

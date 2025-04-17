@@ -5,14 +5,13 @@
 
 package net.minecraftforge.common.util;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
 import net.minecraftforge.common.ForgeI18n;
 import net.minecraftforge.forgespi.locating.ForgeFeature;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.Restriction;
 import org.apache.maven.artifact.versioning.VersionRange;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MavenVersionStringHelper {
     public static String artifactVersionToString(final ArtifactVersion artifactVersion) {

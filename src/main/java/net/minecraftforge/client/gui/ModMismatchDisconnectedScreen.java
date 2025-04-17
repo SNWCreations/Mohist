@@ -5,6 +5,7 @@
 
 package net.minecraftforge.client.gui;
 
+import com.mojang.blaze3d.vertex.Tesselator;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,12 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import net.minecraftforge.client.gui.widget.ScrollPanel;
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.mojang.blaze3d.vertex.Tesselator;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -36,11 +31,13 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.client.gui.widget.ScrollPanel;
 import net.minecraftforge.common.ForgeI18n;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.ConnectionData.ModMismatchData;
 import net.minecraftforge.network.NetworkRegistry;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class ModMismatchDisconnectedScreen extends Screen
 {

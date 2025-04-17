@@ -1,7 +1,9 @@
 --- a/net/minecraft/world/level/material/LavaFluid.java
 +++ b/net/minecraft/world/level/material/LavaFluid.java
-@@ -2,6 +_,8 @@
+@@ -1,7 +_,10 @@
+ package net.minecraft.world.level.material;
  
++import com.mohistmc.MohistConfig;
  import java.util.Optional;
  import javax.annotation.Nullable;
 +
@@ -9,7 +11,12 @@
  import net.minecraft.core.BlockPos;
  import net.minecraft.core.Direction;
  import net.minecraft.core.particles.ParticleOptions;
-@@ -23,6 +_,7 @@
+@@ -18,11 +_,11 @@
+ import net.minecraft.world.level.Level;
+ import net.minecraft.world.level.LevelAccessor;
+ import net.minecraft.world.level.LevelReader;
+-import net.minecraft.world.level.block.BaseFireBlock;
+ import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.LiquidBlock;
  import net.minecraft.world.level.block.state.BlockState;
  import net.minecraft.world.level.block.state.StateDefinition;
@@ -86,6 +93,15 @@
     @Nullable
     public ParticleOptions m_7792_() {
        return ParticleTypes.f_123800_;
+@@ -139,7 +_,7 @@
+    }
+ 
+    public int m_6718_(LevelReader p_76226_) {
+-      return p_76226_.m_6042_().f_63857_() ? 10 : 30;
++      return p_76226_.m_6042_().f_63857_() ? MohistConfig.custom_lava_speed_nether : MohistConfig.custom_lava_speed_normal;
+    }
+ 
+    public int m_6886_(Level p_76203_, BlockPos p_76204_, FluidState p_76205_, FluidState p_76206_) {
 @@ -164,7 +_,11 @@
           FluidState fluidstate = p_76220_.m_6425_(p_76221_);
           if (this.m_205067_(FluidTags.f_13132_) && fluidstate.m_205070_(FluidTags.f_13131_)) {

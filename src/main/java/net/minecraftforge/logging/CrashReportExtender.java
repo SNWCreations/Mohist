@@ -6,6 +6,11 @@
 package net.minecraftforge.logging;
 
 import cpw.mods.modlauncher.log.TransformingThrowablePatternConverter;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 import joptsimple.internal.Strings;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -16,10 +21,6 @@ import net.minecraftforge.fml.LoadingFailedException;
 import net.minecraftforge.forgespi.language.IModFileInfo;
 import net.minecraftforge.forgespi.language.IModInfo;
 import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 public class CrashReportExtender
 {

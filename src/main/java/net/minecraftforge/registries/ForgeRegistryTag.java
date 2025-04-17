@@ -5,6 +5,11 @@
 
 package net.minecraftforge.registries;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.stream.Stream;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -13,13 +18,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraftforge.registries.tags.ITag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Spliterator;
-import java.util.stream.Stream;
 
 class ForgeRegistryTag<V> implements ITag<V>
 {

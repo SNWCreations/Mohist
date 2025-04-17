@@ -6,13 +6,12 @@
 package net.minecraftforge.event.entity.player;
 
 import com.google.common.base.Preconditions;
+import java.util.List;
+import javax.annotation.Nonnegative;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.NonNullList;
 import net.minecraftforge.eventbus.api.Cancelable;
-
-import javax.annotation.Nonnegative;
-import java.util.List;
 
 /**
  * This event is called when a player fishes an item.

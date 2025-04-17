@@ -7,6 +7,7 @@ package net.minecraftforge.client.model.lighting;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Objects;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -15,10 +16,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.IQuadTransformer;
-
 import org.joml.Vector3f;
-
-import java.util.Objects;
 
 /**
  * Base class for all quad lighting providers.

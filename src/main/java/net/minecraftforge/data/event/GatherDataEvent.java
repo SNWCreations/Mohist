@@ -6,14 +6,6 @@
 package net.minecraftforge.data.event;
 
 import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
-import net.minecraft.DetectedVersion;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.event.IModBusEvent;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +16,13 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import net.minecraft.DetectedVersion;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataGenerator;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.event.IModBusEvent;
 
 public class GatherDataEvent extends Event implements IModBusEvent
 {

@@ -35,13 +35,14 @@
              ConfiguredFeature<?, ?> configuredfeature = holder.m_203334_();
              BlockState blockstate = p_222905_.m_6425_(p_222907_).m_76188_();
              p_222905_.m_7731_(p_222907_, blockstate, 4);
-@@ -52,4 +_,55 @@
+@@ -52,4 +_,56 @@
  
        return false;
     }
 +
 +   // CraftBukkit start
 +   protected void setTreeType(Holder<ConfiguredFeature<?, ?>> holder) {
++      if (holder.m_203543_().isEmpty()) return;
 +      ResourceKey<ConfiguredFeature<?, ?>> worldgentreeabstract = holder.m_203543_().get();
 +      if (worldgentreeabstract == TreeFeatures.f_195123_ || worldgentreeabstract == TreeFeatures.f_195142_) {
 +         SaplingBlock.treeType = TreeType.TREE;

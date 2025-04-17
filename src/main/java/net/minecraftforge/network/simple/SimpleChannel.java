@@ -6,6 +6,17 @@
 package net.minecraftforge.network.simple;
 
 import io.netty.buffer.Unpooled;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,9 +26,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkInstance;
 import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.*;
-import java.util.function.*;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class SimpleChannel

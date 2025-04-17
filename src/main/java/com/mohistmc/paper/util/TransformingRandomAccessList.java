@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class TransformingRandomAccessList<F, T> extends AbstractList<T> implements RandomAccess {

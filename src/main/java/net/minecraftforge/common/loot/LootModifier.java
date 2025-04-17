@@ -5,11 +5,10 @@
 
 package net.minecraftforge.common.loot;
 
-import java.util.function.Predicate;
-
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.function.Predicate;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.BendingTrunkPlacer;
 import net.minecraft.world.level.storage.loot.LootContext;

@@ -6,7 +6,6 @@
 package net.minecraftforge.common.util;
 
 import com.mohistmc.MohistMC;
-
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;

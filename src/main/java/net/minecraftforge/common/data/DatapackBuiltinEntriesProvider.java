@@ -5,6 +5,9 @@
 
 package net.minecraftforge.common.data;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
@@ -12,10 +15,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.RegistriesDatapackGenerator;
 import net.minecraftforge.registries.DataPackRegistriesHooks;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * An extension of the {@link RegistriesDatapackGenerator} which properly handles

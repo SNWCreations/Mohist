@@ -5,6 +5,9 @@
 
 package net.minecraftforge.common.data;
 
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -14,15 +17,79 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import static net.minecraftforge.common.Tags.Blocks.BARRELS;
+import static net.minecraftforge.common.Tags.Blocks.BARRELS_WOODEN;
+import static net.minecraftforge.common.Tags.Blocks.BOOKSHELVES;
+import static net.minecraftforge.common.Tags.Blocks.CHESTS;
+import static net.minecraftforge.common.Tags.Blocks.CHESTS_ENDER;
+import static net.minecraftforge.common.Tags.Blocks.CHESTS_TRAPPED;
+import static net.minecraftforge.common.Tags.Blocks.CHESTS_WOODEN;
+import static net.minecraftforge.common.Tags.Blocks.CHORUS_ADDITIONALLY_GROWS_ON;
+import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE;
+import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_DEEPSLATE;
+import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_INFESTED;
+import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_MOSSY;
+import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_NORMAL;
+import static net.minecraftforge.common.Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST;
+import static net.minecraftforge.common.Tags.Blocks.END_STONES;
+import static net.minecraftforge.common.Tags.Blocks.FENCES;
+import static net.minecraftforge.common.Tags.Blocks.FENCES_NETHER_BRICK;
+import static net.minecraftforge.common.Tags.Blocks.FENCES_WOODEN;
+import static net.minecraftforge.common.Tags.Blocks.FENCE_GATES;
+import static net.minecraftforge.common.Tags.Blocks.FENCE_GATES_WOODEN;
+import static net.minecraftforge.common.Tags.Blocks.GLASS;
+import static net.minecraftforge.common.Tags.Blocks.GLASS_COLORLESS;
+import static net.minecraftforge.common.Tags.Blocks.GLASS_PANES;
+import static net.minecraftforge.common.Tags.Blocks.GLASS_PANES_COLORLESS;
+import static net.minecraftforge.common.Tags.Blocks.GLASS_SILICA;
+import static net.minecraftforge.common.Tags.Blocks.GLASS_TINTED;
+import static net.minecraftforge.common.Tags.Blocks.GRAVEL;
+import static net.minecraftforge.common.Tags.Blocks.NETHERRACK;
+import static net.minecraftforge.common.Tags.Blocks.OBSIDIAN;
+import static net.minecraftforge.common.Tags.Blocks.ORES;
+import static net.minecraftforge.common.Tags.Blocks.ORES_COAL;
+import static net.minecraftforge.common.Tags.Blocks.ORES_COPPER;
+import static net.minecraftforge.common.Tags.Blocks.ORES_DIAMOND;
+import static net.minecraftforge.common.Tags.Blocks.ORES_EMERALD;
+import static net.minecraftforge.common.Tags.Blocks.ORES_GOLD;
+import static net.minecraftforge.common.Tags.Blocks.ORES_IN_GROUND_DEEPSLATE;
+import static net.minecraftforge.common.Tags.Blocks.ORES_IN_GROUND_NETHERRACK;
+import static net.minecraftforge.common.Tags.Blocks.ORES_IN_GROUND_STONE;
+import static net.minecraftforge.common.Tags.Blocks.ORES_IRON;
+import static net.minecraftforge.common.Tags.Blocks.ORES_LAPIS;
+import static net.minecraftforge.common.Tags.Blocks.ORES_NETHERITE_SCRAP;
+import static net.minecraftforge.common.Tags.Blocks.ORES_QUARTZ;
+import static net.minecraftforge.common.Tags.Blocks.ORES_REDSTONE;
+import static net.minecraftforge.common.Tags.Blocks.ORE_BEARING_GROUND_DEEPSLATE;
+import static net.minecraftforge.common.Tags.Blocks.ORE_BEARING_GROUND_NETHERRACK;
+import static net.minecraftforge.common.Tags.Blocks.ORE_BEARING_GROUND_STONE;
+import static net.minecraftforge.common.Tags.Blocks.ORE_RATES_DENSE;
+import static net.minecraftforge.common.Tags.Blocks.ORE_RATES_SINGULAR;
+import static net.minecraftforge.common.Tags.Blocks.ORE_RATES_SPARSE;
+import static net.minecraftforge.common.Tags.Blocks.SAND;
+import static net.minecraftforge.common.Tags.Blocks.SANDSTONE;
+import static net.minecraftforge.common.Tags.Blocks.SAND_COLORLESS;
+import static net.minecraftforge.common.Tags.Blocks.SAND_RED;
+import static net.minecraftforge.common.Tags.Blocks.STAINED_GLASS;
+import static net.minecraftforge.common.Tags.Blocks.STAINED_GLASS_PANES;
+import static net.minecraftforge.common.Tags.Blocks.STONE;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_AMETHYST;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_COAL;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_COPPER;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_DIAMOND;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_EMERALD;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_GOLD;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_IRON;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_LAPIS;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_NETHERITE;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_QUARTZ;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_RAW_COPPER;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_RAW_GOLD;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_RAW_IRON;
+import static net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS_REDSTONE;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-
-// We typically don't do static imports as S2S can't remap them {as they are not qualified}, however this conflicts with vanilla and our tag class names, and our tags don't get obfed so its one line of warning.
-import static net.minecraftforge.common.Tags.Blocks.*;
 
 public final class ForgeBlockTagsProvider extends BlockTagsProvider
 {
@@ -42,6 +109,7 @@ public final class ForgeBlockTagsProvider extends BlockTagsProvider
         tag(CHESTS_ENDER).add(Blocks.ENDER_CHEST);
         tag(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
         tag(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
+        tag(CHORUS_ADDITIONALLY_GROWS_ON).addTags(END_STONES);
         tag(COBBLESTONE).addTags(COBBLESTONE_NORMAL, COBBLESTONE_INFESTED, COBBLESTONE_MOSSY, COBBLESTONE_DEEPSLATE);
         tag(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
         tag(COBBLESTONE_INFESTED).add(Blocks.INFESTED_COBBLESTONE);

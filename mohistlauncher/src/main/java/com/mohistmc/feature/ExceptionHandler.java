@@ -4,7 +4,6 @@ import java.net.BindException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
@@ -82,7 +81,6 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void handleBindException(Throwable e) {
-        BindException be = (BindException) e;
         System.out.println("无法将服务器绑定到: " + e.getMessage());
         System.out.println("这可能是因为端口已经被占用，或者没有足够的权限绑定到指定的端口。");
         System.out.println("请检查是否有其他程序占用了相同的端口，或者尝试使用不同的端口启动服务器。");

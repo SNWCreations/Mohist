@@ -32,7 +32,7 @@ public class SpigotCommand extends Command {
             Command.broadcastCommandMessage(sender, ChatColor.RED + MohistMC.i18n.as("mohist.i18n.65"));
 
             MinecraftServer console = MinecraftServer.getServer();
-            SpigotConfig.init((File) MinecraftServer.options.valueOf("spigot-settings"));
+            SpigotConfig.init((File) console.options.valueOf("spigot-settings"));
             for (ServerLevel world : console.getAllLevels()) {
                 world.spigotConfig.init();
             }

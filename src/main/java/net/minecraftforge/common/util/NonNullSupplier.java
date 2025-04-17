@@ -5,8 +5,8 @@
 
 package net.minecraftforge.common.util;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Equivalent to {@link Supplier}, except with nonnull contract.

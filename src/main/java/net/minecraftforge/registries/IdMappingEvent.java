@@ -9,12 +9,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.Event;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.eventbus.api.Event;
 
 /**
  * Called whenever the ID mapping might have changed. If you register for this event, you

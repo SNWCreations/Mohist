@@ -2,6 +2,7 @@ package com.mohistmc.plugins.back;
 
 import com.mohistmc.MohistConfig;
 import com.mohistmc.util.I18n;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,10 +23,14 @@ public class BackCommands extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            if (BackConfig.INSTANCE.has(player.getName())) {
-               player.teleport(BackConfig.INSTANCE.getLocation(player));
-               player.sendMessage(I18n.as("backcommands.success",
-                       BackConfig.INSTANCE.getBackType(player).isTeleport() ? I18n.as("backcommands.backtype.teleport") : I18n.as("backcommands.backtype.death")));
+            if (BackConfig.INSTANCE.has(player.getUniqueId().toString())) {
+                Location location = BackConfig.INSTANCE.getLocation(player);
+                if (location != null) {
+                    player.teleport(BackConfig.INSTANCE.getLocation(player));
+                    player.sendMessage(I18n.as("backcommands.success",
+                            BackConfig.INSTANCE.getBackType(player).isTeleport() ? I18n.as("backcommands.backtype.teleport") : I18n.as("backcommands.backtype.death")));
+                    return true;
+                }
             }
             else {
                 sender.sendMessage(I18n.as("backcommands.none"));
