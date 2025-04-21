@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.thread.NamedThreadFactory;
+import net.minecraft.world.entity.TamableAnimal;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Monster;
 
 /**
  * @author Mgazul by MohistMC
@@ -21,7 +21,7 @@ import org.bukkit.entity.Monster;
 public class EntityClear {
 
     public static final ScheduledExecutorService ENTITYCLEAR_ITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
-    public static final ScheduledExecutorService ENTITYCLEAR_MONSTER = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
+    public static final ScheduledExecutorService ENTITYCLEAR_NOITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - NoItem"));
     private static final ScheduledExecutorService COUNTDOWN_SERVICE = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear-Countdown"));
     private static final AtomicInteger countdownSeconds = new AtomicInteger(15);
     private static ScheduledFuture<?> countdownFuture;
@@ -48,7 +48,7 @@ public class EntityClear {
             } else {
                 countdownSeconds.set(15);
                 if (MohistConfig.clear_item)run_item();
-                if (MohistConfig.clear_monster)run_monster();
+                if (MohistConfig.clear_noitem)run_entity();
                 countdownFuture.cancel(false);
             }
         }, 0, 1, TimeUnit.SECONDS);
@@ -56,7 +56,7 @@ public class EntityClear {
 
     public static void stop() {
         ENTITYCLEAR_ITEM.shutdown();
-        ENTITYCLEAR_MONSTER.shutdown();
+        ENTITYCLEAR_NOITEM.shutdown();
     }
 
     public static void run_item() {
@@ -64,7 +64,9 @@ public class EntityClear {
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof Item item) {
-                    if (!MohistConfig.clear_item_whitelist.contains(item.getItemStack().getType().name())) {
+                    String itemName = item.getItemStack().getType().name();
+                    String itemRegName = item.getItemStack().getType().name().split("_")[0].toLowerCase() + ":*";
+                    if (!MohistConfig.clear_item_whitelist.contains(itemName) && !MohistConfig.clear_item_whitelist.contains(itemRegName)) {
                         entity.remove();
                         size_item.addAndGet(1);
                     }
@@ -76,20 +78,24 @@ public class EntityClear {
         }
     }
 
-    public static void run_monster() {
-        AtomicInteger size_monster = new AtomicInteger(0);
+    public static void run_entity() {
+        AtomicInteger size_noitem = new AtomicInteger(0);
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity instanceof Monster monster) {
-                    if (!MohistConfig.clear_monster_whitelist.contains(monster.getType().name()) && monster.getCustomName() == null) {
-                        entity.remove();
-                        size_monster.addAndGet(1);
+                if (!(entity instanceof Item)) {
+                    String entityName = entity.getType().name();
+                    String entityRegName = entity.getType().name().split("_")[0].toLowerCase() + ":*";
+                    if (!MohistConfig.clear_noitem_whitelist.contains(entityName) && !MohistConfig.clear_noitem_whitelist.contains(entityRegName)&& entity.getCustomName() == null) {
+                        if (entity instanceof TamableAnimal tamable && !tamable.isTame()) {
+                            entity.remove();
+                            size_noitem.addAndGet(1);
+                        }
                     }
                 }
             }
         }
-        if (!MohistConfig.clear_monster_msg.isEmpty()){
-            Bukkit.broadcastMessage(MohistConfig.clear_monster_msg.replace("&", "§").replace("%size%", String.valueOf(size_monster.getAndSet(0))));
+        if (!MohistConfig.clear_noitem_msg.isEmpty()){
+            Bukkit.broadcastMessage(MohistConfig.clear_noitem_msg.replace("&", "§").replace("%size%", String.valueOf(size_noitem.getAndSet(0))));
         }
     }
 }

@@ -205,9 +205,9 @@ public class MohistConfig {
     public static String clear_countdown_msg;
     public static int clear_time;
 
-    public static boolean clear_monster;
-    public static List<String> clear_monster_whitelist;
-    public static String clear_monster_msg;
+    public static boolean clear_noitem;
+    public static List<String> clear_noitem_whitelist;
+    public static String clear_noitem_msg;
 
     // Ban
     public static boolean ban_item_enable;
@@ -298,9 +298,9 @@ public class MohistConfig {
         clear_item_whitelist = getStringList("entity.clear.item.whitelist", new ArrayList<>());
         clear_item_msg = getString("entity.clear.item.msg", "[Server] Cleaned up %size% drop item");
 
-        clear_monster = getBoolean("entity.clear.monster.enable", false);
-        clear_monster_whitelist = getStringList("entity.clear.monster.whitelist", new ArrayList<>());
-        clear_monster_msg = getString("entity.clear.monster.msg", "[Server] Cleaned up %size% monster");
+        clear_noitem = getBoolean("entity.clear.noitem.enable", false);
+        clear_noitem_whitelist = getStringList("entity.clear.noitem.whitelist", new ArrayList<>());
+        clear_noitem_msg = getString("entity.clear.noitem.msg", "[Server] Cleaned up %size% monster");
 
         ban_item_enable = getBoolean("ban.item.enable" , false);
         ban_item_materials = getStringList("ban.item.list", new ArrayList<>());

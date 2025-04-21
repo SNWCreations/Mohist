@@ -328,14 +328,16 @@
        if (flag) {
           this.m_8886_();
        }
-@@ -318,6 +_,7 @@
+@@ -318,7 +_,9 @@
              profilerfiller.m_7238_();
           }
  
 +         ActivationRange.activateEntities(this); // Spigot
           this.f_143243_.m_156910_((p_184065_) -> {
++            if (p_184065_ == null) return;
              if (!p_184065_.m_213877_()) {
                 if (this.m_143342_(p_184065_)) {
+                   p_184065_.m_146870_();
 @@ -337,7 +_,9 @@
                       }
  

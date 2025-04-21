@@ -64,7 +64,6 @@ import org.bukkit.craftbukkit.v1_20_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_20_R1.potion.CraftPotionUtil;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftMagicNumbers;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftSpawnCategory;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.entity.Villager;
