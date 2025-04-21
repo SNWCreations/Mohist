@@ -290,11 +290,22 @@
        this.f_11204_.m_78433_(p_11277_);
        ServerStatsCounter serverstatscounter = this.f_11202_.get(p_11277_.m_20148_());
        if (serverstatscounter != null) {
-@@ -336,9 +_,25 @@
+@@ -336,9 +_,43 @@
  
     }
  
 +   public String quitMessage;
++   // Mohist start - Paper Adventure
++   public net.kyori.adventure.text.Component adventure$quitMessage;
++
++   public void remove(ServerPlayer player, net.kyori.adventure.text.Component quitMessage) {
++      synchronized (this) {
++         adventure$quitMessage = quitMessage;
++         m_11286_(player);
++      }
++   }
++   // Mohist end
++
     public void m_11286_(ServerPlayer p_11287_) {
 +      ForgeEventFactory.firePlayerLoggedOut(p_11287_);
        ServerLevel serverlevel = p_11287_.m_284548_();
@@ -306,7 +317,14 @@
 +         p_11287_.m_6915_();
 +      }
 +
-+      PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), p_11287_.kickLeaveMessage != null ? p_11287_.kickLeaveMessage : "\u00A7e" + p_11287_.m_6302_() + " left the game");
++      // Mohist start - Paper Adventure
++      PlayerQuitEvent playerQuitEvent;
++      if (adventure$quitMessage != null) {
++          playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), adventure$quitMessage);
++      } else {
++          playerQuitEvent = new PlayerQuitEvent(p_11287_.getBukkitEntity(), p_11287_.kickLeaveMessage != null ? p_11287_.kickLeaveMessage : "\u00A7e" + p_11287_.m_6302_() + " left the game");
++      }
++      // Mohist end
 +      cserver.getPluginManager().callEvent(playerQuitEvent);
 +      p_11287_.getBukkitEntity().disconnect(playerQuitEvent.getQuitMessage());
 +
@@ -324,7 +342,7 @@
        this.f_11195_.m_129901_().m_136305_(p_11287_);
        UUID uuid = p_11287_.m_20148_();
        ServerPlayer serverplayer = this.f_11197_.get(uuid);
-@@ -364,35 +_,94 @@
+@@ -364,35 +_,95 @@
           this.f_11203_.remove(uuid);
        }
  
@@ -345,6 +363,7 @@
 +      cserver.getScoreboardManager().removePlayer(p_11287_.getBukkitEntity());
 +      // CraftBukkit end
 +      quitMessage = playerQuitEvent.getQuitMessage();
++      adventure$quitMessage = playerQuitEvent.quitMessage(); // Mohist - Paper Adventure but more compatibility
 +   }
 +
 +   // Mohist start

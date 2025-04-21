@@ -1055,7 +1055,7 @@
     }
  
     public void m_5938_(ServerboundPaddleBoatPacket p_9878_) {
-@@ -1118,12 +_,37 @@
+@@ -1118,12 +_,40 @@
     }
  
     public void m_7026_(Component p_9825_) {
@@ -1085,8 +1085,11 @@
 +         this.f_9745_.m_6846_().remove(this.f_9743_, quitMessage);
 +      }
 +      // Mohist end
-+      quitMessage = this.f_9745_.m_6846_().quitMessage; // Paper - pass in quitMessage to fix kick message not being used // Mohist - Use field to retrieve quit message for better compatibility
-+      this.f_9745_.m_6846_().quitMessage = null; // Release quit message object to prevent memory leak
++      quitMessage = this.f_9745_.m_6846_().adventure$quitMessage; // Paper - pass in quitMessage to fix kick message not being used // Mohist - Use field to retrieve quit message for better compatibility
++      // Mohist start - Release quit message object to prevent memory leak
++      this.f_9745_.m_6846_().quitMessage = null;
++      this.f_9745_.m_6846_().adventure$quitMessage = null;
++      // Mohist end
 +      if ((quitMessage != null) && !quitMessage.equals(net.kyori.adventure.text.Component.empty())) {
 +         this.f_9745_.m_6846_().m_240416_(PaperAdventure.asVanilla(quitMessage), false);
 +         // Paper end

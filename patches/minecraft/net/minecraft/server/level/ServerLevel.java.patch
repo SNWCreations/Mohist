@@ -185,7 +185,7 @@
  
  public class ServerLevel extends Level implements WorldGenLevel {
     public static final BlockPos f_8562_ = new BlockPos(100, 50, 0);
-@@ -188,24 +_,83 @@
+@@ -188,24 +_,84 @@
     private final List<CustomSpawner> f_8558_;
     @Nullable
     private EndDragonFight f_8559_;
@@ -203,6 +203,7 @@
 +   public PrimaryLevelData K;
 +   public final LevelStorageAccess convertable;
 +   public final UUID uuid;
++   public boolean hasEntityMoveEvent; // Paper
 +   public ResourceKey<LevelStem> typeKey;
 +
 +   public LevelChunk getChunkIfLoaded(int x, int z) {
