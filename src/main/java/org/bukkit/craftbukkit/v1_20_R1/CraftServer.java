@@ -2448,6 +2448,16 @@ public final class CraftServer implements Server {
     }
     // Spigot end
 
+    @Override
+    public int getCurrentTick() {
+        return net.minecraft.server.MinecraftServer.currentTick;
+    }
+
+    @Override
+    public boolean isStopping() {
+        return net.minecraft.server.MinecraftServer.getServer().hasStopped();
+    }
+
     // Paper start - adventure sounds
     @Override
     public void playSound(final net.kyori.adventure.sound.Sound sound) {

@@ -108,6 +108,22 @@
     public int m_36062_() {
        for(int i = 0; i < this.f_35974_.size(); ++i) {
           if (this.f_35974_.get(i).m_41619_()) {
+@@ -95,6 +_,15 @@
+       this.f_35974_.set(p_36039_, itemstack);
+    }
+ 
++   public void pickSlot(int slot, int targetSlot) {
++      this.f_35977_ = targetSlot;
++      // Paper end
++      ItemStack itemstack = this.f_35974_.get(this.f_35977_);
++
++      this.f_35974_.set(this.f_35977_, this.f_35974_.get(slot));
++      this.f_35974_.set(slot, itemstack);
++   }
++
+    public static boolean m_36045_(int p_36046_) {
+       return p_36046_ >= 0 && p_36046_ < 9;
+    }
 @@ -130,7 +_,7 @@
  
        for(int k = 0; k < 9; ++k) {

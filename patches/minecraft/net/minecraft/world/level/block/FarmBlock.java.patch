@@ -9,7 +9,7 @@
  
  public class FarmBlock extends Block {
     public static final IntegerProperty f_53243_ = BlockStateProperties.f_61423_;
-@@ -73,42 +_,50 @@
+@@ -73,42 +_,51 @@
        int i = p_221139_.m_61143_(f_53243_);
        if (!m_53258_(p_221140_, p_221141_) && !p_221140_.m_46758_(p_221141_.m_7494_())) {
           if (i > 0) {
@@ -19,8 +19,9 @@
              m_269406_((Entity)null, p_221139_, p_221140_, p_221141_);
           }
        } else if (i < 7) {
++         p_221140_.fake$setBlock = true;
           p_221140_.m_7731_(p_221141_, p_221139_.m_61124_(f_53243_, Integer.valueOf(7)), 2);
-+         CraftEventFactory.handleMoistureChangeEvent(p_221140_, p_221141_, p_221139_.m_61124_(f_53243_, 7), 2); // CraftBukkit
++         CraftEventFactory.handleMoistureChangeEvent(p_221140_, p_221141_, p_221140_.fake$setBlockBlockState, 2); // CraftBukkit
        }
  
     }

@@ -3,6 +3,7 @@ package org.bukkit.craftbukkit.v1_20_R1.entity;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.BaseEncoding;
+import com.mohistmc.util.ChatPatchFix;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.Unpooled;
@@ -543,8 +544,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         Preconditions.checkArgument(msg != null, "msg cannot be null");
 
         if (getHandle().connection == null) return;
-
-        getHandle().connection.chat(msg, PlayerChatMessage.system(msg), false);
+        ChatPatchFix.chat(getHandle().connection, msg, PlayerChatMessage.system(msg), false);
     }
 
     @Override

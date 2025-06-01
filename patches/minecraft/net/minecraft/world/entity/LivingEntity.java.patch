@@ -575,7 +575,7 @@
     }
  
     public float m_21223_() {
-+      if (this instanceof ServerPlayer serverPlayer) {
++      if (this instanceof ServerPlayer serverPlayer && serverPlayer.initialized) {
 +         return (float) serverPlayer.getBukkitEntity().getHealth();
 +      }
        return this.f_19804_.m_135370_(f_20961_);
@@ -587,7 +587,7 @@
 +   }
     public void m_21153_(float p_21154_) {
 +      // CraftBukkit start - Handle scaled health
-+      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false)) {
++      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false) && serverPlayer.initialized) {
 +         org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer player = serverPlayer.getBukkitEntity();
 +         // Squeeze
 +         if (p_21154_ < 0.0F) {
@@ -605,7 +605,7 @@
        this.f_19804_.m_135381_(f_20961_, Mth.m_14036_(p_21154_, 0.0F, this.m_21233_()));
     }
  
-@@ -1036,35 +_,28 @@
+@@ -1036,36 +_,43 @@
     }
  
     public boolean m_6469_(DamageSource p_21016_, float p_21017_) {
@@ -632,7 +632,7 @@
 +
           boolean flag = false;
           float f1 = 0.0F;
-          if (p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
+-         if (p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
 -            this.m_7909_(p_21017_);
 -            f1 = p_21017_;
 -            p_21017_ = 0.0F;
@@ -641,12 +641,27 @@
 -               if (entity instanceof LivingEntity) {
 -                  LivingEntity livingentity = (LivingEntity)entity;
 -                  this.m_6728_(livingentity);
--               }
++         if (false && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
++            net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(this, p_21016_, p_21017_);
++            if(!ev.isCanceled()) {
++               if(ev.shieldTakesDamage()) this.m_7909_(p_21017_);
++               f1 = ev.getBlockedDamage();
++               p_21017_ -= ev.getBlockedDamage();
++               if (!p_21016_.m_269533_(DamageTypeTags.f_268524_)) {
++                  Entity entity = p_21016_.m_7640_();
++                  if (entity instanceof LivingEntity) {
++                     LivingEntity livingentity = (LivingEntity)entity;
++                     this.m_6728_(livingentity);
++                  }
+                }
 -            }
--
-             flag = true;
+ 
+-            flag = true;
++               flag = p_21017_ <= 0;
++            }
           }
  
+          if (p_21016_.m_269533_(DamageTypeTags.f_268419_) && this.m_6095_().m_204039_(EntityTypeTags.f_144295_)) {
 @@ -1074,23 +_,39 @@
  
           this.f_267362_.m_267771_(1.5F);
@@ -1001,7 +1016,7 @@
           }
  
           if (p_21194_ <= 0.0F) {
-@@ -1582,27 +_,250 @@
+@@ -1582,27 +_,253 @@
     }
  
     protected void m_6475_(DamageSource p_21240_, float p_21241_) {
@@ -1039,10 +1054,10 @@
 +   }
 +
 +   protected boolean injectedHurt = true;
-+   public AtomicBoolean canDamage = new AtomicBoolean(true);
++   public AtomicBoolean canDamage = new AtomicBoolean(false);
 +   public AtomicDouble damage = new AtomicDouble(-999);
 +   public boolean canDamage() {
-+      return canDamage.getAndSet(true);
++      return canDamage.getAndSet(false);
 +   }
 +   // Mohist end
 +
@@ -1072,6 +1087,7 @@
 +         p_21241_ = ForgeHooks.onLivingHurt(this, p_21240_, p_21241_);
 +         // If the damage is negative return true
 +         if (p_21241_ < 0) {
++            canDamage.set(true);
 +            return true;
 +         }
 +         final float originalDamage = p_21241_;
@@ -1079,7 +1095,7 @@
 +         Function<Double, Double> hardHat = new Function<Double, Double>() {
 +            @Override
 +            public Double apply(Double input) {
-+               if (p_21240_.m_269533_(DamageTypeTags.f_268627_)  && !LivingEntity.this.m_6844_(EquipmentSlot.HEAD).m_41619_()) {
++               if (p_21240_.m_269533_(DamageTypeTags.f_268627_) && !LivingEntity.this.m_6844_(EquipmentSlot.HEAD).m_41619_()) {
 +                  return -(input - (input * 0.75F));
 +               }
 +               return -0.0;
@@ -1096,25 +1112,25 @@
 +               var blocked = shieldEvent.getBlockedDamage();
 +               shieldTakesDamage = shieldEvent.shieldTakesDamage();
 +               blocking = new Function<Double, Double>() {
-+                  @Override
-+                  public Double apply(Double input) {
-+                     return -(double) blocked;
-+                  }
++                   @Override
++                   public Double apply(Double input) {
++                       return -(double) blocked;
++                   }
 +               };
 +            } else {
 +               blocking = new Function<Double, Double>() {
-+                  @Override
-+                  public Double apply(Double input) {
-+                     return 0d;
-+                  }
++                   @Override
++                   public Double apply(Double input) {
++                       return 0d;
++                   }
 +               };
 +            }
 +         } else {
 +            blocking = new Function<Double, Double>() {
-+               @Override
-+               public Double apply(Double input) {
-+                  return 0d;
-+               }
++                @Override
++                public Double apply(Double input) {
++                    return 0d;
++                }
 +            };
 +         }
 +         float blockingModifier = blocking.apply((double) p_21241_).floatValue();
@@ -1258,9 +1274,11 @@
 +                  CriteriaTriggers.f_10573_.m_60112_(serverPlayer, this, p_21240_, p_21241_, originalDamage, true);
 +               }
 +               this.canDamage.set(false);
-+               return false ;
++               return false;
 +            } else {
-+                return originalDamage > 0;
++               boolean eo = originalDamage > 0;
++               this.canDamage.set(eo);
++               return eo;
 +            }
 +            // CraftBukkit end
           }

@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
@@ -29,6 +30,16 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 public class ItemAPI {
 
     public static final Logger LOGGER = LogManager.getLogger("ItemAPI");
+
+    /**
+     * Gets the name displayed on the current client of the item, and changes with the client
+     * @return item name
+     */
+    public static String getClientName(ItemStack itemStack) {
+        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()
+                ? itemStack.getItemMeta().getDisplayName()
+                : "§r" + Component.translatable(itemStack.getTranslationKey()).getString();
+    }
 
     public static ItemStack doItem(Material material, int menge, String name, List<String> lore) {
         ItemStack item = new ItemStack(material, menge);

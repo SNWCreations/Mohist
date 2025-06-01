@@ -1,5 +1,6 @@
 package com.mohistmc.api.gui;
 
+import com.mohistmc.util.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -7,20 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * @author LSeng
- */
-public class Warehouse {
+public class DemoGUI {
 
     GUI gui;
     List<GUIItem> items = new ArrayList<>();
-    String tempName;
     int pageChoose = 0;
 
-    private Warehouse() {
-    }
-
-    public Warehouse(String name) {
+    public DemoGUI(String name) {
         this.gui = new GUI(GUIType.SIXBYNINE, name);
 
         for (int i = 36; i < 46; i++) {
@@ -34,7 +28,7 @@ public class Warehouse {
                 .toItemStack()), 47, 48, 49, 50);
 
         this.gui.setItem(46, new GUIItem(new ItemStackFactory(Material.REDSTONE)
-                .setDisplayName("§cClose")
+                .setDisplayName(I18n.as("demogui.close"))
                 .toItemStack()) {
             @Override
             public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
@@ -113,37 +107,37 @@ public class Warehouse {
 
         if (this.pageChoose == 0) {
             gui.setItem(51, new GUIItem(new ItemStackFactory(Material.ACACIA_FENCE)
-                    .setDisplayName("&cThis is already the home page")
+                    .setDisplayName(I18n.as("demogui.homepage"))
                     .toItemStack()));
         } else {
             gui.setItem(51, new GUIItem(new ItemStackFactory(Material.ACACIA_FENCE)
-                    .setDisplayName("&eprevious page")
+                    .setDisplayName(I18n.as("demogui.ppage"))
                     .toItemStack()) {
                 @Override
                 public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
-                    Warehouse.this.pageChoose--;
+                    DemoGUI.this.pageChoose--;
                     openGUI(u);
                 }
             });
         }
 
         gui.setItem(52, new GUIItem(new ItemStackFactory(Material.PAPER, pageChoose + 1)
-                .setDisplayName("&7No. &f&l" + (pageChoose + 1) + " &7page")
+                .setDisplayName(I18n.as("demogui.nowpage",  (pageChoose + 1)))
                 .toItemStack()));
 
         if (this.pageChoose < page - 1) {
             gui.setItem(53, new GUIItem(new ItemStackFactory(Material.ACACIA_FENCE)
-                    .setDisplayName("&enext page")
+                    .setDisplayName(I18n.as("demogui.npage"))
                     .toItemStack()) {
                 @Override
                 public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
-                    Warehouse.this.pageChoose++;
+                    DemoGUI.this.pageChoose++;
                     openGUI(u);
                 }
             });
         } else {
             gui.setItem(53, new GUIItem(new ItemStackFactory(Material.ACACIA_FENCE)
-                    .setDisplayName("&cThis is already the last page")
+                    .setDisplayName(I18n.as("demogui.lastpage"))
                     .toItemStack()));
         }
 

@@ -52,7 +52,7 @@
     void m_140784_(long p_140785_, Ticket<?> p_140786_) {
        SortedArraySet<Ticket<?>> sortedarrayset = this.m_140857_(p_140785_);
        int i = m_140797_(sortedarrayset);
-@@ -159,7 +_,18 @@
+@@ -159,11 +_,25 @@
           this.f_140762_.m_140715_(p_140785_, p_140786_.m_9433_(), true);
        }
  
@@ -61,6 +61,7 @@
 +          SortedArraySet<Ticket<?>> tickets = forcedTickets.computeIfAbsent(p_140785_, e -> SortedArraySet.m_14246_(4));
 +          tickets.m_14253_(ticket);
 +      }
++      addTicketCB.set(p_140786_ == ticket);
 +   }
 +
 +   // CraftBukkit start
@@ -72,7 +73,13 @@
  
     void m_140818_(long p_140819_, Ticket<?> p_140820_) {
        SortedArraySet<Ticket<?>> sortedarrayset = this.m_140857_(p_140819_);
-@@ -171,31 +_,70 @@
++      boolean removed = false; // CraftBukkit
+       if (sortedarrayset.remove(p_140820_)) {
++         removed = true; // CraftBukkit
+       }
+ 
+       if (sortedarrayset.isEmpty()) {
+@@ -171,31 +_,71 @@
        }
  
        this.f_140762_.m_140715_(p_140819_, m_140797_(sortedarrayset), false);
@@ -84,6 +91,7 @@
 +              tickets.remove(p_140820_);
 +          }
 +      }
++      removeTicketCB.set(removed);
 +   }
 +
 +   // CraftBukkit start

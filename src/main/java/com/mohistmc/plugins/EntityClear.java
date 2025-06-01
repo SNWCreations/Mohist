@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.thread.NamedThreadFactory;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -23,7 +24,7 @@ public class EntityClear {
     public static final ScheduledExecutorService ENTITYCLEAR_ITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
     public static final ScheduledExecutorService ENTITYCLEAR_NOITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - NoItem"));
     private static final ScheduledExecutorService COUNTDOWN_SERVICE = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear-Countdown"));
-    private static final AtomicInteger countdownSeconds = new AtomicInteger(15);
+    private static final AtomicInteger countdownSeconds = new AtomicInteger(31);
     private static ScheduledFuture<?> countdownFuture;
 
     public static void start() {
@@ -44,9 +45,9 @@ public class EntityClear {
                 String msg = MohistConfig.clear_countdown_msg
                         .replace("&", "§")
                         .replace("%seconds%", String.valueOf(remaining));
-                if (remaining == 14 || remaining == 10 || remaining < 4) Bukkit.broadcastMessage(msg);
+                if (remaining == 30 || remaining == 14 || remaining == 10 || remaining < 4) Bukkit.broadcastMessage(msg);
             } else {
-                countdownSeconds.set(15);
+                countdownSeconds.set(31);
                 if (MohistConfig.clear_item)run_item();
                 if (MohistConfig.clear_noitem)run_entity();
                 countdownFuture.cancel(false);
@@ -86,10 +87,11 @@ public class EntityClear {
                     String entityName = entity.getType().name();
                     String entityRegName = entity.getType().name().split("_")[0].toLowerCase() + ":*";
                     if (!MohistConfig.clear_noitem_whitelist.contains(entityName) && !MohistConfig.clear_noitem_whitelist.contains(entityRegName)&& entity.getCustomName() == null) {
-                        if (entity instanceof TamableAnimal tamable && !tamable.isTame()) {
-                            entity.remove();
-                            size_noitem.addAndGet(1);
+                        if (entity instanceof TamableAnimal tamable && tamable.isTame() || entity instanceof Player) {
+                           continue;
                         }
+                        entity.remove();
+                        size_noitem.addAndGet(1);
                     }
                 }
             }

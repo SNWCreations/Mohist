@@ -37,15 +37,17 @@
     }
  
     public boolean m_264473_() {
-@@ -116,7 +_,7 @@
+@@ -114,6 +_,10 @@
+       }
+    }
  
++   public float getTemperaturePublic(BlockPos p_47506_) {
++      return m_47505_(p_47506_);
++   }
++
     /** @deprecated */
     @Deprecated
--   private float m_47505_(BlockPos p_47506_) {
-+   public float m_47505_(BlockPos p_47506_) {
-       long i = p_47506_.m_121878_();
-       Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = this.f_47444_.get();
-       float f = long2floatlinkedopenhashmap.get(i);
+    private float m_47505_(BlockPos p_47506_) {
 @@ -188,7 +_,7 @@
     }
  

@@ -1038,22 +1038,26 @@
     }
  
     public int m_20146_() {
-@@ -2228,7 +_,18 @@
+@@ -2228,7 +_,22 @@
     }
  
     public void m_20301_(int p_20302_) {
 -      this.f_19804_.m_135381_(f_19832_, p_20302_);
 +      // CraftBukkit start
-+      EntityAirChangeEvent event = new EntityAirChangeEvent(this.getBukkitEntity(), p_20302_);
-+      // Suppress during worldgen
-+      if (this.valid) {
-+         event.getEntity().getServer().getPluginManager().callEvent(event);
++      if (!AsyncCatcher.catchAsync()) {
++         EntityAirChangeEvent event = new EntityAirChangeEvent(this.getBukkitEntity(), p_20302_);
++         // Suppress during worldgen
++         if (this.valid) {
++            event.getEntity().getServer().getPluginManager().callEvent(event);
++         }
++         if (event.isCancelled() && this.m_20146_() != p_20302_){
++            this.f_19804_.markDirty(Entity.f_19832_);
++            return;
++         }
++         this.f_19804_.m_135381_(Entity.f_19832_, event.getAmount());
++      } else {
++         this.f_19804_.m_135381_(f_19832_, p_20302_);
 +      }
-+      if (event.isCancelled() && this.m_20146_() != p_20302_){
-+         this.f_19804_.markDirty(Entity.f_19832_);
-+         return;
-+      }
-+      this.f_19804_.m_135381_(Entity.f_19832_, event.getAmount());
 +      // CraftBukkit end
     }
  

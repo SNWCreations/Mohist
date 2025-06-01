@@ -191,6 +191,7 @@ public class MohistConfig {
     public static List<String> networkmanager_intercept;
     public static boolean keepinventory_global;
     public static boolean keepinventory_inventory;
+    public static boolean keepinventory_permission_enable;
     public static String keepinventory_inventory_permission;
     public static boolean keepinventory_exp;
     public static String keepinventory_exp_permission;
@@ -285,6 +286,7 @@ public class MohistConfig {
         networkmanager_intercept = getStringList("networkmanager.intercept", new ArrayList<>());
         keepinventory_global = getBoolean("keepinventory.global.enable", false);
         keepinventory_inventory = getBoolean("keepinventory.global.inventory", true);
+        keepinventory_permission_enable = getBoolean("keepinventory.permission.enable", false);
         keepinventory_inventory_permission = getString("keepinventory.permission.inventory", "mohist.keepinventory.inventory");
         keepinventory_exp = getBoolean("keepinventory.global.exp", true);
         keepinventory_exp_permission = getString("keepinventory.permission.exp", "mohist.keepinventory.exp");

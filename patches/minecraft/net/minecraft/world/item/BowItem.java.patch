@@ -49,7 +49,7 @@
  
                    p_40667_.m_41622_(1, player, (p_289501_) -> {
                       p_289501_.m_21190_(player.m_7655_());
-@@ -63,7 +_,19 @@
+@@ -63,7 +_,17 @@
                       abstractarrow.f_36705_ = AbstractArrow.Pickup.CREATIVE_ONLY;
                    }
  
@@ -57,13 +57,11 @@
 +                  // CraftBukkit start
 +                  if (event.getProjectile() == abstractarrow.getBukkitEntity()) {
 +                     p_40668_.m_7967_(abstractarrow);
-+                     if (p_40668_ instanceof ServerLevel serverLevel) {
-+                        if (!serverLevel.canAddFreshEntity()) { // Mohist
-+                           if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
-+                              serverPlayer.getBukkitEntity().updateInventory();
-+                           }
-+                           return;
++                     if (!p_40668_.canAddFreshEntity()) { // Mohist
++                        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
++                           serverPlayer.getBukkitEntity().updateInventory();
 +                        }
++                        return;
 +                     }
 +                  }
 +                  // CraftBukkit end

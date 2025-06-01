@@ -5,7 +5,7 @@ import com.mohistmc.api.EntityAPI;
 import com.mohistmc.api.ItemAPI;
 import com.mohistmc.api.gui.GUIItem;
 import com.mohistmc.api.gui.ItemStackFactory;
-import com.mohistmc.api.gui.Warehouse;
+import com.mohistmc.api.gui.DemoGUI;
 import com.mohistmc.plugins.ban.BanConfig;
 import com.mohistmc.plugins.ban.BanListener;
 import com.mohistmc.plugins.ban.BanType;
@@ -121,7 +121,7 @@ public class BansCommand extends Command {
                 }
                 switch (args[1]) {
                     case "item" -> {
-                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.item"));
+                        DemoGUI wh = new DemoGUI(I18n.as("banscmd.show.item"));
                         List<String> old = MohistConfig.ban_item_materials;
                         for (String s : MohistConfig.ban_item_materials) {
                             Material material = ItemAPI.getMaterial(s);
@@ -145,7 +145,7 @@ public class BansCommand extends Command {
                         return true;
                     }
                     case "item-moshou" -> {
-                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.item-moshou"));
+                        DemoGUI wh = new DemoGUI(I18n.as("banscmd.show.item-moshou"));
                         List<String> old = BanConfig.MOSHOU.getMoShouList();
                         for (String s : BanConfig.MOSHOU.getMoShouList()) {
                             Material material = ItemAPI.getMaterial(s);
@@ -169,7 +169,7 @@ public class BansCommand extends Command {
                         return true;
                     }
                     case "entity" -> {
-                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.entity"));
+                        DemoGUI wh = new DemoGUI(I18n.as("banscmd.show.entity"));
                         List<String> old = MohistConfig.ban_entity_types;
                         for (String s : MohistConfig.ban_entity_types) {
                             wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(EntityAPI.entityType(s)))
@@ -190,7 +190,7 @@ public class BansCommand extends Command {
                         return true;
                     }
                     case "enchantment" -> {
-                        Warehouse wh = new Warehouse(I18n.as("banscmd.show.enchantment"));
+                        DemoGUI wh = new DemoGUI(I18n.as("banscmd.show.enchantment"));
                         List<String> old = MohistConfig.ban_enchantment_list;
                         for (String s : MohistConfig.ban_enchantment_list) {
                             wh.addItem(new GUIItem(new ItemStackFactory(Material.ENCHANTED_BOOK)

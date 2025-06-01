@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -2,16 +_,29 @@
+@@ -2,16 +_,31 @@
  
  import com.google.common.collect.Lists;
  import com.google.common.primitives.Floats;
@@ -10,9 +10,11 @@
 +import com.mohistmc.bukkit.LoginHandler;
 +import com.mohistmc.bukkit.inventory.MohistModsInventory;
 +import com.mohistmc.paper.event.player.PlayerJumpEvent;
++import com.mohistmc.paper.event.player.PlayerPickItemEvent;
 +import com.mohistmc.paper.event.player.PlayerUseUnknownEntityEvent;
 +import com.mohistmc.paper.event.server.AsyncTabCompleteEvent;
 +import com.mohistmc.plugins.ban.bans.BanItem;
++import com.mohistmc.util.ChatPatchFix;
  import com.mojang.brigadier.CommandDispatcher;
  import com.mojang.brigadier.ParseResults;
  import com.mojang.brigadier.StringReader;
@@ -30,11 +32,12 @@
  import java.util.Collections;
  import java.util.EnumSet;
  import java.util.List;
-@@ -21,6 +_,8 @@
+@@ -21,6 +_,9 @@
  import java.util.Set;
  import java.util.concurrent.CancellationException;
  import java.util.concurrent.CompletableFuture;
 +import java.util.concurrent.ExecutionException;
++import java.util.concurrent.atomic.AtomicBoolean;
 +import java.util.concurrent.atomic.AtomicInteger;
  import java.util.concurrent.atomic.AtomicReference;
  import java.util.function.BiFunction;
@@ -497,6 +500,29 @@
        });
     }
  
+@@ -600,7 +_,21 @@
+ 
+    public void m_7965_(ServerboundPickItemPacket p_9880_) {
+       PacketUtils.m_131359_(p_9880_, this, this.f_9743_.m_284548_());
+-      this.f_9743_.m_150109_().m_36038_(p_9880_.m_134232_());
++      // Paper start - validate pick item position
++      if (!(p_9880_.m_134232_() >= 0 && p_9880_.m_134232_() < this.f_9743_.m_150109_().f_35974_.size())) {
++         ServerGamePacketListenerImpl.f_9744_.warn("{} tried to set an invalid carried item", this.f_9743_.m_7755_().getString());
++         this.disconnect("Invalid hotbar selection (Hacking?)");
++         return;
++      }
++      org.bukkit.entity.Player bukkitPlayer = this.f_9743_.getBukkitEntity();
++      int targetSlot = this.f_9743_.m_150109_().m_36065_();
++      int sourceSlot = p_9880_.m_134232_();
++
++      PlayerPickItemEvent event = new PlayerPickItemEvent(bukkitPlayer, targetSlot, sourceSlot);
++      if (!event.callEvent()) return;
++
++      this.f_9743_.m_150109_().pickSlot(event.getSourceSlot(), event.getTargetSlot());
++      // Paper end
+       this.f_9743_.f_8906_.m_9829_(new ClientboundContainerSetSlotPacket(-2, 0, this.f_9743_.m_150109_().f_35977_, this.f_9743_.m_150109_().m_8020_(this.f_9743_.m_150109_().f_35977_)));
+       this.f_9743_.f_8906_.m_9829_(new ClientboundContainerSetSlotPacket(-2, 0, p_9880_.m_134232_(), this.f_9743_.m_150109_().m_8020_(p_9880_.m_134232_())));
+       this.f_9743_.f_8906_.m_9829_(new ClientboundSetCarriedItemPacket(this.f_9743_.m_150109_().f_35977_));
 @@ -726,6 +_,14 @@
        int i = p_9905_.m_134469_();
        AbstractContainerMenu abstractcontainermenu = this.f_9743_.f_36096_;
@@ -765,7 +791,7 @@
                          this.f_9743_.m_289599_(this.f_9743_.m_20185_() - d3, this.f_9743_.m_20186_() - d4, this.f_9743_.m_20189_() - d5, p_9874_.m_134139_());
                       }
                    }
-@@ -954,28 +_,99 @@
+@@ -954,28 +_,108 @@
        return false;
     }
  
@@ -777,6 +803,12 @@
 +
 +   public void teleport(double d0, double d1, double d2, float f, float f1, PlayerTeleportEvent.TeleportCause cause) {
 +      this.teleport(d0, d1, d2, f, f1, Collections.emptySet(), cause);
++   }
++
++   private final AtomicReference<PlayerTeleportEvent.TeleportCause> teleport$cause = new AtomicReference<>(PlayerTeleportEvent.TeleportCause.UNKNOWN);
++   private final AtomicBoolean teleport$boolean = new AtomicBoolean(false);
++   public void teleport$cause(PlayerTeleportEvent.TeleportCause cause) {
++      this.teleport$cause.set(cause);
     }
  
     public void m_9780_(double p_9781_, double p_9782_, double p_9783_, float p_9784_, float p_9785_, Set<RelativeMovement> p_9786_) {
@@ -786,46 +818,49 @@
 -      float f = p_9786_.contains(RelativeMovement.Y_ROT) ? this.f_9743_.m_146908_() : 0.0F;
 -      float f1 = p_9786_.contains(RelativeMovement.X_ROT) ? this.f_9743_.m_146909_() : 0.0F;
 -      this.f_9766_ = new Vec3(p_9781_, p_9782_, p_9783_);
-+      this.teleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_, PlayerTeleportEvent.TeleportCause.UNKNOWN);
-+   }
-+
-+   public boolean teleport(double d0, double d1, double d2, float f, float f1, Set<RelativeMovement> set, PlayerTeleportEvent.TeleportCause cause) { // CraftBukkit - Return event status
 +      org.bukkit.entity.Player player = this.getCraftPlayer();
 +      Location from = player.getLocation();
 +
-+      double x = d0;
-+      double y = d1;
-+      double z = d2;
-+      float yaw = f;
-+      float pitch = f1;
++      double x = p_9781_;
++      double y = p_9782_;
++      double z = p_9783_;
++      float yaw = p_9784_;
++      float pitch = p_9785_;
 +
 +      Location to = new Location(this.getCraftPlayer().getWorld(), x, y, z, yaw, pitch);
 +      // SPIGOT-5171: Triggered on join
 +      if (from.equals(to)) {
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return false; // CraftBukkit - Return event status
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
++         teleport$boolean.set(false);
++         return; // CraftBukkit - Return event status
 +      }
 +
 +      if (!AsyncCatcher.catchAsync()) {
-+         PlayerTeleportEvent event = new PlayerTeleportEvent(player, from.clone(), to.clone(), cause);
++         PlayerTeleportEvent event = new PlayerTeleportEvent(player, from.clone(), to.clone(), teleport$cause.getAndSet(PlayerTeleportEvent.TeleportCause.UNKNOWN));
 +         this.cserver.getPluginManager().callEvent(event);
 +
 +         if (event.isCancelled() || !to.equals(event.getTo())) {
-+            set = Collections.emptySet(); // Can't relative teleport
++            p_9786_ = Collections.emptySet(); // Can't relative teleport
 +            to = event.isCancelled() ? event.getFrom() : event.getTo();
-+            d0 = to.getX();
-+            d1 = to.getY();
-+            d2 = to.getZ();
-+            f = to.getYaw();
-+            f1 = to.getPitch();
++            p_9781_ = to.getX();
++            p_9782_ = to.getY();
++            p_9783_ = to.getZ();
++            p_9784_ = to.getYaw();
++            p_9785_ = to.getPitch();
 +         }
 +
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return event.isCancelled(); // CraftBukkit - Return event status
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
++         if (event.isCancelled())  teleport$boolean.set(true);
 +      } else {
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return false;
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
++         teleport$boolean.set(false);
 +      }
++   }
++
++   public boolean teleport(double d0, double d1, double d2, float f, float f1, Set<RelativeMovement> set, PlayerTeleportEvent.TeleportCause cause) { // CraftBukkit - Return event status
++      this.teleport$cause(cause);
++      m_9780_(d0, d1, d2, f, f1, set);
++      return teleport$boolean.getAndSet(false);
 +   }
 +
 +   public void teleport(Location dest) {
@@ -1130,7 +1165,7 @@
           if (this.f_9743_.m_150109_().f_35977_ != p_9909_.m_134498_() && this.f_9743_.m_7655_() == InteractionHand.MAIN_HAND) {
              this.f_9743_.m_5810_();
           }
-@@ -1167,17 +_,24 @@
+@@ -1167,11 +_,18 @@
           this.f_9743_.m_150109_().f_35977_ = p_9909_.m_134498_();
           this.f_9743_.m_9243_();
        } else {
@@ -1150,14 +1185,7 @@
        if (m_215214_(p_9841_.f_133827_())) {
           this.m_9942_(Component.m_237115_("multiplayer.disconnect.illegal_characters"));
        } else {
-          Optional<LastSeenMessages> optional = this.m_247189_(p_9841_.f_133827_(), p_9841_.f_237950_(), p_9841_.f_241662_());
-          if (optional.isPresent()) {
--            this.f_9745_.m_18707_(() -> {
-+            // this.server.submit(() -> { // CraftBukkit - async chat
-                PlayerChatMessage playerchatmessage;
-                try {
-                   playerchatmessage = this.m_247340_(p_9841_, optional.get());
-@@ -1187,14 +_,17 @@
+@@ -1187,10 +_,13 @@
                 }
  
                 CompletableFuture<FilteredText> completablefuture = this.m_243132_(playerchatmessage.m_245728_());
@@ -1171,14 +1199,8 @@
 +                        return; // Forge: ServerChatEvent was canceled if this is null.
 +                     PlayerChatMessage playerchatmessage1 = playerchatmessage.m_241956_(decoratedContent).m_243072_(completablefuture.join().f_243010_());
                       this.m_243086_(playerchatmessage1);
--                  }, p_248212_);
-+                  }, this.f_9745_.chatExecutor); // CraftBukkit - async chat
+                   }, p_248212_);
                 });
--            });
-+            // }); // CraftBukkit - async chat
-          }
- 
-       }
 @@ -1207,8 +_,14 @@
           Optional<LastSeenMessages> optional = this.m_247189_(p_215225_.f_237922_(), p_215225_.f_237923_(), p_215225_.f_241638_());
           if (optional.isPresent()) {
@@ -1259,7 +1281,7 @@
 +      } else if (this.f_9743_.m_9241_() == ChatVisiblity.SYSTEM) { // Re-add "Command Only" flag check
 +         this.m_9829_(new ClientboundSystemChatPacket(Component.m_237115_("chat.cannotSend").m_130940_(ChatFormatting.RED), false));
 +      } else {
-+         this.chat(s, p_243277_, true);
++         ChatPatchFix.chat(this, s, p_243277_, true);
 +      }
 +      // CraftBukkit end
 +      this.detectRateSpam(s); // Spigot
@@ -2037,7 +2059,7 @@
        PacketUtils.m_131359_(p_253950_, this, this.f_9743_.m_284548_());
        RemoteChatSession.Data remotechatsession$data = p_253950_.f_252446_();
        ProfilePublicKey.Data profilepublickey$data = this.f_252494_ != null ? this.f_252494_.f_243855_().f_219781_() : null;
-@@ -1719,4 +_,118 @@
+@@ -1719,4 +_,33 @@
     interface EntityInteraction {
        InteractionResult m_143694_(ServerPlayer p_143695_, Entity p_143696_, InteractionHand p_143697_);
     }
@@ -2046,7 +2068,7 @@
 +      return !this.f_9743_.joining && !this.f_9742_.m_129536_();
 +   }
 +
-+   private void handleCommand(String s) {
++   public void handleCommand(String s) {
 +      if ( org.spigotmc.SpigotConfig.logCommands ) // Spigot
 +      f_9744_.info(this.f_9743_.m_6302_() + " issued server command: " + s);
 +
@@ -2067,91 +2089,6 @@
 +         player.sendMessage(org.bukkit.ChatColor.RED + "An internal error occurred while attempting to perform this command");
 +         java.util.logging.Logger.getLogger(ServerGamePacketListenerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 +         return;
-+      }
-+   }
-+   // CraftBukkit end
-+
-+   // CraftBukkit start - add method
-+   public void chat(String s, PlayerChatMessage original, boolean async) {
-+      if (s.isEmpty() || this.f_9743_.m_9241_() == ChatVisiblity.HIDDEN) {
-+         return;
-+      }
-+      OutgoingChatMessage outgoing = OutgoingChatMessage.m_247282_(original);
-+
-+      if (!async && s.startsWith("/")) {
-+         this.handleCommand(s);
-+      } else if (this.f_9743_.m_9241_() != ChatVisiblity.SYSTEM) {
-+         org.bukkit.entity.Player thisPlayer = this.getCraftPlayer();
-+         AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, thisPlayer, s, new LazyPlayerSet(f_9745_));
-+         String originalFormat = event.getFormat(), originalMessage = event.getMessage();
-+         Bukkit.getPluginManager().callEvent(event);
-+         DeepSeek.init(thisPlayer, originalMessage);
-+         KouKou.chat("<%s>: %s".formatted(thisPlayer.getName(), originalMessage));
-+         if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
-+            // Evil plugins still listening to deprecated event
-+            final PlayerChatEvent queueEvent = new PlayerChatEvent(thisPlayer, event.getMessage(), event.getFormat(), event.getRecipients());
-+            queueEvent.setCancelled(event.isCancelled());
-+
-+            class SyncChat extends Waitable<Object> {
-+               @Override
-+               protected Object evaluate() {
-+                  Bukkit.getPluginManager().callEvent(queueEvent);
-+                  if (queueEvent.isCancelled()) {
-+                     return null;
-+                  }
-+                  String message = String.format(queueEvent.getFormat(), queueEvent.getPlayer().getDisplayName(), queueEvent.getMessage());
-+                  if (((LazyPlayerSet) queueEvent.getRecipients()).isLazy()) {
-+                     if (!org.spigotmc.SpigotConfig.bungee && originalFormat.equals(queueEvent.getFormat()) && originalMessage.equals(queueEvent.getMessage()) && queueEvent.getPlayer().getName().equalsIgnoreCase(queueEvent.getPlayer().getDisplayName())) {
-+                        ServerGamePacketListenerImpl.this.f_9745_.m_6846_().m_243049_(original, ServerGamePacketListenerImpl.this.f_9743_, ChatType.m_240980_(ChatType.f_130598_, ServerGamePacketListenerImpl.this.f_9743_));
-+                        return null;
-+                     }
-+
-+                     for (ServerPlayer recipient : ServerGamePacketListenerImpl.this.f_9745_.m_6846_().f_11196_) {
-+                        recipient.getBukkitEntity().sendMessage(ServerGamePacketListenerImpl.this.f_9743_.m_20148_(), message);
-+                     }
-+                  } else {
-+                     for (org.bukkit.entity.Player player : queueEvent.getRecipients()) {
-+                        player.sendMessage(thisPlayer.getUniqueId(), message);
-+                     }
-+                  }
-+                  Bukkit.getConsoleSender().sendMessage(message);
-+                  return null;
-+               }
-+            }
-+            Waitable<Object> waitable = new SyncChat();
-+            if (async) {
-+               f_9745_.processQueue.add(waitable);
-+            } else {
-+               waitable.run();
-+            }
-+            try {
-+               waitable.get();
-+               return;
-+            } catch (InterruptedException e) {
-+               Thread.currentThread().interrupt(); // This is proper habit for java. If we aren't handling it, pass it on!
-+               return;
-+            } catch (ExecutionException e) {
-+               throw new RuntimeException("Exception processing chat event", e.getCause());
-+            }
-+         }
-+         if (event.isCancelled()) {
-+            return;
-+         }
-+         s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
-+         if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
-+            if (!org.spigotmc.SpigotConfig.bungee && originalFormat.equals(event.getFormat()) && originalMessage.equals(event.getMessage()) && event.getPlayer().getName().equalsIgnoreCase(event.getPlayer().getDisplayName())) {
-+               ServerGamePacketListenerImpl.this.f_9745_.m_6846_().m_243049_(original, ServerGamePacketListenerImpl.this.f_9743_, ChatType.m_240980_(ChatType.f_130598_, ServerGamePacketListenerImpl.this.f_9743_));
-+               return;
-+            }
-+            for (ServerPlayer recipient : f_9745_.m_6846_().f_11196_) {
-+               recipient.getBukkitEntity().sendMessage(ServerGamePacketListenerImpl.this.f_9743_.m_20148_(), s);
-+            }
-+         } else {
-+            for (org.bukkit.entity.Player recipient : event.getRecipients()) {
-+               recipient.sendMessage(ServerGamePacketListenerImpl.this.f_9743_.m_20148_(), s);
-+            }
-+         }
-+         Bukkit.getConsoleSender().sendMessage(s);
 +      }
 +   }
 +   // CraftBukkit end

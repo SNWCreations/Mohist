@@ -197,7 +197,7 @@ public class MohistCommand extends Command {
                 }
             }
             case "memoryfix" -> {
-                sender.sendMessage(ChatColor.GREEN + MemoryUtils.setProcessWorkingSetSize(-1, -1));
+                sender.sendMessage(ChatColor.GREEN + MemoryUtils.setProcessWorkingSetSize(50, 100));
             }
             default -> {
                 sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);

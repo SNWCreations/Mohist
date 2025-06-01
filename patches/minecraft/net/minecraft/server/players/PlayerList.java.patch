@@ -459,7 +459,7 @@
        UUID uuid = UUIDUtil.m_235875_(p_215625_);
        List<ServerPlayer> list = Lists.newArrayList();
  
-@@ -415,76 +_,169 @@
+@@ -415,76 +_,170 @@
        return new ServerPlayer(this.f_11195_, this.f_11195_.m_129783_(), p_215625_);
     }
  
@@ -468,6 +468,7 @@
 +   public PlayerRespawnEvent.RespawnReason mohist$reason = null;
 +   public ServerLevel mohist$worldserver = null;
 +   public AtomicBoolean avoidSuffocation = new AtomicBoolean(true);
++   public World fromWorld = null;
 +
     public ServerPlayer m_11236_(ServerPlayer p_11237_, boolean p_11238_) {
 +      p_11237_.m_8127_(); // CraftBukkit
@@ -482,7 +483,7 @@
 -      if (serverlevel != null && blockpos != null) {
 -         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +
-+      World fromWorld = p_11237_.getBukkitEntity().getWorld();
++      fromWorld = p_11237_.getBukkitEntity().getWorld();
 +      p_11237_.f_8944_ = false;
 +
 +      boolean flag2 = false;

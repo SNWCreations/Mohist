@@ -806,7 +806,7 @@ public class CraftWorld extends CraftRegionAccessor implements World {
     @Override
     public double getTemperature(int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);
-        return this.world.getNoiseBiome(x >> 2, y >> 2, z >> 2).value().getTemperature(pos);
+        return this.world.getNoiseBiome(x >> 2, y >> 2, z >> 2).value().getTemperaturePublic(pos);
     }
 
     @Override

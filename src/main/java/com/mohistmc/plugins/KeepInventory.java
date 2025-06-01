@@ -24,7 +24,7 @@ public class KeepInventory {
             return true;
         }
         Player bukkit_player = player.getBukkitEntity();
-        if (bukkit_player.hasPermission(MohistConfig.keepinventory_inventory_permission)) {
+        if (hasPermission(bukkit_player, Type.INVENTORY)) {
             return true;
         }
         String world = bukkit_player.getWorld().getName();
@@ -46,12 +46,28 @@ public class KeepInventory {
             return true;
         }
         Player bukkit_player = player.getBukkitEntity();
-        if (bukkit_player.hasPermission(MohistConfig.keepinventory_exp_permission)) {
+        if (hasPermission(bukkit_player, Type.EXP)) {
             return true;
         }
         String world = bukkit_player.getWorld().getName();
         boolean i = MohistConfig.keepinventory_global ? MohistConfig.keepinventory_exp : MohistConfig.yml.getBoolean("keepinventory." + world + ".exp");
         player.keepLevel = i;
         return i;
+    }
+
+    private static boolean hasPermission(Player bukkit_player, Type type){
+        if (!MohistConfig.keepinventory_permission_enable) return false;
+        return bukkit_player.hasPermission(type.permission);
+    }
+
+    enum Type {
+        INVENTORY("keepinventory.permission"),
+        EXP("keepinventory.permission");
+
+        final String permission;
+
+        Type(String s) {
+            this.permission = s;
+        }
     }
 }

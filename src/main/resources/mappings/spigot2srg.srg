@@ -17322,7 +17322,7 @@ net/minecraft/world/level/biome/BiomeBase net/minecraft/world/level/biome/Biome
 	e (Lnet/minecraft/core/BlockPosition;)F m_47528_
 	e (Lnet/minecraft/world/level/biome/BiomeBase;)Lnet/minecraft/world/level/biome/BiomeFog; m_220549_
 	f ()I m_47542_
-	f (Lnet/minecraft/core/BlockPosition;)F m_47505_
+	f (Lnet/minecraft/core/BlockPosition;)F getTemperaturePublic
 	f (Lnet/minecraft/world/level/biome/BiomeBase;)Lnet/minecraft/world/level/biome/BiomeBase$ClimateSettings; m_151716_
 	g ()F m_47554_
 	h ()Lnet/minecraft/world/level/biome/BiomeFog; m_47557_

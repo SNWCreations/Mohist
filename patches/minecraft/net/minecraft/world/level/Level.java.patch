@@ -244,7 +244,19 @@
     }
  
     public boolean m_5776_() {
-@@ -190,7 +_,31 @@
+@@ -185,12 +_,42 @@
+          return chunkaccess;
+       }
+    }
+-
++   public boolean fake$setBlock = false;
++   public BlockState fake$setBlockBlockState = null;
+    public boolean m_7731_(BlockPos p_46601_, BlockState p_46602_, int p_46603_) {
++      if (fake$setBlock) {
++         fake$setBlock = false;
++         fake$setBlockBlockState = p_46602_;
++         return false;
++      }
        return this.m_6933_(p_46601_, p_46602_, p_46603_, 512);
     }
  

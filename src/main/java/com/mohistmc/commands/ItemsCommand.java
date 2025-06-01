@@ -21,7 +21,7 @@ package com.mohistmc.commands;
 import com.mohistmc.api.ItemAPI;
 import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.gui.GUIItem;
-import com.mohistmc.api.gui.Warehouse;
+import com.mohistmc.api.gui.DemoGUI;
 import com.mohistmc.plugins.item.ItemsConfig;
 import com.mohistmc.util.I18n;
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class ItemsCommand extends Command {
                 return true;
             }
             case "list" ->{
-                Warehouse wh = new Warehouse("Items");
+                DemoGUI wh = new DemoGUI("Items");
                 for (ItemStack s : ItemsConfig.INSTANCE.getItems()) {
                     wh.addItem(new GUIItem(s) {
                         @Override

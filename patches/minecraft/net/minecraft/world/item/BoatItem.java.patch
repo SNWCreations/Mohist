@@ -20,31 +20,33 @@
        if (hitresult.m_6662_() == HitResult.Type.MISS) {
           return InteractionResultHolder.m_19098_(itemstack);
        } else {
-@@ -49,6 +_,13 @@
+@@ -49,6 +_,15 @@
           }
  
           if (hitresult.m_6662_() == HitResult.Type.BLOCK) {
-+            // CraftBukkit start - Boat placement
-+            org.bukkit.event.player.PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(p_40623_, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK, hitresult.m_82425_(), hitresult.m_82434_(), itemstack, false, p_40624_, hitresult.m_82450_());
++            {
++               // CraftBukkit start - Boat placement
++               org.bukkit.event.player.PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(p_40623_, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK, hitresult.m_82425_(), hitresult.m_82434_(), itemstack, false, p_40624_, hitresult.m_82450_());
 +
-+            if (event.isCancelled()) {
-+               return InteractionResultHolder.m_19098_(itemstack);
++               if (event.isCancelled()) {
++                  return InteractionResultHolder.m_19098_(itemstack);
++               }
++               // CraftBukkit end
 +            }
-+            // CraftBukkit end
              Boat boat = this.m_220016_(p_40622_, hitresult);
              boat.m_28464_(this.f_40616_);
              boat.m_146922_(p_40623_.m_146908_());
-@@ -56,7 +_,15 @@
+@@ -56,7 +_,16 @@
                 return InteractionResultHolder.m_19100_(itemstack);
              } else {
                 if (!p_40622_.f_46443_) {
--                  p_40622_.m_7967_(boat);
 +                  // CraftBukkit start
 +                  if (CraftEventFactory.callEntityPlaceEvent(p_40622_, hitresult.m_82425_(), hitresult.m_82434_(), p_40623_, boat, p_40624_).isCancelled()) {
 +                     return InteractionResultHolder.m_19100_(itemstack);
 +                  }
 +
-+                  if (!p_40622_.m_7967_(boat)) {
+                   p_40622_.m_7967_(boat);
++                  if (!p_40622_.canAddFreshEntity()) {
 +                     return InteractionResultHolder.m_19098_(itemstack);
 +                  }
 +                  // CraftBukkit end

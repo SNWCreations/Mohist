@@ -1817,6 +1817,20 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
     @NotNull
     org.bukkit.command.CommandMap getCommandMap();
 
+    /**
+     * Get the current internal server tick
+     *
+     * @return Current tick
+     */
+    int getCurrentTick();
+
+    /**
+     * Checks if the server is in the process of being shutdown.
+     *
+     * @return true if server is in the process of being shutdown
+     */
+    boolean isStopping();
+
     // Spigot start
     public class Spigot {
 
