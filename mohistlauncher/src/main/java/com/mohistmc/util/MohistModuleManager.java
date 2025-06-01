@@ -20,6 +20,7 @@ package com.mohistmc.util;
 
 import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.tools.OSUtil;
+import java.io.File;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -182,7 +183,7 @@ public class MohistModuleManager {
     //Codesnipped from (https://github.com/IzzelAliz/Arclight/blob/f98046185ebfc183a242ac5497619dc35d741042/forge-installer/src/main/java/io/izzel/arclight/forgeinstaller/ForgeInstaller.java#L420)
     public void loadModules(String modulePath) throws Throwable {
         // Find all extra modules
-        ModuleFinder finder = ModuleFinder.of(Arrays.stream(modulePath.split(OSUtil.getOS() == OSUtil.OS.WINDOWS ? ";" : ":")).map(Paths::get).peek(JarLoader::loadJar).toArray(Path[]::new));
+        ModuleFinder finder = ModuleFinder.of(Arrays.stream(modulePath.split(File.pathSeparator)).map(Paths::get).peek(JarLoader::loadJar).toArray(Path[]::new));
         MethodHandle loadModuleMH = IMPL_LOOKUP.findVirtual(Class.forName("jdk.internal.loader.BuiltinClassLoader"), "loadModule", MethodType.methodType(void.class, ModuleReference.class));
 
         // Resolve modules to a new config

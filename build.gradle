@@ -578,7 +578,7 @@ project(':mohist') {
                         'Implementation-Vendor' : 'MohistMC'
                 ] as LinkedHashMap,
                 'org/bukkit/craftbukkit/v1_20_R1/'          : [
-                        'Specification-Title'   : MCP_VERSION,
+                        'Specification-Title'   : 'Spigot',
                         'Specification-Vendor'  : 'SpigotMC',
                         'Specification-Version' : '1.20.1',
                         'Implementation-Title'  : 'Spigot',

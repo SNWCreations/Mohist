@@ -4,7 +4,6 @@ import com.mohistmc.ai.koukou.network.HttpRequestUtils;
 import com.mohistmc.mjson.Json;
 import java.util.HashMap;
 import java.util.Objects;
-import lombok.SneakyThrows;
 
 public class KouKou {
 
@@ -33,7 +32,6 @@ public class KouKou {
         }
     }
 
-    @SneakyThrows
     public static void send_group_msg(String group_id, String message) {
         HashMap<String, String> param = new HashMap<>();
         param.put("group_id", group_id);

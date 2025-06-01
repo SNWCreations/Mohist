@@ -111,7 +111,7 @@
     protected final NeighborUpdater f_220350_;
     private final List<TickingBlockEntity> f_151503_ = Lists.newArrayList();
     private boolean f_151504_;
-@@ -101,19 +_,72 @@
+@@ -101,19 +_,76 @@
     private final RandomSource f_220348_ = RandomSource.m_216337_();
     private final ResourceKey<DimensionType> f_220349_;
     private final Holder<DimensionType> f_204147_;
@@ -136,9 +136,9 @@
 +   public CraftWorld world;
 +   public boolean pvpMode;
 +   public boolean keepSpawnInMemory = true;
-+   public org.bukkit.generator.ChunkGenerator generator;
-+   public org.bukkit.World.Environment environment;
-+   public org.bukkit.generator.BiomeProvider biomeProvider;
++   public static org.bukkit.generator.ChunkGenerator generator;
++   public static org.bukkit.World.Environment environment;
++   public static org.bukkit.generator.BiomeProvider biomeProvider;
 +
 +   public boolean preventPoiUpdated = false; // CraftBukkit - SPIGOT-5710
 +   public boolean captureBlockStates = false;
@@ -151,17 +151,21 @@
 +   public org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
 +   public String name;
 +
++   public CraftWorld getWorld() {
++      return this.world;
++   }
++
 +   public CraftServer getCraftServer() {
 +      return (CraftServer) Bukkit.getServer();
 +   }
 +   public ResourceKey<LevelStem> getTypeKey() {
 +      return Registries.m_257452_(f_46421_);
 +   }
-+   public Level craftWorldData(org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator generator, org.bukkit.generator.BiomeProvider bp) {
-+      this.environment = env;
-+      this.biomeProvider = bp;
-+      this.generator = generator;
-+      return this;
++
++   public static void craftWorldData(org.bukkit.generator.ChunkGenerator gen, org.bukkit.World.Environment env, org.bukkit.generator.BiomeProvider bp) {
++      generator = gen;
++      environment = env;
++      biomeProvider = bp;
 +   }
 +
 +   /*
@@ -171,7 +175,7 @@
 +      environment = env;
 +      biomeProvider = bp;
 +   }
-+    */
++   */
  
     protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_) {
 +      super(Level.class);
@@ -200,11 +204,14 @@
              }
           };
        } else {
-@@ -141,6 +_,43 @@
+@@ -141,6 +_,46 @@
        this.f_220350_ = new CollectingNeighborUpdater(this, p_270466_);
        this.f_268710_ = p_270200_;
        this.f_268497_ = new DamageSources(p_270200_);
 +      // CraftBukkit start
++      if (environment == null) {
++         environment = ForgeInjectBukkit.environment.get(getTypeKey());
++      }
 +      m_6857_().world = this;
 +      // From PlayerList.setPlayerFileData
 +      m_6857_().m_61929_(new BorderChangeListener() {
@@ -644,7 +651,7 @@
     }
  
     public static enum ExplosionInteraction {
-@@ -880,4 +_,83 @@
+@@ -880,4 +_,53 @@
        MOB,
        TNT;
     }
@@ -695,36 +702,6 @@
 +         }
 +         // CraftBukkit end
 +      }
-+   }
-+
-+
-+   public CraftWorld getWorld() {
-+      if (this.world == null) {
-+         if (environment == null) {
-+            environment = ForgeInjectBukkit.environment.getOrDefault(getTypeKey(), World.Environment.CUSTOM);
-+         }
-+         if (generator == null) {
-+            generator = this.getCraftServer().getGenerator(((ServerLevelData) this.m_6106_()).m_5462_());
-+
-+            if (this instanceof net.minecraft.server.level.ServerLevel serverLevel && generator != null) {
-+               CraftWorldInfo info = new CraftWorldInfo((ServerLevelData) m_6106_(), serverLevel.convertable, environment, m_6042_());
-+
-+               net.minecraft.world.level.chunk.ChunkGenerator NMSgenerator = serverLevel.m_7726_().m_8481_();
-+               if (biomeProvider != null) {
-+                  net.minecraft.world.level.biome.BiomeSource source = new CustomWorldChunkManager(info, biomeProvider, serverLevel.m_9598_().m_175515_(Registries.f_256952_));
-+                  NMSgenerator.setBiomeSource(source);
-+               } else {
-+                  biomeProvider = generator.getDefaultBiomeProvider(info);
-+               }
-+
-+               CustomChunkGenerator gen = new CustomChunkGenerator(serverLevel, NMSgenerator, generator);
-+               serverLevel.m_7726_().setChunkGenerator(gen);
-+            }
-+         }
-+         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
-+         getCraftServer().addWorld(this.world);
-+      }
-+      return this.world;
 +   }
 +   // CraftBukkit end
  }

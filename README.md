@@ -8,7 +8,7 @@
  other parts of this project. -- SNWCreations
 
 [![](https://img.shields.io/github/stars/MohistMC/Mohist.svg?label=Stars&logo=github)](https://github.com/MohistMC/Mohist/stargazers)
-[![](https://img.shields.io/badge/Forge-1.20.1--47.4.0-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![](https://img.shields.io/badge/Forge-1.20.1--47.4.1-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![](https://img.shields.io/badge/NeoForge-1.20.1--47.1.106-brightgreen.svg?colorB=26303d)](https://neoforged.net/)
 [![](https://img.shields.io/badge/JDK-17.0.14-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
 [![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
@@ -24,7 +24,7 @@
 Progress
 ------
 
-- [x] Rectify Forge([**753d68d20**](https://github.com/MinecraftForge/MinecraftForge/commit/753d68d20))
+- [x] Rectify Forge([**f36781652**](https://github.com/MinecraftForge/MinecraftForge/commit/f36781652))
 - [x] Rectify NeoForge([**e7ac32353**](https://github.com/neoforged/NeoForge/commit/e7ac32353))
 - [x] Start patch
     * [x] Bukkit([**997de31d**](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/997de31d))
