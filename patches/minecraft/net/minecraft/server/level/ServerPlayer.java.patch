@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -2,79 +_,58 @@
+@@ -2,79 +_,33 @@
  
  import com.google.common.collect.Lists;
  import com.google.common.net.InetAddresses;
@@ -14,47 +14,45 @@
  import com.mojang.datafixers.util.Either;
  import com.mojang.logging.LogUtils;
  import com.mojang.serialization.Dynamic;
- import java.net.InetSocketAddress;
- import java.net.SocketAddress;
-+import java.util.ArrayList;
- import java.util.Collection;
- import java.util.List;
-+import java.util.Locale;
-+import java.util.Objects;
- import java.util.Optional;
- import java.util.OptionalInt;
- import java.util.Set;
-+import java.util.concurrent.atomic.AtomicReference;
- import javax.annotation.Nullable;
+-import java.net.InetSocketAddress;
+-import java.net.SocketAddress;
+-import java.util.Collection;
+-import java.util.List;
+-import java.util.Optional;
+-import java.util.OptionalInt;
+-import java.util.Set;
+-import javax.annotation.Nullable;
 -import net.minecraft.BlockUtil;
+-import net.minecraft.ChatFormatting;
+-import net.minecraft.CrashReport;
+-import net.minecraft.CrashReportCategory;
+-import net.minecraft.ReportedException;
+-import net.minecraft.Util;
 +import net.minecraft.BlockUtil.FoundRectangle;
- import net.minecraft.ChatFormatting;
- import net.minecraft.CrashReport;
- import net.minecraft.CrashReportCategory;
- import net.minecraft.ReportedException;
- import net.minecraft.Util;
++import net.minecraft.*;
  import net.minecraft.advancements.CriteriaTriggers;
 -import net.minecraft.commands.arguments.EntityAnchorArgument;
+-import net.minecraft.core.BlockPos;
+-import net.minecraft.core.Direction;
+-import net.minecraft.core.GlobalPos;
+-import net.minecraft.core.NonNullList;
+-import net.minecraft.core.SectionPos;
 +import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
- import net.minecraft.core.BlockPos;
++import net.minecraft.core.*;
 +import net.minecraft.core.BlockPos.MutableBlockPos;
- import net.minecraft.core.Direction;
 +import net.minecraft.core.Direction.Axis;
- import net.minecraft.core.GlobalPos;
- import net.minecraft.core.NonNullList;
-+import net.minecraft.core.PositionImpl;
- import net.minecraft.core.SectionPos;
  import net.minecraft.core.registries.BuiltInRegistries;
  import net.minecraft.nbt.CompoundTag;
  import net.minecraft.nbt.NbtOps;
  import net.minecraft.network.PacketSendListener;
 -import net.minecraft.network.chat.ChatType;
+-import net.minecraft.network.chat.CommonComponents;
+-import net.minecraft.network.chat.Component;
+-import net.minecraft.network.chat.HoverEvent;
+-import net.minecraft.network.chat.OutgoingChatMessage;
+-import net.minecraft.network.chat.RemoteChatSession;
 +import net.minecraft.network.chat.ChatType.Bound;
- import net.minecraft.network.chat.CommonComponents;
- import net.minecraft.network.chat.Component;
- import net.minecraft.network.chat.HoverEvent;
- import net.minecraft.network.chat.OutgoingChatMessage;
- import net.minecraft.network.chat.RemoteChatSession;
++import net.minecraft.network.chat.*;
  import net.minecraft.network.protocol.Packet;
 -import net.minecraft.network.protocol.game.ClientGamePacketListener;
 -import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
@@ -98,7 +96,7 @@
  import net.minecraft.resources.ResourceKey;
  import net.minecraft.resources.ResourceLocation;
  import net.minecraft.server.MinecraftServer;
-@@ -95,6 +_,7 @@
+@@ -95,16 +_,11 @@
  import net.minecraft.world.Container;
  import net.minecraft.world.InteractionHand;
  import net.minecraft.world.MenuProvider;
@@ -106,14 +104,39 @@
  import net.minecraft.world.damagesource.DamageSource;
  import net.minecraft.world.effect.MobEffectInstance;
  import net.minecraft.world.effect.MobEffects;
-@@ -113,6 +_,7 @@
+-import net.minecraft.world.entity.Entity;
+-import net.minecraft.world.entity.EntitySelector;
+-import net.minecraft.world.entity.HumanoidArm;
+-import net.minecraft.world.entity.LivingEntity;
+-import net.minecraft.world.entity.Mob;
+-import net.minecraft.world.entity.NeutralMob;
+-import net.minecraft.world.entity.RelativeMovement;
++import net.minecraft.world.entity.*;
+ import net.minecraft.world.entity.animal.horse.AbstractHorse;
+ import net.minecraft.world.entity.item.ItemEntity;
+ import net.minecraft.world.entity.monster.Monster;
+@@ -113,18 +_,9 @@
  import net.minecraft.world.entity.player.Inventory;
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.entity.projectile.AbstractArrow;
+-import net.minecraft.world.inventory.AbstractContainerMenu;
+-import net.minecraft.world.inventory.ContainerListener;
+-import net.minecraft.world.inventory.ContainerSynchronizer;
+-import net.minecraft.world.inventory.HorseInventoryMenu;
+-import net.minecraft.world.inventory.ResultSlot;
+-import net.minecraft.world.inventory.Slot;
+-import net.minecraft.world.item.ComplexItem;
+-import net.minecraft.world.item.ItemCooldowns;
+-import net.minecraft.world.item.ItemStack;
+-import net.minecraft.world.item.Items;
+-import net.minecraft.world.item.ServerItemCooldowns;
+-import net.minecraft.world.item.WrittenBookItem;
 +import net.minecraft.world.food.FoodData;
- import net.minecraft.world.inventory.AbstractContainerMenu;
- import net.minecraft.world.inventory.ContainerListener;
- import net.minecraft.world.inventory.ContainerSynchronizer;
++import net.minecraft.world.inventory.*;
++import net.minecraft.world.item.*;
+ import net.minecraft.world.item.crafting.Recipe;
+ import net.minecraft.world.item.trading.MerchantOffers;
+ import net.minecraft.world.level.ChunkPos;
 @@ -133,6 +_,7 @@
  import net.minecraft.world.level.Level;
  import net.minecraft.world.level.biome.BiomeManager;
@@ -130,7 +153,7 @@
  import net.minecraft.world.level.gameevent.GameEvent;
  import net.minecraft.world.level.portal.PortalInfo;
  import net.minecraft.world.level.storage.LevelData;
-@@ -147,10 +_,51 @@
+@@ -147,10 +_,50 @@
  import net.minecraft.world.phys.Vec3;
  import net.minecraft.world.scores.PlayerTeam;
  import net.minecraft.world.scores.Score;
@@ -161,21 +184,20 @@
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftChatMessage;
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftLocation;
 +import org.bukkit.event.entity.EntityPotionEffectEvent;
-+import org.bukkit.event.player.PlayerBedLeaveEvent;
-+import org.bukkit.event.player.PlayerChangedMainHandEvent;
-+import org.bukkit.event.player.PlayerChangedWorldEvent;
-+import org.bukkit.event.player.PlayerLocaleChangeEvent;
-+import org.bukkit.event.player.PlayerPortalEvent;
-+import org.bukkit.event.player.PlayerSpawnChangeEvent;
++import org.bukkit.event.player.*;
 +import org.bukkit.event.player.PlayerSpawnChangeEvent.Cause;
-+import org.bukkit.event.player.PlayerTeleportEvent;
 +import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-+import org.bukkit.event.player.PlayerToggleSneakEvent;
 +import org.bukkit.event.world.PortalCreateEvent;
 +import org.bukkit.event.world.PortalCreateEvent.CreateReason;
 +import org.bukkit.inventory.MainHand;
  import org.slf4j.Logger;
  
++import javax.annotation.Nullable;
++import java.net.InetSocketAddress;
++import java.net.SocketAddress;
++import java.util.*;
++import java.util.concurrent.atomic.AtomicReference;
++
 +import net.minecraft.world.entity.Entity.RemovalReason;
 +import net.minecraft.world.entity.player.Player.BedSleepingProblem;
 +
@@ -191,12 +213,14 @@
     private WardenSpawnTracker f_244516_ = new WardenSpawnTracker(0, 0, 0);
     private final ContainerSynchronizer f_143379_ = new ContainerSynchronizer() {
        public void m_142589_(AbstractContainerMenu p_143448_, NonNullList<ItemStack> p_143449_, ItemStack p_143450_, int[] p_143451_) {
-@@ -245,6 +_,24 @@
+@@ -245,6 +_,26 @@
     public int f_8943_;
     public boolean f_8944_;
  
 +   // CraftBukkit start
 +   public String displayName;
++   public net.kyori.adventure.text.Component adventure$displayName; // Paper
++   public Component listName;
 +   public Location compassTarget;
 +   public int newExp = 0;
 +   public int newLevel = 0;
@@ -432,7 +456,7 @@
  
     public void m_6667_(DamageSource p_9035_) {
        this.m_146850_(GameEvent.f_223707_);
-+      if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, p_9035_)) return;
++      if (ForgeHooks.onLivingDeath(this, p_9035_)) return;
        boolean flag = this.m_9236_().m_46469_().m_46207_(GameRules.f_46142_);
 -      if (flag) {
 -         Component component = this.m_21231_().m_19293_();
@@ -1119,7 +1143,7 @@
        if (this.m_240422_()) {
           p_249852_.m_246195_(this, p_250110_, p_252108_);
        }
-@@ -1274,14 +_,25 @@
+@@ -1274,14 +_,29 @@
           return "<unknown>";
        }
     }
@@ -1143,6 +1167,10 @@
        this.m_20088_().m_135381_(f_36089_, (byte)p_9157_.f_133867_());
        this.m_20088_().m_135381_(f_36090_, (byte)(p_9157_.f_133868_() == HumanoidArm.LEFT ? 0 : 1));
 +      this.language = p_9157_.f_133863_();
++      // Paper start
++      this.adventure$locale = net.kyori.adventure.translation.Translator.parseLocale(this.language);
++      this.f_8906_.f_9742_.f_129468_.attr(com.mohistmc.paper.adventure.PaperAdventure.LOCALE_ATTRIBUTE).set(this.adventure$locale);
++      // Paper end
     }
  
     public boolean m_143432_() {
@@ -1200,8 +1228,9 @@
           this.f_8906_.m_9829_(new ClientboundRespawnPacket(p_9000_.m_220362_(), p_9000_.m_46472_(), BiomeManager.m_47877_(p_9000_.m_7328_()), this.f_8941_.m_9290_(), this.f_8941_.m_9293_(), p_9000_.m_46659_(), p_9000_.m_8584_(), (byte)3, this.m_219759_(), this.m_287157_()));
           this.f_8906_.m_9829_(new ClientboundChangeDifficultyPacket(leveldata.m_5472_(), leveldata.m_5474_()));
           this.f_8924_.m_6846_().m_11289_(this);
-          serverlevel.m_143261_(this, Entity.RemovalReason.CHANGED_DIMENSION);
+-         serverlevel.m_143261_(this, Entity.RemovalReason.CHANGED_DIMENSION);
 -         this.m_146912_();
++         serverlevel.m_143261_(this, RemovalReason.CHANGED_DIMENSION);
 +         this.revive();
           this.m_7678_(p_9001_, p_9002_, p_9003_, p_9004_, p_9005_);
           this.m_284127_(p_9000_);
@@ -1305,11 +1334,12 @@
           this.m_9236_().m_7967_(itementity);
           ItemStack itemstack = itementity.m_32055_();
           if (p_9087_) {
-@@ -1507,6 +_,76 @@
+@@ -1507,6 +_,77 @@
        }
     }
  
 +   private String language = "en_us";
++   public Locale adventure$locale = Locale.US; // Paper
 +   /**
 +    * Returns the language last reported by the player as their local language.
 +    * Defaults to en_us if the value is unknown.
