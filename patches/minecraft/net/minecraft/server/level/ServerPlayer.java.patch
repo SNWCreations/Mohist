@@ -240,7 +240,7 @@
     public ServerPlayer(MinecraftServer p_254143_, ServerLevel p_254435_, GameProfile p_253651_) {
        super(p_254435_, p_254435_.m_220360_(), p_254435_.m_220361_(), p_253651_);
        this.f_8939_ = p_254143_.m_7950_(this);
-@@ -254,11 +_,56 @@
+@@ -254,11 +_,57 @@
        this.f_8909_ = p_254143_.m_6846_().m_11296_(this);
        this.m_274367_(1.0F);
        this.m_9201_(p_254435_);
@@ -248,6 +248,7 @@
 +
 +      // CraftBukkit start
 +      this.displayName = this.m_6302_();
++      this.adventure$displayName = net.kyori.adventure.text.Component.text(this.m_6302_()); // Paper
 +      this.bukkitPickUpLoot = true;
 +      this.maxHealthCache = this.m_21233_();
 +      this.initialized = true;
