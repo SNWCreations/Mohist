@@ -29,7 +29,7 @@
  
  public class ItemEntity extends Entity implements TraceableEntity {
     private static final EntityDataAccessor<ItemStack> f_31984_ = SynchedEntityData.m_135353_(ItemEntity.class, EntityDataSerializers.f_135033_);
-@@ -38,10 +_,14 @@
+@@ -38,10 +_,15 @@
     public int f_31986_;
     private int f_31987_ = 5;
     @Nullable
@@ -43,6 +43,7 @@
 +    * The maximum age of this EntityItem.  The item is expired once this is reached.
 +    */
 +   public int lifespan = ItemEntity.f_149659_;
++   public boolean canMobPickup = true; // Paper
  
     public ItemEntity(EntityType<? extends ItemEntity> p_31991_, Level p_31992_) {
        super(p_31991_, p_31992_);

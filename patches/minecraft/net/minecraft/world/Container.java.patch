@@ -22,6 +22,22 @@
  public interface Container extends Clearable {
     int f_146642_ = 64;
     int f_271421_ = 8;
+@@ -78,10 +_,14 @@
+    }
+ 
+    static boolean m_272074_(BlockEntity p_273154_, Player p_273222_) {
+-      return m_271806_(p_273154_, p_273222_, 8);
++      return stillValidBlockEntity(p_273154_, p_273222_, p_273222_.m_21133_(net.minecraftforge.common.ForgeMod.BLOCK_REACH.get()) + 3.5); // Vanilla uses 8, default reach is 4.5 so add 3.5 padding
+    }
+ 
+    static boolean m_271806_(BlockEntity p_272877_, Player p_272670_, int p_273411_) {
++      return stillValidBlockEntity(p_272877_, p_272670_, (double)p_273411_);
++   }
++
++   static boolean stillValidBlockEntity(BlockEntity p_272877_, Player p_272670_, double p_273411_) {
+       Level level = p_272877_.m_58904_();
+       BlockPos blockpos = p_272877_.m_58899_();
+       if (level == null) {
 @@ -92,4 +_,47 @@
           return p_272670_.m_20275_((double)blockpos.m_123341_() + 0.5D, (double)blockpos.m_123342_() + 0.5D, (double)blockpos.m_123343_() + 0.5D) <= (double)(p_273411_ * p_273411_);
        }

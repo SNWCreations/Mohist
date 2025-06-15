@@ -10,3 +10,11 @@
           if (p_219950_ != null) {
              lootparams$builder.m_287239_(p_219950_.m_36336_()).m_287286_(LootContextParams.f_81455_, p_219950_);
           }
+@@ -171,6 +_,6 @@
+    }
+ 
+    default boolean m_219954_(Player p_219955_) {
+-      return !this.m_213877_() && this.m_20182_().m_82509_(p_219955_.m_20182_(), 8.0D);
++      return !this.m_213877_() && this.m_20182_().m_82509_(p_219955_.m_20182_(), p_219955_.m_21133_(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()) + 5.0); // Vanilla uses 8 default reach is 3.0 so add 5.0 padding
+    }
+ }

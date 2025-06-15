@@ -66,6 +66,18 @@ public class CraftItem extends CraftEntity implements Item {
         }
     }
 
+    // Paper Start
+    @Override
+    public boolean canMobPickup() {
+        return item.canMobPickup;
+    }
+
+    @Override
+    public void setCanMobPickup(boolean canMobPickup) {
+        item.canMobPickup = canMobPickup;
+    }
+    // Paper End
+
     @Override
     public void setOwner(UUID uuid) {
         item.setTarget(uuid);

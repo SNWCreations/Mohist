@@ -586,7 +586,7 @@
                    }
                 }
  
-@@ -1121,10 +_,13 @@
+@@ -1121,10 +_,14 @@
                    if (flag3) {
                       float f3 = 1.0F + EnchantmentHelper.m_44821_(this) * f;
  
@@ -595,8 +595,9 @@
 -                           livingentity.m_147240_((double)0.4F, (double)Mth.m_14031_(this.m_146908_() * ((float)Math.PI / 180F)), (double)(-Mth.m_14089_(this.m_146908_() * ((float)Math.PI / 180F))));
 -                           livingentity.m_6469_(this.m_269291_().m_269075_(this), f3);
 +                     for(LivingEntity livingentity : this.f_19853_.m_45976_(LivingEntity.class, this.m_21120_(InteractionHand.MAIN_HAND).getSweepHitBox(this, p_36347_))) {
-+                        double entityReachSq = Mth.m_144952_(this.getEntityReach()); // Use entity reach instead of constant 9.0. Vanilla uses bottom center-to-center checks here, so don't update this to use canReach, since it uses closest-corner checks.
-+                        if (livingentity != this && livingentity != p_36347_ && !this.m_7307_(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).m_31677_()) && this.m_20280_(livingentity) < entityReachSq) {
++                        // Use entity reach instead of constant 9.0. Vanilla uses bottom center-to-center checks here, so don't update this to use canReach, since it uses closest-corner checks.
++                        var reach = this.m_21133_(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get());
++                        if (livingentity != this && livingentity != p_36347_ && !this.m_7307_(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).m_31677_()) && this.m_20280_(livingentity) < reach * reach) {
 +                           // CraftBukkit start - Only apply knockback if the damage hits
 +                           if (livingentity.m_6469_(this.m_269291_().m_269075_(this).sweep(), f3)) {
 +                              livingentity.m_147240_((double) 0.4F, (double) Mth.m_14031_(this.m_146908_() * ((float) Math.PI / 180F)), (double) (-Mth.m_14089_(this.m_146908_() * ((float) Math.PI / 180F))));

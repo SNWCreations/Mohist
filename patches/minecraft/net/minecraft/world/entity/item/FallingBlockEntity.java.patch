@@ -39,7 +39,7 @@
     @Nullable
     public CompoundTag f_31944_;
     protected static final EntityDataAccessor<BlockPos> f_31945_ = SynchedEntityData.m_135353_(FallingBlockEntity.class, EntityDataSerializers.f_135038_);
-@@ -75,13 +_,25 @@
+@@ -75,13 +_,26 @@
        this.m_31959_(this.m_20183_());
     }
  
@@ -52,7 +52,8 @@
 +      if (!CraftEventFactory.callEntityChangeBlockEvent(fallingblockentity, p_201973_, p_201974_.m_60819_().m_76188_())) return fallingblockentity; // CraftBukkit
        p_201972_.m_7731_(p_201973_, p_201974_.m_60819_().m_76188_(), 3);
 -      p_201972_.m_7967_(fallingblockentity);
-+      p_201972_.addFreshEntity(fallingblockentity, fallspawnReason.getAndSet(CreatureSpawnEvent.SpawnReason.DEFAULT)); // CraftBukkit
++      fallingblockentity.spawnReason(fallspawnReason.getAndSet(CreatureSpawnEvent.SpawnReason.DEFAULT));
++      p_201972_.m_7967_(fallingblockentity); // CraftBukkit
        return fallingblockentity;
     }
  

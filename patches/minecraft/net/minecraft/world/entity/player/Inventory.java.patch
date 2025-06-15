@@ -179,3 +179,14 @@
  
        return list == null ? ItemStack.f_41583_ : list.get(p_35991_);
     }
+@@ -530,7 +_,9 @@
+       if (this.f_35978_.m_213877_()) {
+          return false;
+       } else {
+-         return !(p_36009_.m_20280_(this.f_35978_) > 64.0D);
++         // Vanilla uses 64 which is 8*8. Default reach is 3.0 so add 5.0 padding
++         double reach = p_36009_.m_21133_(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()) + 5.0;
++         return !(p_36009_.m_20280_(this.f_35978_) > reach * reach);
+       }
+    }
+ 
