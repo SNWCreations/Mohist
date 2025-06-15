@@ -991,4 +991,9 @@ public abstract class CraftRegionAccessor implements RegionAccessor {
 
         throw new IllegalArgumentException("Cannot spawn an entity for " + clazz.getName());
     }
+
+    @Override
+    public org.bukkit.NamespacedKey getKey() {
+        return org.bukkit.craftbukkit.v1_20_R1.util.CraftNamespacedKey.fromMinecraft(this.getHandle().getLevel().dimension().location());
+    }
 }

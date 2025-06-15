@@ -1034,9 +1034,15 @@ public final class CraftServer implements Server {
         World world = getWorld(name);
         Level2LevelStem.bukkit = folder;
         Level2LevelStem.bukkit_name = name;
-        if (world != null) {
-            return world;
+        // Paper start
+        World worldByKey = this.getWorld(creator.key());
+        if (world != null || worldByKey != null) {
+            if (world == worldByKey) {
+                return world;
+            }
+            throw new IllegalArgumentException("Cannot create a world with key " + creator.key() + " and name " + name + " one (or both) already match a world that exists");
         }
+        // Paper end
 
         if ((folder.exists()) && (!folder.isDirectory())) {
             throw new IllegalArgumentException("File exists with the name '" + name + "' and isn't a folder");
@@ -1112,7 +1118,7 @@ public final class CraftServer implements Server {
         } else if (name.equals(levelName + "_the_end")) {
             worldKey = net.minecraft.world.level.Level.END;
         } else {
-            worldKey = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(name.toLowerCase(java.util.Locale.ENGLISH)));
+            worldKey = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(creator.key().getNamespace().toLowerCase(java.util.Locale.ENGLISH), creator.key().getKey().toLowerCase(java.util.Locale.ENGLISH))); // Paper
         }
 
         net.minecraft.world.level.Level.craftWorldData(generator, creator.environment(), biomeProvider);
@@ -1222,6 +1228,15 @@ public final class CraftServer implements Server {
         }
         return null;
     }
+
+    // Paper start
+    @Override
+    public World getWorld(NamespacedKey worldKey) {
+        ServerLevel worldServer = console.getLevel(ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, CraftNamespacedKey.toMinecraft(worldKey)));
+        if (worldServer == null) return null;
+        return worldServer.getWorld();
+    }
+    // Paper end
 
     public void addWorld(World world) {
         // Check if a World already exists with the UID.
