@@ -129,7 +129,7 @@
                       }
  
                       return true;
-@@ -592,7 +_,24 @@
+@@ -592,7 +_,16 @@
        return this.m_31666_();
     }
  
@@ -142,15 +142,7 @@
 +
     public void m_6074_() {
 +      Collection<ItemEntity> captureDrops = this.captureDrops(null);
-+      List<org.bukkit.inventory.ItemStack> drops;
-+      if (captureDrops == null) {
-+         drops = new ArrayList<>();
-+      } else if (captureDrops instanceof List) {
-+         drops = Lists.transform((List<ItemEntity>) captureDrops, e -> CraftItemStack.asCraftMirror(e.m_32055_()));
-+      } else {
-+         drops = captureDrops.stream().map(ItemEntity::m_32055_).map(CraftItemStack::asCraftMirror).collect(Collectors.toList());
-+      }
-+      CraftEventFactory.callEntityDeathEvent(this, drops); // CraftBukkit - call event
++      CraftEventFactory.callEntityDeathEvent(this, captureDrops); // CraftBukkit - call event
        this.m_142687_(Entity.RemovalReason.KILLED);
        this.m_146850_(GameEvent.f_223707_);
     }

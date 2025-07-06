@@ -10,49 +10,87 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.LevelSettings;
+import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.level.storage.WorldData;
 import net.minecraft.world.level.timers.TimerQueue;
 import org.jetbrains.annotations.NotNull;
 
 public class MohistDerivedWorldInfo extends PrimaryLevelData {
 
-    private final DerivedLevelData derivedWorldInfo;
+    private final ServerLevelData derivedWorldInfo;
 
-    public MohistDerivedWorldInfo(DerivedLevelData derivedWorldInfo, LevelSettings p_78470_, WorldOptions p_78471_, SpecialWorldProperty p_252268_, Lifecycle p_78472_) {
+    public MohistDerivedWorldInfo(ServerLevelData derivedWorldInfo, LevelSettings p_78470_, WorldOptions p_78471_, SpecialWorldProperty p_252268_, Lifecycle p_78472_) {
         super(p_78470_, p_78471_, p_252268_, p_78472_);
         this.derivedWorldInfo = derivedWorldInfo;
     }
 
-    public static MohistDerivedWorldInfo create(DerivedLevelData worldInfo) {
-        return new MohistDerivedWorldInfo(worldInfo, worldSettings(worldInfo), generatorSettings(worldInfo), null, lifecycle(worldInfo));
+    public static MohistDerivedWorldInfo create(ServerLevelData worldInfo) {
+        return new MohistDerivedWorldInfo(worldInfo, worldSettings(worldInfo), generatorSettings(worldInfo), specialWorldProperty(worldInfo), lifecycle(worldInfo));
     }
 
-    private static LevelSettings worldSettings(ServerLevelData worldInfo) {
-        if (worldInfo instanceof PrimaryLevelData) {
-            return ((PrimaryLevelData) worldInfo).settings;
-        } else {
-            return worldSettings(((DerivedLevelData) worldInfo).wrapped);
+    private static LevelSettings worldSettings(ServerLevelData data) {
+        data = resolveDelegate(data);
+
+        if (data instanceof PrimaryLevelData bridged) {
+            return bridged.getLevelSettings();
         }
+
+        if (data instanceof WorldData p) {
+            return p.getLevelSettings();
+        }
+
+        return new LevelSettings(data.getLevelName(), data.getGameType(), data.isHardcore(), data.getDifficulty(),
+                data.getAllowCommands(), data.getGameRules(), WorldDataConfiguration.DEFAULT);
     }
 
-    private static WorldOptions generatorSettings(ServerLevelData worldInfo) {
-        if (worldInfo instanceof PrimaryLevelData) {
-            return ((PrimaryLevelData) worldInfo).worldGenOptions();
-        } else {
-            return generatorSettings(((DerivedLevelData) worldInfo).wrapped);
+    private static WorldOptions generatorSettings(ServerLevelData data) {
+        data = resolveDelegate(data);
+
+        if (data instanceof WorldData p) {
+            return p.worldGenOptions();
         }
+
+        return WorldOptions.defaultWithRandomSeed();
     }
 
-    private static Lifecycle lifecycle(ServerLevelData worldInfo) {
-        if (worldInfo instanceof PrimaryLevelData) {
-            return ((PrimaryLevelData) worldInfo).worldGenSettingsLifecycle();
-        } else {
-            return lifecycle(((DerivedLevelData) worldInfo).wrapped);
+    private static SpecialWorldProperty specialWorldProperty(ServerLevelData data) {
+        data = resolveDelegate(data);
+
+        if (data instanceof WorldData d) {
+            return (d.isFlatWorld() ?
+                    SpecialWorldProperty.FLAT :
+                    (d.isDebugWorld() ?
+                            SpecialWorldProperty.DEBUG :
+                            SpecialWorldProperty.NONE));
         }
+
+        return SpecialWorldProperty.NONE;
+    }
+
+    private static Lifecycle lifecycle(ServerLevelData data) {
+        data = resolveDelegate(data);
+        if (data instanceof PrimaryLevelData bridged) {
+            return bridged.worldGenSettingsLifecycle();
+        }
+
+        if (data instanceof WorldData p) {
+            return p.worldGenSettingsLifecycle();
+        }
+
+        return Lifecycle.stable();
+    }
+
+    private static ServerLevelData resolveDelegate(ServerLevelData data) {
+        if (data instanceof DerivedLevelData bridged) {
+            return resolveDelegate(bridged.wrapped);
+        }
+
+        return data;
     }
 
     @Override

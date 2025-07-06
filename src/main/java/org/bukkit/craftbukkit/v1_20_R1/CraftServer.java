@@ -1034,6 +1034,9 @@ public final class CraftServer implements Server {
         World world = getWorld(name);
         Level2LevelStem.bukkit = folder;
         Level2LevelStem.bukkit_name = name;
+        if (world != null) {
+            return world;
+        }
         // Paper start
         World worldByKey = this.getWorld(creator.key());
         if (world != null || worldByKey != null) {

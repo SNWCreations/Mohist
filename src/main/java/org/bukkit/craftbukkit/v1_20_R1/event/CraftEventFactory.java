@@ -9,6 +9,7 @@ import com.mohistmc.bukkit.inventory.MohistModsInventory;
 import com.mohistmc.dynamicenum.MohistDynamEnum;
 import com.mohistmc.forge.ForgeInjectBukkit;
 import com.mojang.datafixers.util.Either;
+import java.util.Collection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
@@ -865,15 +866,21 @@ public class CraftEventFactory {
     }
 
     public static EntityDeathEvent callEntityDeathEvent(LivingEntity victim) {
-        return callEntityDeathEvent(victim, new ArrayList<org.bukkit.inventory.ItemStack>(0));
+        return callEntityDeathEvent(victim, new java.util.ArrayList<>());
     }
 
-    public static EntityDeathEvent callEntityDeathEvent(LivingEntity victim, List<org.bukkit.inventory.ItemStack> drops) {
+    public static EntityDeathEvent callEntityDeathEvent(LivingEntity victim, Collection<ItemEntity> captureDrops) {
+        List<org.bukkit.inventory.ItemStack> drops;
+        if (captureDrops == null) {
+            drops = new ArrayList<>();
+        } else if (captureDrops instanceof List) {
+            drops = Lists.transform((List<ItemEntity>) captureDrops, e -> CraftItemStack.asCraftMirror(e.getItem()));
+        } else {
+            drops = captureDrops.stream().map(ItemEntity::getItem).map(CraftItemStack::asCraftMirror).collect(Collectors.toList());
+        }
         CraftLivingEntity entity = (CraftLivingEntity) victim.getBukkitEntity();
         EntityDeathEvent event = new EntityDeathEvent(entity, drops, victim.getExperienceReward());
-        CraftWorld world = (CraftWorld) entity.getWorld();
         Bukkit.getServer().getPluginManager().callEvent(event);
-
         return event;
     }
 

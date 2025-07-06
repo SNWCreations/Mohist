@@ -33,6 +33,11 @@ public class PluginFixManager {
                 helloWorld(node, 110, 109);
                 helloWorld(node, "brand:", "peace");
             };
+            case "com.sk89q.worldedit.bukkit.BukkitConfiguration" -> node -> {
+                helloWorld(node, "I accept that I will receive no support with this flag enabled.", "mohist");
+                helloWorld(node, "allow-editing-on-unsupported-versions", "mohist");
+                helloWorld(node, "false", "mohist");
+            };
             case "net.Zrips.CMILib.Reflections" -> node -> helloWorld(node, "bR", "f_36096_");
             default -> null;
         };

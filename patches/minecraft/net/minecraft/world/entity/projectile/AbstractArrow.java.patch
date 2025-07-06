@@ -97,11 +97,12 @@
           vec3 = this.m_20184_();
           double d5 = vec3.f_82479_;
           double d6 = vec3.f_82480_;
-@@ -264,7 +_,7 @@
+@@ -264,7 +_,8 @@
  
     protected void m_6901_() {
        ++this.f_36697_;
 -      if (this.f_36697_ >= 1200) {
++      int magic_number = 1200;
 +      if (this.f_36697_ >= ((this instanceof ThrownTrident) ? f_19853_.spigotConfig.tridentDespawnRate : f_19853_.spigotConfig.arrowDespawnRate)) { // Spigot
           this.m_146870_();
        }

@@ -31,14 +31,16 @@
        this.f_39653_ = p_39658_;
        this.f_39654_ = p_39659_;
        int i = 3;
-@@ -62,7 +_,9 @@
+@@ -62,7 +_,11 @@
     }
  
     public boolean m_6875_(Player p_39661_) {
 -      return !this.f_39654_.m_149511_(this.f_39653_) && this.f_39653_.m_6542_(p_39661_) && this.f_39654_.m_6084_() && this.f_39654_.m_20270_(p_39661_) < 8.0F;
-+      // Default reach is 3 vanilla uses 8 here so add 5 padding
-+      double reach = p_39661_.m_21133_(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()) + 5;
-+      return !this.f_39654_.m_149511_(this.f_39653_) && this.f_39653_.m_6542_(p_39661_) && this.f_39654_.m_6084_() && this.f_39654_.m_20270_(p_39661_) < reach;
++       // Default reach is 3 vanilla uses 8 here so add 5 padding
++       // Make pehkui's mixin happy so we stop getting crash reports. It requires the magic float 8.0F
++       float magic_number = 8.0F;
++       double reach = p_39661_.m_21133_(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()) + 5;
++       return !this.f_39654_.m_149511_(this.f_39653_) && this.f_39653_.m_6542_(p_39661_) && this.f_39654_.m_6084_() && this.f_39654_.m_20270_(p_39661_) < reach;
     }
  
     private boolean m_150577_(AbstractHorse p_150578_) {

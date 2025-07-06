@@ -20,11 +20,11 @@ public class CraftWorldInfo implements WorldInfo {
     private final int minHeight;
     private final int maxHeight;
 
-    public CraftWorldInfo(ServerLevelData K, LevelStorageSource.LevelStorageAccess session, World.Environment environment, DimensionType dimensionManager) {
-        this.name = K.getLevelName();
+    public CraftWorldInfo(PrimaryLevelData worldDataServer, LevelStorageSource.LevelStorageAccess session, World.Environment environment, DimensionType dimensionManager) {
+        this.name = worldDataServer.getLevelName();
         this.uuid = WorldUUID.getUUID(Level2LevelStem.checkPath(session.levelDirectory.path()).toFile());
         this.environment = environment;
-        this.seed = ((PrimaryLevelData) K).worldGenOptions().seed();
+        this.seed = worldDataServer.worldGenOptions().seed();
         this.minHeight = dimensionManager.minY();
         this.maxHeight = dimensionManager.minY() + dimensionManager.height();
     }

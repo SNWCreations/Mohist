@@ -12,12 +12,13 @@
  
  public class LeadItem extends Item {
     public LeadItem(Item.Properties p_42828_) {
-@@ -24,7 +_,7 @@
+@@ -24,7 +_,8 @@
        if (blockstate.m_204336_(BlockTags.f_13039_)) {
           Player player = p_42834_.m_43723_();
           if (!level.f_46443_ && player != null) {
 -            m_42829_(player, level, blockpos);
-+            bindPlayerMobs(player, level, blockpos, p_42834_.m_43724_()); // CraftBukkit - Pass hand
++             enumHand.set(p_42834_.m_43724_());  // CraftBukkit - Pass hand
++             m_42829_(player, level, blockpos);
           }
  
           return InteractionResult.m_19078_(level.f_46443_);

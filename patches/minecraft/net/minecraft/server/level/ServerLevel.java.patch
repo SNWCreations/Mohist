@@ -192,7 +192,7 @@
  
  public class ServerLevel extends Level implements WorldGenLevel {
     public static final BlockPos f_8562_ = new BlockPos(100, 50, 0);
-@@ -188,24 +_,97 @@
+@@ -188,24 +_,99 @@
     private final List<CustomSpawner> f_8558_;
     @Nullable
     private EndDragonFight f_8559_;
@@ -204,7 +204,6 @@
     private final RandomSequences f_286969_;
 -
 -   public ServerLevel(MinecraftServer p_214999_, Executor p_215000_, LevelStorageSource.LevelStorageAccess p_215001_, ServerLevelData p_215002_, ResourceKey<Level> p_215003_, LevelStem p_215004_, ChunkProgressListener p_215005_, boolean p_215006_, long p_215007_, List<CustomSpawner> p_215008_, boolean p_215009_, @Nullable RandomSequences p_288977_) {
-+   public boolean hasEntityMoveEvent = false; // Paper
 +   private LevelCapabilityData capabilityData;
 +
 +   // CraftBukkit start
@@ -251,11 +250,14 @@
 +         } else {
 +            this.typeKey = ResourceKey.m_135785_(Registries.f_256862_, f_46421_.m_135782_());
 +         }
++         if (p_215002_ instanceof DerivedLevelData data) {
++            data.setTypeKey(this.getTypeKey());
++         }
 +      }
 +      if (p_215002_ instanceof PrimaryLevelData) {
 +         this.K = (PrimaryLevelData) p_215002_;
-+      } else if (p_215002_ instanceof DerivedLevelData) {
-+         this.K = MohistDerivedWorldInfo.create((DerivedLevelData) p_215002_);
++      } else {
++         this.K = MohistDerivedWorldInfo.create(p_215002_);
 +      }
        this.f_8561_ = p_215009_;
        this.f_8548_ = p_214999_;
