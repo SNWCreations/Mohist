@@ -203,15 +203,14 @@
           }
  
        }
-@@ -220,8 +_,12 @@
-    }
+@@ -221,7 +_,11 @@
  
     public boolean m_9280_(BlockPos p_9281_) {
-+      if (BanItem.check(f_9245_)) {
-+         return false;
-+      }
        BlockState blockstate = this.f_9244_.m_8055_(p_9281_);
 -      if (!this.f_9245_.m_21205_().m_41720_().m_6777_(blockstate, this.f_9244_, p_9281_, this.f_9245_)) {
++       if (BanItem.check(f_9245_, blockstate.m_60734_().m_5456_().m_7968_()) || BanItem.check(f_9245_)) {
++           return false;
++       }
 +      int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(f_9244_, f_9247_, f_9245_, p_9281_);
 +      if (exp == -1) {
           return false;

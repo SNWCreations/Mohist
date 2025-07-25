@@ -19,15 +19,19 @@
 package com.mohistmc.action;
 
 import com.mohistmc.MohistMCStart;
+import com.mohistmc.feature.DefaultLibraries;
+import com.mohistmc.libraries.Libraries;
 import com.mohistmc.tools.FileUtils;
 import com.mohistmc.tools.SHA256;
 import com.mohistmc.util.DataParser;
 import com.mohistmc.util.JarLoader;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -58,7 +62,11 @@ public abstract class Action {
     public final File minecraft_server;
     public final String libPath = "libraries";
 
+    public List<URL> installerTourls = new ArrayList<>();
+
+
     protected Action() {
+        init();
         this.mohistVer = DataParser.versionMap.get("mohist");
         this.forgeVer = DataParser.versionMap.get("forge");
         this.mcpVer = DataParser.versionMap.get("mcp");
@@ -84,23 +92,19 @@ public abstract class Action {
         this.minecraft_server = new File(libPath, "net/minecraft/server/" + mcVer + "/server-" + mcVer + ".jar");
     }
 
-    protected void run(String mainClass, String[] args, List<URL> classPath) throws Exception {
-        try {
-            Class.forName(mainClass);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Class not found: " + e.getMessage());
-            return;
-        }
+    protected void run(String mainClass, String[] args) throws Exception {
+        List<URL> classPath = stringToUrl(installerTourls);
+        System.out.println("[Mohist] Loading " + classPath);
         URLClassLoader loader = URLClassLoader.newInstance(classPath.toArray(new URL[0]));
         Class.forName(mainClass, true, loader).getDeclaredMethod("main", String[].class).invoke(null, new Object[]{args});
         loader.clearAssertionStatus();
         loader.close();
     }
 
-    protected List<URL> stringToUrl(List<String> strs) throws Exception {
+    protected List<URL> stringToUrl(List<URL> strs) throws Exception {
         List<URL> temp = new ArrayList<>();
-        for (String t : strs) {
-            File file = t.startsWith(libPath) ? new File(t) : new File(libPath, t);
+        for (URL t : strs) {
+            File file = new File(t.toURI());
             JarLoader.loadJar(file.toPath());
             temp.add(file.toURI().toURL());
         }
@@ -150,13 +154,27 @@ public abstract class Action {
         }
     }
 
-    public boolean checkDependencies() throws IOException {
+    public boolean needsInstall() throws IOException {
         if (installInfo.exists()) {
             String jarmd = SHA256.as(MohistMCStart.jarTool.getFile());
             List<String> lines = Files.readAllLines(installInfo.toPath());
             return lines.size() < 2 || !jarmd.equals(lines.get(1));
         }
         return true;
+    }
+
+    private void init() {
+        try {
+            BufferedReader b = new BufferedReader(new InputStreamReader(DefaultLibraries.class.getClassLoader().getResourceAsStream("installer.txt")));
+            for (String line = b.readLine(); line != null; line = b.readLine()) {
+                Libraries libraries = Libraries.from(line);
+                File file = new File("libraries", libraries.getPath());
+                URL url = file.toURI().toURL();
+                installerTourls.add(url);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

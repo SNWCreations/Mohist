@@ -212,9 +212,9 @@
 +      if (environment == null) {
 +         environment = ForgeInjectBukkit.environment.get(getTypeKey());
 +      }
-+      m_6857_().world = this;
++       f_46447_.world = this;
 +      // From PlayerList.setPlayerFileData
-+      m_6857_().m_61929_(new BorderChangeListener() {
++       f_46447_.m_61929_(new BorderChangeListener() {
 +
 +         @Override
 +         public void m_6312_(WorldBorder pBorder, double pSize) {

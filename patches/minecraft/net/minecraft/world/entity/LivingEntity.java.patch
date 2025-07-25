@@ -642,7 +642,7 @@
 -               if (entity instanceof LivingEntity) {
 -                  LivingEntity livingentity = (LivingEntity)entity;
 -                  this.m_6728_(livingentity);
-+         if (false && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
++         if (Boolean.parseBoolean("false") && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
 +            net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(this, p_21016_, p_21017_);
 +            if(!ev.isCanceled()) {
 +               if(ev.shieldTakesDamage()) this.m_7909_(p_21017_);
@@ -1695,7 +1695,7 @@
     public void m_6672_(InteractionHand p_21159_) {
        ItemStack itemstack = this.m_21120_(p_21159_);
        if (!itemstack.m_41619_() && !this.m_6117_()) {
-+         if (BanItem.check(itemstack)) return;
++         if (this instanceof ServerPlayer player && BanItem.check(player, itemstack)) return;
 +         int duration = net.minecraftforge.event.ForgeEventFactory.onItemUseStart(this, itemstack, itemstack.m_41779_());
 +         if (duration < net.minecraftforge.common.ForgeConfig.SERVER.getUseItemDuration()) return;
           this.f_20935_ = itemstack;
@@ -1967,7 +1967,7 @@
     }
  
     public ItemStack m_5584_(Level p_21067_, ItemStack p_21068_) {
-@@ -3211,9 +_,9 @@
+@@ -3211,9 +_,10 @@
     private void m_21063_(ItemStack p_21064_, Level p_21065_, LivingEntity p_21066_) {
        Item item = p_21064_.m_41720_();
        if (item.m_41472_()) {
@@ -1975,7 +1975,8 @@
 +         for(Pair<MobEffectInstance, Float> pair : p_21064_.getFoodProperties(this).m_38749_()) {
              if (!p_21065_.f_46443_ && pair.getFirst() != null && p_21065_.f_46441_.m_188501_() < pair.getSecond()) {
 -               p_21066_.m_7292_(new MobEffectInstance(pair.getFirst()));
-+               p_21066_.addEffect(new MobEffectInstance(pair.getFirst()), EntityPotionEffectEvent.Cause.FOOD); // CraftBukkit
++                p_21066_.pushEffectCause(EntityPotionEffectEvent.Cause.FOOD);  // CraftBukkit
++                p_21066_.m_7292_(new MobEffectInstance(pair.getFirst()));
              }
           }
        }

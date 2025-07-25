@@ -30,6 +30,10 @@ public class BanItem {
         }
         if (check(itemStack)) {
             player.containerMenu.sendAllDataToRemote();
+            String message = BanConfig.BAN_MESSAGE.getMessage(CraftItemStack.asCraftMirror(itemStack).getType().name());
+            if (!message.isEmpty()) {
+                player.getBukkitEntity().sendMessage(message);
+            }
             return true;
         }
         return false;
@@ -43,6 +47,10 @@ public class BanItem {
             if (player.getBukkitEntity().hasPermission(moshou_permission + main.asBukkitCopy().getType().name())) {
                 return false;
             }
+            String message = BanConfig.BAN_MESSAGE.getMessage(CraftItemStack.asCraftMirror(main).getType().name());
+            if (!message.isEmpty()) {
+                player.getBukkitEntity().sendMessage(message);
+            }
             player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             return true;
         }
@@ -50,24 +58,47 @@ public class BanItem {
             if (player.getBukkitEntity().hasPermission(moshou_permission + off.asBukkitCopy().getType().name())) {
                 return false;
             }
+            String message = BanConfig.BAN_MESSAGE.getMessage(CraftItemStack.asCraftMirror(off).getType().name());
+            if (!message.isEmpty()) {
+                player.getBukkitEntity().sendMessage(message);
+            }
             player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
             return true;
         }
         if (check(main)) {
+            String message = BanConfig.BAN_MESSAGE.getMessage(CraftItemStack.asCraftMirror(main).getType().name());
+            if (!message.isEmpty()) {
+                player.getBukkitEntity().sendMessage(message);
+            }
             return true;
         }
-        return check(off);
+        if (check(off)) {
+            String message = BanConfig.BAN_MESSAGE.getMessage(CraftItemStack.asCraftMirror(off).getType().name());
+            if (!message.isEmpty()) {
+                player.getBukkitEntity().sendMessage(message);
+            }
+            return true;
+        }
+        return false;
     }
 
     public static boolean check(ItemStack itemStack) {
+        return check(CraftItemStack.asCraftMirror(itemStack));
+    }
+
+    public static boolean check(org.bukkit.inventory.ItemStack itemStack) {
         if (!MohistConfig.ban_item_enable) return false;
-        return ItemAPI.isBan(CraftItemStack.asCraftMirror(itemStack));
+        return ItemAPI.isBan(itemStack);
+    }
+
+    public static boolean checkMoShou(org.bukkit.inventory.ItemStack itemStack) {
+        if (itemStack.isEmpty()) return false;
+        if (!MohistConfig.ban_item_enable) return false;
+        return BanConfig.MOSHOU.getMoShouList().contains(itemStack.getType().name());
     }
 
     public static boolean checkMoShou(ItemStack itemStack) {
-        if (itemStack.isEmpty()) return false;
-        if (!MohistConfig.ban_item_enable) return false;
-        return BanConfig.MOSHOU.getMoShouList().contains(CraftItemStack.asCraftMirror(itemStack).getType().name());
+        return checkMoShou(CraftItemStack.asCraftMirror(itemStack));
     }
 
     public static boolean checkMoShou(net.minecraft.world.entity.player.Player player, ItemStack itemStack) {

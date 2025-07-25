@@ -9,6 +9,7 @@ import com.mohistmc.api.gui.ItemStackFactory;
 import com.mohistmc.plugins.ban.BanConfig;
 import com.mohistmc.plugins.ban.BanListener;
 import com.mohistmc.plugins.ban.BanType;
+import com.mohistmc.plugins.ban.bans.BanItem;
 import com.mohistmc.plugins.ban.utils.BanSaveInventory;
 import com.mohistmc.plugins.ban.utils.BanUtils;
 import com.mohistmc.util.I18n;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -32,12 +34,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BansCommand extends Command {
 
-    private final List<String> params = Arrays.asList("add", "show");
+    private final List<String> params = Arrays.asList("add", "show", "setmessage");
     private final List<String> params1 = Arrays.asList("item", "item-moshou", "entity", "enchantment");
     public BansCommand(String name) {
         super(name);
         this.description = I18n.as("banscmd.description");
-        this.usageMessage = "/bans [add|show] [item|item-moshou|entity|enchantment]";
+        this.usageMessage = "/bans [add|show|setmessage] [item|item-moshou|entity|enchantment]";
         this.setPermission("mohist.command.bans");
     }
 
@@ -209,6 +211,52 @@ public class BansCommand extends Command {
                             });
                         }
                         wh.openGUI(player);
+                        return true;
+                    }
+                    default -> {
+                        sender.sendMessage(ChatColor.RED + usageMessage);
+                        return false;
+                    }
+                }
+            } case "setmessage" -> {
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.RED + usageMessage);
+                    return false;
+                }
+                switch (args[1]) {
+                    case "item", "item-moshou" -> {
+                        if (!MohistConfig.ban_item_enable) {
+                            sender.sendMessage(ChatColor.RED + check);
+                            return false;
+                        }
+                        if (player.getItemInHand().isEmpty()) {
+                            sender.sendMessage(ChatColor.RED + "Please hold an item in your hand.");
+                            return false;
+                        }
+                        if (BanItem.check(player.getItemInHand()) || BanItem.checkMoShou(player.getItemInHand())) {
+                            String result = Arrays.stream(args)
+                                    .skip(2)
+                                    .collect(Collectors.joining(" "));
+                            BanConfig.BAN_MESSAGE.setBanMessage(player.getItemInHand().getType().name(), result);
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "This item is not banned.");
+                            return false;
+                        }
+                        sender.sendMessage(ChatColor.GREEN + "Set the message for " + player.getItemInHand().getType().name() + ".");
+                        return true;
+                    }
+                    case "entity" -> {
+                        if (!MohistConfig.ban_entity_enable) {
+                            sender.sendMessage(ChatColor.RED + check);
+                            return false;
+                        }
+                        return true;
+                    }
+                    case "enchantment" -> {
+                        if (!MohistConfig.ban_enchantment_enable) {
+                            sender.sendMessage(ChatColor.RED + check);
+                            return false;
+                        }
                         return true;
                     }
                     default -> {

@@ -358,7 +358,7 @@
        for(ServerLevel serverlevel : this.m_129785_()) {
           if (!p_129886_) {
 -            f_129750_.info("Saving chunks for level '{}'/{}", serverlevel, serverlevel.m_46472_().m_135782_());
-+            f_129750_.info(I18n.as("minecraftserver.savingchunks",serverlevel, serverlevel.m_46472_().m_135782_()));
++            f_129750_.info(I18n.as("minecraftserver.savingchunks"), serverlevel, serverlevel.m_46472_().m_135782_());
           }
  
           serverlevel.m_8643_((ProgressListener)null, p_129887_, serverlevel.f_8564_ && !p_129888_);

@@ -30,14 +30,13 @@ public class Libraries {
     String path;
     String sha256;
     long size;
-    boolean installer;
 
     public static Libraries from(String line) {
         String[] parts = line.split("\\|");
-        return new Libraries(parts[0], parts[1], Long.parseLong(parts[2]), Boolean.parseBoolean(parts[3]));
+        return new Libraries(parts[0], parts[1], Long.parseLong(parts[2]));
     }
 
     public static Libraries from(File file) {
-        return new Libraries(file.getAbsolutePath(), SHA256.as(file), file.length(), false);
+        return new Libraries(file.getAbsolutePath(), SHA256.as(file), file.length());
     }
 }

@@ -59,7 +59,7 @@
                 ItemStack itemstack1 = craftingrecipe.m_5874_(p_150550_, p_150548_.m_9598_());
 -               if (itemstack1.m_246617_(p_150548_.m_246046_())) {
 -                  itemstack = itemstack1;
-+               if (!BanItem.check(itemstack1)) {
++               if (!BanItem.check(serverplayer, itemstack1)) {
 +                  if (itemstack1.m_246617_(p_150548_.m_246046_())) {
 +                     itemstack = itemstack1;
 +                  }

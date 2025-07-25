@@ -25,14 +25,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
@@ -49,9 +54,6 @@ public class LibrariesDownloadQueue {
     public InputStream inputStream = null;
     @ToString.Exclude
     public Set<Libraries> need_download = new LinkedHashSet<>();
-    @ToString.Exclude
-    public Set<Libraries> installer = new LinkedHashSet<>();
-    public List<URL> installerTourls = new ArrayList<>();
 
     public String parentDirectory = "libraries";
     public String systemProperty = null;
@@ -60,6 +62,11 @@ public class LibrariesDownloadQueue {
 
     public static LibrariesDownloadQueue create() {
         return new LibrariesDownloadQueue();
+    }
+
+    private static boolean isTargetFile(JarEntry entry) {
+        String name = entry.getName().toLowerCase();
+        return name.endsWith(".jar") || name.endsWith(".zip") || name.endsWith(".txt");
     }
 
     /**
@@ -89,8 +96,9 @@ public class LibrariesDownloadQueue {
      *
      * @return Construct the final column
      */
+    @SneakyThrows
     public LibrariesDownloadQueue build() {
-        init();
+        scanFromJar();
         return this;
     }
 
@@ -99,7 +107,8 @@ public class LibrariesDownloadQueue {
      */
     public void progressBar() {
         if (needDownload()) {
-            ProgressBarBuilder builder = new ProgressBarBuilder().setTaskName("")
+            ProgressBarBuilder builder = new ProgressBarBuilder()
+                    .setTaskName("")
                     .setStyle(ProgressBarStyle.ASCII)
                     .setUpdateIntervalMillis(100)
                     .setInitialMax(need_download.size());
@@ -156,21 +165,27 @@ public class LibrariesDownloadQueue {
         return !need_download.isEmpty();
     }
 
-    private void init() {
-        try {
-            BufferedReader b = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line = b.readLine(); line != null; line = b.readLine()) {
-                Libraries libraries = Libraries.from(line);
-                allLibraries.add(libraries);
-                if (libraries.isInstaller()) {
-                    File file = new File(parentDirectory, libraries.getPath());
-                    URL url = file.toURI().toURL();
-                    installer.add(libraries);
-                    installerTourls.add(url);
-                }
+    public void scanFromJar() throws IOException {
+        Enumeration<URL> resources = LibrariesDownloadQueue.class.getClassLoader().getResources("META-INF/libraries");
+        while (resources.hasMoreElements()) {
+            URL url = resources.nextElement();
+            if ("jar".equals(url.getProtocol())) {
+                JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
+                JarFile jarFile = jarConnection.getJarFile();
+                String entryPrefix = jarConnection.getEntryName();
+
+                jarFile.stream()
+                        .filter(entry -> !entry.isDirectory())
+                        .filter(entry -> entry.getName().startsWith(entryPrefix))
+                        .filter(LibrariesDownloadQueue::isTargetFile)
+                        .forEach(entry -> {
+                            String line = entry.getName().substring(entryPrefix.length());
+                            InputStream is = MohistMCStart.class.getClassLoader().getResourceAsStream(entry.getName());
+                            Libraries libraries = new Libraries(line, SHA256.as(is), entry.getSize());
+                            allLibraries.add(libraries);
+                            debug("Find the resource: " + libraries);
+                        });
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
