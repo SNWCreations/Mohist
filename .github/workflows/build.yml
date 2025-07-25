@@ -49,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{steps.build.outputs.artifact_name}}.dev+${{env.shortened_commit_sha}}
-          path: projects/mohist/build/libs/*
+          path: projects/mohist/build/libs/*-server.jar
