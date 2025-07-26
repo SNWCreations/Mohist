@@ -1,28 +1,19 @@
-<div align="center">
-  <h1>Mohist 1.20.1</h1>
+# Mohist+ 1.20.1
 
-### Minecraft Forge Hybrid server implementing the Spigot/Bukkit API, formerly known as Thermos/Cauldron/MCPC+
+A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 
-**Note:** This is a fork. Only for self-use. No warranty on its changes,
- I just try my best to make my changes work but don't apply any promise to
- other parts of this project. -- SNWCreations
+**This is a fork of the Mohist project.** No warranty on its changes,
+ I just try my best to make my changes work but don't apply any promise to other parts of this project.
 
-[![](https://img.shields.io/github/stars/MohistMC/Mohist.svg?label=Stars&logo=github)](https://github.com/MohistMC/Mohist/stargazers)
 [![](https://img.shields.io/badge/Forge-1.20.1--47.4.4-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![](https://img.shields.io/badge/NeoForge-1.20.1--47.1.106-brightgreen.svg?colorB=26303d)](https://neoforged.net/)
 [![](https://img.shields.io/badge/JDK-17.0.14-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
 [![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
-[![](https://img.shields.io/bstats/servers/6762?label=bStats)](https://bstats.org/plugin/server-implementation/Mohist/6762)
 [![](https://badges.crowdin.net/mohist/localized.svg)](https://crowdin.com/project/mohist)
-[![](https://img.shields.io/discord/311256119005937665.svg?color=%237289da&label=Discord&logo=discord&logoColor=%237289da)](https://discord.gg/mohistmc)
 
 [![](https://bstats.org/signatures/server-implementation/Mohist.svg)](https://bstats.org/plugin/server-implementation/Mohist/6762)
-</div>
 
-<img height="400px" alt="Mohist Project Status" src="https://mohistmc.com/api/v2/projects/mohist/table?" />
-
-Progress
-------
+## Progress
 
 - [x] Rectify Forge([**6c4f5e286**](https://github.com/MinecraftForge/MinecraftForge/commit/6c4f5e286))
 - [x] Rectify NeoForge([**e7ac32353**](https://github.com/neoforged/NeoForge/commit/e7ac32353))
@@ -33,14 +24,8 @@ Progress
         * [x] Bukkit-Patches
         * [x] CraftBukkit-Patches
 
-Getting Help
-------
+## Upstream Projects
 
-  [MohistWiki](https://mohistmc.com/mohist/docs) (Here is everything you need related to Mohist)  
-  [MohistWiki CN](https://www.mohistmc.cn/docs/mohist) (Here is everything you need related to Mohist)
-
-Upstream Projects
-------
 * [**MinecraftForge**](https://github.com/MinecraftForge/MinecraftForge.git) - mod support.
 * [**Bukkit**](https://hub.spigotmc.org/stash/scm/spigot/bukkit.git) - plugin support.
 * [**CraftBukkit**](https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git) - plugin support.
@@ -51,10 +36,7 @@ Upstream Projects
 * [**Mirai**](https://github.com/etil2jz/Mirai.git) - plugin support.
 * [**Arclight**](https://github.com/IzzelAliz/Arclight.git) - Remapper support.
 
-Special Thanks To:
--------------
-
-<a href="https://www.bisecthosting.com/mohistmc"><img src="https://www.bisecthosting.com/partners/custom-banners/118608b8-6e45-4301-b244-41934cdac6d1.png"></a>
+## Special Thanks To:
 
 ![YourKit-Logo](https://www.yourkit.com/images/yklogo.png)
 
@@ -62,4 +44,4 @@ Special Thanks To:
 
 [<img src="https://user-images.githubusercontent.com/21148213/121807008-8ffc6700-cc52-11eb-96a7-2f6f260f8fda.png" alt="" width="100">](https://www.jetbrains.com)
 
-[JetBrains](https://www.jetbrains.com/), creators of the IntelliJ IDEA, supports Paper with one of their [Open Source Licenses](https://www.jetbrains.com/opensource/). IntelliJ IDEA is the recommended IDE for working with Paper, and most of the Paper team uses it.
+[JetBrains](https://www.jetbrains.com/), creators of the IntelliJ IDEA, supports open source projects with one of their [Open Source Licenses](https://www.jetbrains.com/opensource/).

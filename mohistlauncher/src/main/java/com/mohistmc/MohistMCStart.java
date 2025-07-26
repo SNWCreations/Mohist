@@ -70,6 +70,8 @@ public class MohistMCStart {
                     System.getProperty("java.version"),
                     ManagementFactory.getRuntimeMXBean().getName().split("@")[0]
             );
+            // Mohist+ start - Remove contact info of the original MohistMC org as we're rebranded
+            /*
             if (i18n.isCN()) {
                 System.out.println("+------------------------------------------------------+");
                 System.out.println("|                                                      |");
@@ -79,6 +81,8 @@ public class MohistMCStart {
                 System.out.println("|                                                      |");
                 System.out.println("+------------------------------------------------------+");
             }
+            */
+            // Mohist+ end
         }
 
         if (System.getProperty("log4j.configurationFile") == null) {
