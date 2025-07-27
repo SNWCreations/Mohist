@@ -19,7 +19,7 @@
 package com.mohistmc.commands;
 
 import com.mohistmc.MohistMC;
-import com.mohistmc.ai.koukou.AIConfig;
+// import com.mohistmc.ai.koukou.AIConfig; // Mohist+ - Remove AI stuff
 import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.ServerAPI;
 import com.mohistmc.plugins.MohistPlugin;
@@ -126,9 +126,11 @@ public class MohistCommand extends Command {
 
                 console.server.reloadCount++;
                 sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.reload.complete"));
+                /*
                 if (AIConfig.INSTANCE.enable()) {
                     sender.sendMessage(ChatColor.GREEN + "QQ 机器人模块已启用！");
                 }
+                */
                 return true;
             }
             case "version" -> {

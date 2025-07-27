@@ -1,6 +1,6 @@
 package org.bukkit.craftbukkit.v1_20_R1.command;
 
-import com.mohistmc.ai.koukou.KouKou;
+// import com.mohistmc.ai.koukou.KouKou; // Mohist+ - Remove AI stuff
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,10 +61,14 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
     @Override
     public void sendMessage(String message) {
         if (!this.conversationTracker.isConversingModaly()) {
+            // Mohist+ start - Remove AI stuff
+            /*
             if (contactID.get() != -1) {
                 KouKou.sendToGroup(String.valueOf(contactID.getAndSet(-1)), message.replaceAll("§\\S", ""));
                 return;
             }
+            */
+            // Mohist+ end
             LOGGER.info(convertRGBColors(message));
         }
     }

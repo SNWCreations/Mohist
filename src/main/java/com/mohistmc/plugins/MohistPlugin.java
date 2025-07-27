@@ -1,8 +1,12 @@
 package com.mohistmc.plugins;
 
 import com.mohistmc.MohistConfig;
+// Mohist+ start - Remove AI stuff
+/*
 import com.mohistmc.ai.koukou.AIConfig;
 import com.mohistmc.ai.koukou.ApiController;
+*/
+// Mohist+ end
 import com.mohistmc.plugins.back.BackCommands;
 import com.mohistmc.plugins.back.BackConfig;
 import com.mohistmc.plugins.ban.BanConfig;
@@ -65,7 +69,7 @@ public class MohistPlugin {
             }
         }
         EntityClear.start();
-        ApiController.init();
+        // ApiController.init(); // Mohist+ - Remove AI stuff
     }
 
     public static void initConfig() {
@@ -73,7 +77,7 @@ public class MohistPlugin {
         BackConfig.init();
         WarpsConfig.init();
         BanConfig.init();
-        AIConfig.init();
+        // AIConfig.init(); // Mohist+ - Remove AI stuff
     }
 
     public static void registerCommands(Map<String, Command> map) {

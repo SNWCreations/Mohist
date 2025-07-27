@@ -1,7 +1,7 @@
 package com.mohistmc.util;
 
 // import com.mohistmc.ai.deepseek.DeepSeek; // Mohist+ - Remove AI stuff
-import com.mohistmc.ai.koukou.KouKou;
+// import com.mohistmc.ai.koukou.KouKou; // Mohist+ - Remove AI stuff
 import java.util.concurrent.ExecutionException;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.PlayerChatMessage;
@@ -30,7 +30,7 @@ public class ChatPatchFix {
             String originalFormat = event.getFormat(), originalMessage = event.getMessage();
             Bukkit.getPluginManager().callEvent(event);
             // DeepSeek.init(thisPlayer, originalMessage); // Mohist+ - Remove AI stuff
-            KouKou.chat("<%s>: %s".formatted(thisPlayer.getName(), originalMessage));
+            // KouKou.chat("<%s>: %s".formatted(thisPlayer.getName(), originalMessage)); // Mohist+ - Remove AI stuff
             if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
                 // Evil plugins still listening to deprecated event
                 final PlayerChatEvent queueEvent = new PlayerChatEvent(thisPlayer, event.getMessage(), event.getFormat(), event.getRecipients());
