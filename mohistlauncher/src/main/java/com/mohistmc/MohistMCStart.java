@@ -21,7 +21,7 @@ package com.mohistmc;
 import com.mohistmc.action.v_1_20_1;
 import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.feature.AutoDeleteMods;
-import com.mohistmc.feature.CustomLibraries;
+// import com.mohistmc.feature.CustomLibraries; // Mohist+ - Remove custom library loading
 import com.mohistmc.feature.DefaultLibraries;
 import com.mohistmc.feature.ExceptionHandler;
 import com.mohistmc.i18n.i18n;
@@ -94,7 +94,7 @@ public class MohistMCStart {
             DefaultLibraries.run();
         }
 
-        CustomLibraries.loadCustomLibs();
+        // CustomLibraries.loadCustomLibs(); // Mohist+ - Remove custom library loading
         if (MohistConfigUtil.INSTALLATIONFINISHED()) {
             v_1_20_1.run();
         }
