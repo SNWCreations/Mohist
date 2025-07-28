@@ -5,14 +5,6 @@
 
 package net.minecraftforge.registries;
 
-import com.mohistmc.MohistMC;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,6 +12,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public final class RegistryObject<T> implements Supplier<T>
 {
@@ -175,7 +175,7 @@ public final class RegistryObject<T> implements Supplier<T>
                     if (!registryExists(registryName))
                     {
                         invalidRegistry = true;
-                        throw new IllegalStateException(MohistMC.i18n.as("mohist.i18n.222", registryName, modid, callerStack));
+                        throw new IllegalStateException("Unable to find registry with key " + registryName + " for mod \"" + modid + "\". Check the 'caused by' to see further stack.", callerStack);
                     }
                     registryExists = true;
                 }
@@ -201,7 +201,7 @@ public final class RegistryObject<T> implements Supplier<T>
     public T get()
     {
         T ret = this.value;
-        if (ret == null) throw new NullPointerException(MohistMC.i18n.as("mohist.i18n.223", this.name));
+        if (ret == null) throw new NullPointerException("Registry Object not present: " + this.name);
         return ret;
     }
 

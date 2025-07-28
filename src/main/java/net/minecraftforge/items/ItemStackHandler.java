@@ -5,12 +5,11 @@
 
 package net.minecraftforge.items;
 
-import com.mohistmc.MohistMC;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 
@@ -204,7 +203,7 @@ public class ItemStackHandler implements IItemHandler, IItemHandlerModifiable, I
     protected void validateSlotIndex(int slot)
     {
         if (slot < 0 || slot >= stacks.size())
-            throw new RuntimeException(MohistMC.i18n.as("mohist.i18n.113", slot, stacks.size()));
+            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
     }
 
     protected void onLoad()

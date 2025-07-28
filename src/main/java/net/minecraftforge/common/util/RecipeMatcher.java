@@ -5,7 +5,6 @@
 
 package net.minecraftforge.common.util;
 
-import com.mohistmc.MohistMC;
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class RecipeMatcher
             int used = data.nextSetBit(offset) - offset;
 
             if (used >= elements || used < 0)
-                throw new IllegalStateException(MohistMC.i18n.as("mohist.i18n.77", test, used));
+                throw new IllegalStateException("What? We matched something, but it wasn't set in the range of this test! Test: " + test +  " Used: " + used);
 
             data.set(used);
             data.set(elements + test);

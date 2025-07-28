@@ -13,6 +13,7 @@ import com.mohistmc.MohistMC;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +52,7 @@ public class ConditionalRecipe
             for (JsonElement ele : items)
             {
                 if (!ele.isJsonObject())
-                    throw new JsonSyntaxException(MohistMC.i18n.as("mohist.i18n.69", idx));
+                    throw new JsonSyntaxException("Invalid recipes entry at index " + idx + " Must be JsonObject");
                 if (CraftingHelper.processConditions(GsonHelper.getAsJsonArray(ele.getAsJsonObject(), "conditions"), context))
                     return (T)RecipeManager.fromJson(recipeId, GsonHelper.getAsJsonObject(ele.getAsJsonObject(), "recipe"));
                 idx++;

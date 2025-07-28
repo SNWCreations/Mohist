@@ -6,15 +6,6 @@
 package net.minecraftforge.common;
 
 import com.google.common.base.CharMatcher;
-import com.mohistmc.MohistMC;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.regex.Pattern;
 import net.minecraftforge.common.util.MavenVersionStringHelper;
 import net.minecraftforge.fml.Logging;
 import net.minecraftforge.fml.loading.StringUtils;
@@ -23,6 +14,15 @@ import org.apache.commons.lang3.text.ExtendedMessageFormat;
 import org.apache.commons.lang3.text.FormatFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 
 //TODO, this should be re-evaluated now that ITextComponents are passed everywhere instaed of strings.
 public class ForgeI18n {
@@ -80,7 +80,7 @@ public class ForgeI18n {
     }
 
     public static void loadLanguageData(final Map<String, String> properties) {
-        LOGGER.debug(Logging.CORE,MohistMC.i18n.as("mohist.i18n.101", properties.size()));
+        LOGGER.debug(Logging.CORE,"Loading I18N data entries: {}", properties.size());
         i18n = properties;
     }
 
@@ -89,7 +89,7 @@ public class ForgeI18n {
         try {
             return parseFormat(pattern, args);
         } catch (IllegalArgumentException e) {
-            LOGGER.error(Logging.CORE,MohistMC.i18n.as("mohist.i18n.102", pattern));
+            LOGGER.error(Logging.CORE,"Illegal format found `{}`", pattern);
             return pattern;
         }
     }

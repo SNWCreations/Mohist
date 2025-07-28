@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.util.GsonHelper;
@@ -44,7 +45,7 @@ public class ConditionalAdvancement
         for (JsonElement ele : entries)
         {
             if (!ele.isJsonObject())
-                throw new JsonSyntaxException(MohistMC.i18n.as("mohist.i18n.68", idx));
+                throw new JsonSyntaxException("Invalid advancement entry at index " + idx + " Must be JsonObject");
             if (CraftingHelper.processConditions(GsonHelper.getAsJsonArray(ele.getAsJsonObject(), "conditions"), context))
                 return GsonHelper.getAsJsonObject(ele.getAsJsonObject(), "advancement");
             idx++;

@@ -5,7 +5,6 @@
 
 package net.minecraftforge.common;
 
-import com.mohistmc.MohistMC;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -79,7 +78,7 @@ public class ForgeSpawnEggItem extends SpawnEggItem
         }
         catch (Exception exception)
         {
-            DispenseItemBehavior.LOGGER.error(MohistMC.i18n.as("mohist.i18n.103", source.getPos()), exception);
+            DispenseItemBehavior.LOGGER.error("Error while dispensing spawn egg from dispenser at {}", source.getPos(), exception);
             return ItemStack.EMPTY;
         }
 

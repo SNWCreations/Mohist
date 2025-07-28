@@ -5,7 +5,6 @@
 
 package net.minecraftforge.server.command;
 
-import com.mohistmc.MohistMC;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -91,7 +90,7 @@ public final class CommandHelper
             return resultNode;
         } else
         {
-            throw new IllegalStateException(MohistMC.i18n.as("mohist.i18n.225", sourceNode));
+            throw new IllegalStateException("Node type " + sourceNode + " is not a standard node type");
         }
 
         if (sourceNode.getCommand() != null)

@@ -5,7 +5,6 @@
 
 package net.minecraftforge.fluids.capability.wrappers;
 
-import com.mohistmc.MohistMC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
@@ -93,8 +92,8 @@ public class BucketPickupHandlerWrapper implements IFluidHandler
                         if (!resource.isFluidEqual(extracted))
                         {
                             //Be loud if something went wrong
-                            LOGGER.error(MohistMC.i18n.as("mohist.i18n.110",
-                                    ForgeRegistries.FLUIDS.getKey(fluidState.getType()), blockPos, world.dimension().location(), ForgeRegistries.FLUIDS.getKey(bucket.getFluid())));
+                            LOGGER.error("Fluid removed without successfully being picked up. Fluid {} at {} in {} matched requested type, but after performing pickup was {}.",
+                                    ForgeRegistries.FLUIDS.getKey(fluidState.getType()), blockPos, world.dimension().location(), ForgeRegistries.FLUIDS.getKey(bucket.getFluid()));
                             return FluidStack.EMPTY;
                         }
                         return extracted;

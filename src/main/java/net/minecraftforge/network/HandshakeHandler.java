@@ -7,7 +7,6 @@ package net.minecraftforge.network;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.mohistmc.MohistMC;
 import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.plugins.PlayerModsCheck;
 import com.mojang.authlib.GameProfile;
@@ -133,7 +132,7 @@ public class HandshakeHandler
             LOGGER.debug(FMLHSMARKER, "Starting new vanilla impl connection.");
         } else {
             this.messageList = NetworkRegistry.gatherLoginPayloads(this.direction, false);
-            LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.114", this.messageList.size()));
+            LOGGER.debug(FMLHSMARKER, "Starting new modded impl connection. Found {} messages to dispatch.", this.messageList.size());
         }
     }
 
@@ -185,7 +184,7 @@ public class HandshakeHandler
 
     void handleServerModListOnClient(HandshakeMessages.S2CModList serverModList, Supplier<NetworkEvent.Context> c)
     {
-        LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.115", String.join(", ", serverModList.getModList())));
+        LOGGER.debug(FMLHSMARKER, "Logging into server with mod list [{}]", String.join(", ", serverModList.getModList()));
         Map<ResourceLocation, String> mismatchedChannels = NetworkRegistry.validateClientChannels(serverModList.getChannels());
         c.get().setPacketHandled(true);
         //The connection data needs to be modified before a new ModMismatchData instance could be constructed
@@ -233,16 +232,16 @@ public class HandshakeHandler
 
     <MSG extends IntSupplier> void handleIndexedMessage(MSG message, Supplier<NetworkEvent.Context> c)
     {
-        LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.116", message.getAsInt(), message.getClass().getName()));
+        LOGGER.debug(FMLHSMARKER, "Received client indexed reply {} of type {}", message.getAsInt(), message.getClass().getName());
         boolean removed = this.sentMessages.removeIf(i-> i == message.getAsInt());
         if (!removed) {
-            LOGGER.error(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.117", message.getAsInt()));
+            LOGGER.error(FMLHSMARKER, "Recieved unexpected index {} in client reply", message.getAsInt());
         }
     }
 
     void handleClientModListOnServer(HandshakeMessages.C2SModListReply clientModList, Supplier<NetworkEvent.Context> c)
     {
-        LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.118",  String.join(", ", clientModList.getModList())));
+        LOGGER.debug(FMLHSMARKER, "Received client connection with modlist [{}]",  String.join(", ", clientModList.getModList()));
         if (PlayerModsCheck.init(clientModList.getModList())) {
             return;
         }
@@ -276,7 +275,7 @@ public class HandshakeHandler
     }
 
     void handleRegistryMessage(final HandshakeMessages.S2CRegistry registryPacket, final Supplier<NetworkEvent.Context> contextSupplier){
-        LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.119", registryPacket.getRegistryName()));
+        LOGGER.debug(FMLHSMARKER,"Received registry packet for {}", registryPacket.getRegistryName());
         this.registriesToReceive.remove(registryPacket.getRegistryName());
         this.registrySnapshots.put(registryPacket.getRegistryName(), registryPacket.getSnapshot());
 
@@ -303,8 +302,8 @@ public class HandshakeHandler
             final Multimap<ResourceLocation, ResourceLocation> missingData = GameData.injectSnapshot(registrySnapshots, false, false);
             LOGGER.debug(FMLHSMARKER, "Snapshot injected.");
             if (!missingData.isEmpty()) {
-                LOGGER.error(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.120", LogMessageAdapter.adapt(sb->
-                        missingData.forEach((reg, entry)-> sb.append("\t").append(reg).append(": ").append(entry).append('\n')))));
+                LOGGER.error(FMLHSMARKER, "Missing registry data for impl connection:\n{}", LogMessageAdapter.adapt(sb->
+                        missingData.forEach((reg, entry)-> sb.append("\t").append(reg).append(": ").append(entry).append('\n'))));
             }
             successfulConnection.set(missingData.isEmpty());
             registryMismatches.set(missingData);
@@ -361,7 +360,7 @@ public class HandshakeHandler
         if (packetPosition < messageList.size()) {
             NetworkRegistry.LoginPayload message = messageList.get(packetPosition);
 
-            LOGGER.debug(FMLHSMARKER,MohistMC.i18n.as("mohist.i18n.121", message.getMessageContext(), message.getChannelName(), packetPosition));
+            LOGGER.debug(FMLHSMARKER, "Sending ticking packet info '{}' to '{}' sequence {}", message.getMessageContext(), message.getChannelName(), packetPosition);
             if (message.needsResponse())
                 sentMessages.add(packetPosition);
             loginWrapper.sendServerToClientLoginPacket(message.getChannelName(), message.getData(), packetPosition, this.manager);

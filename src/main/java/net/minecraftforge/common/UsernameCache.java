@@ -151,14 +151,14 @@ public final class UsernameCache {
         }
         catch (JsonSyntaxException | IOException e)
         {
-            LOGGER.error(USRCACHE, MohistMC.i18n.as("mohist.i18n.106", saveFile), e);
+            LOGGER.error(USRCACHE,"Could not parse username cache file as valid json, deleting file {}", saveFile, e);
             try
             {
                 Files.delete(saveFile);
             }
             catch (IOException e1)
             {
-                LOGGER.error(USRCACHE, MohistMC.i18n.as("mohist.i18n.107", saveFile.toString()));
+                LOGGER.error(USRCACHE,"Could not delete file {}", saveFile.toString());
             }
         }
         finally
@@ -198,7 +198,7 @@ public final class UsernameCache {
             }
             catch (IOException e)
             {
-                LOGGER.error(USRCACHE, MohistMC.i18n.as("mohist.i18n.108"), e);
+                LOGGER.error(USRCACHE, "Failed to save username cache to file!", e);
             }
         }
     }

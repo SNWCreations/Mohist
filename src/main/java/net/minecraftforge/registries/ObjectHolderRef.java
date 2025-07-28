@@ -11,8 +11,10 @@ import java.lang.reflect.Modifier;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import net.minecraft.ResourceLocationException;
 import net.minecraft.resources.ResourceLocation;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -57,18 +59,18 @@ class ObjectHolderRef implements Consumer<Predicate<ResourceLocation>>
             }
             catch (ResourceLocationException e)
             {
-                throw new IllegalArgumentException(MohistMC.i18n.as("mohist.i18n.208", field.toString()), e);
+                throw new IllegalArgumentException("Invalid @ObjectHolder annotation on \"" + field.toString() + "\"", e);
             }
         }
 
         if (injectedObjectName == null)
-            throw new IllegalStateException(String.format(Locale.ENGLISH, MohistMC.i18n.as("mohist.i18n.209", field.getType().getName(), field.getDeclaringClass().getName(), field.getName())));
+            throw new IllegalStateException(String.format(Locale.ENGLISH, "The ObjectHolder annotation cannot apply to a field that does not map to a registry. Ensure the registry was created during NewRegistryEvent. (found : %s at %s.%s)", field.getType().getName(), field.getDeclaringClass().getName(), field.getName()));
 
         field.setAccessible(true);
 
         if (Modifier.isFinal(field.getModifiers()))
         {
-            throw new RuntimeException(MohistMC.i18n.as("mohist.i18n.210", field.getDeclaringClass().getName(), field.getName()));
+            throw new RuntimeException("@ObjectHolder on final field, our transformer did not run? " + field.getDeclaringClass().getName() + "/" + field.getName());
         }
 
         return new ObjectHolderRef(registry, field, injectedObjectName);
@@ -99,7 +101,7 @@ class ObjectHolderRef implements Consumer<Predicate<ResourceLocation>>
 
         if (thing == null)
         {
-            LOGGER.debug(MohistMC.i18n.as("mohist.i18n.211", injectedObject, field));
+            LOGGER.debug("Unable to lookup {} for {}. This means the object wasn't registered. It's likely just mod options.", injectedObject, field);
             return;
         }
         try
@@ -108,7 +110,7 @@ class ObjectHolderRef implements Consumer<Predicate<ResourceLocation>>
         }
         catch (IllegalArgumentException | ReflectiveOperationException e)
         {
-            LOGGER.warn(MohistMC.i18n.as("mohist.i18n.212", this.field, thing, this.injectedObject), e);
+            LOGGER.warn("Unable to set {} with value {} ({})", this.field, thing, this.injectedObject, e);
         }
     }
 

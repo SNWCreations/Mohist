@@ -194,7 +194,7 @@ public abstract class SoundDefinitionsProvider implements DataProvider
     {
         if (this.sounds.put(soundEvent, definition) != null)
         {
-            throw new IllegalStateException(MohistMC.i18n.as("mohist.i18n.72",this.modId, soundEvent));
+            throw new IllegalStateException("Sound event '" + this.modId + ":" + soundEvent + "' already exists");
         }
     }
 
@@ -228,7 +228,7 @@ public abstract class SoundDefinitionsProvider implements DataProvider
         // that has broken the invariants of this sound definition's provider. In fact, a sound may only be either of
         // SOUND or EVENT type. Any other values is somebody messing with the internals, reflectively adding something
         // to an enum or passing `null` to a parameter annotated with `@NotNull`.
-        throw new IllegalArgumentException(MohistMC.i18n.as("mohist.i18n.73", sound.name(), sound.type()));
+        throw new IllegalArgumentException("The given sound '" + sound.name() + "' does not have a valid type: expected either SOUND or EVENT, but found " + sound.type());
     }
 
     private boolean validateSound(final String soundName, final ResourceLocation name)
@@ -237,7 +237,7 @@ public abstract class SoundDefinitionsProvider implements DataProvider
         if (!valid)
         {
             final String path = name.getNamespace() + ":sounds/" + name.getPath() + ".ogg";
-            LOGGER.warn(MohistMC.i18n.as("mohist.i18n.74", path, soundName));
+            LOGGER.warn("Unable to find corresponding OGG file '{}' for sound event '{}'", path, soundName);
         }
         return valid;
     }
@@ -247,7 +247,7 @@ public abstract class SoundDefinitionsProvider implements DataProvider
         final boolean valid = this.sounds.containsKey(soundName) || ForgeRegistries.SOUND_EVENTS.containsKey(name);
         if (!valid)
         {
-            LOGGER.warn(MohistMC.i18n.as("mohist.i18n.75", name, soundName));
+            LOGGER.warn("Unable to find event '{}' referenced from '{}'", name, soundName);
         }
         return valid;
     }

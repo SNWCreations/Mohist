@@ -37,7 +37,7 @@ public class DatagenModLoader {
             final boolean structureValidator, final boolean flat, final String assetIndex, final File assetsDir) {
         if (mods.contains("minecraft") && mods.size() == 1)
             return;
-        LOGGER.info(MohistMC.i18n.as("mohist.i18n.109", mods));
+        LOGGER.info("Initializing Data Gatherer for mods {}", mods);
         runningDataGen = true;
         Bootstrap.bootStrap();
         ModLoader.get().gatherAndInitializeMods(ModWorkManager.syncExecutor(), ModWorkManager.parallelExecutor(), ()->{});

@@ -5,7 +5,6 @@
 
 package net.minecraftforge.network;
 
-import com.mohistmc.MohistMC;
 import com.mohistmc.bukkit.inventory.MohistModsInventory;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -208,7 +207,7 @@ public class NetworkHooks
         output.writeBytes(extraData);
 
         if (output.readableBytes() > 32600 || output.readableBytes() < 1) {
-            throw new IllegalArgumentException(MohistMC.i18n.as("mohist.i18n.125", output.readableBytes()));
+            throw new IllegalArgumentException("Invalid PacketBuffer for openGui, found "+ output.readableBytes()+ " bytes");
         }
         var c = containerSupplier.createMenu(openContainerId, player.getInventory(), player);
         if (c == null) return;
