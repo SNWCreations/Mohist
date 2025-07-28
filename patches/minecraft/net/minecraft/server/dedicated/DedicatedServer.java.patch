@@ -7,7 +7,7 @@
 +import com.mohistmc.Metrics;
 +import com.mohistmc.MohistConfig;
 +import com.mohistmc.MohistMC;
-+import com.mohistmc.WatchMohist;
++// import com.mohistmc.WatchMohist; // Mohist+ - Remove unnecessary Watchdog implementation
 +import com.mohistmc.api.ServerAPI;
 +import com.mohistmc.api.color.ColorsAPI;
 +import com.mohistmc.paper.brigadier.PaperBrigadierProviderImpl;
@@ -227,7 +227,7 @@
 +            this.dediLanPinger.start();
 +         }
 +         Metrics.MohistMetrics.startMetrics();
-+         WatchMohist.start();
++         // WatchMohist.start(); // Mohist+ - Remove unnecessary Watchdog implementation
 +         return net.minecraftforge.server.ServerLifecycleHooks.handleServerStarting(this);
        }
     }
