@@ -36,7 +36,7 @@ jobs:
             ~/.gradle/wrapper
             projects/mohist/build/distributions
             projects/mohist/build/libraries
-          key: $${{ runner.os }}-gradle
+          key: ${{ runner.os }}-gradle
       - name: Get Short Identifier
         uses: iendeavor/shorten-commit-sha@v2.0.0
         id: short-sha
