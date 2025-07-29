@@ -7,7 +7,7 @@
 +import com.mohistmc.MohistConfig;
 +// import com.mohistmc.WatchMohist; // Mohist+ - Remove unnecessary Watchdog implementation
 +import com.mohistmc.forge.ForgeInjectBukkit;
-+import com.mohistmc.util.I18n;
++// import com.mohistmc.util.I18n; // Mohist+ - Remove I18N stuff
  import com.mojang.authlib.GameProfile;
  import com.mojang.authlib.GameProfileRepository;
  import com.mojang.authlib.minecraft.MinecraftSessionService;
@@ -353,15 +353,6 @@
     }
  
     public GameType m_130008_() {
-@@ -497,7 +_,7 @@
- 
-       for(ServerLevel serverlevel : this.m_129785_()) {
-          if (!p_129886_) {
--            f_129750_.info("Saving chunks for level '{}'/{}", serverlevel, serverlevel.m_46472_().m_135782_());
-+            f_129750_.info(I18n.as("minecraftserver.savingchunks"), serverlevel, serverlevel.m_46472_().m_135782_());
-          }
- 
-          serverlevel.m_8643_((ProgressListener)null, p_129887_, serverlevel.f_8564_ && !p_129888_);
 @@ -506,9 +_,18 @@
  
        ServerLevel serverlevel2 = this.m_129783_();
@@ -447,7 +438,7 @@
  
     }
  
-@@ -624,30 +_,54 @@
+@@ -624,30 +_,53 @@
  
     }
  
@@ -477,10 +468,8 @@
 +            long i = (curTime = Util.m_137550_()) - this.f_129726_;
              if (i > 2000L && this.f_129726_ - this.f_129718_ >= 15000L) {
                 long j = i / 50L;
--               f_129750_.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", i, j);
-+               if (server.getWarnOnOverload()) {
-+                  f_129750_.warn(I18n.as("minecraftserver.cantkeepup", i, j));
-+               }
++               if (server.getWarnOnOverload()) // CraftBukkit
+                f_129750_.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", i, j);
                 this.f_129726_ += j * 50L;
                 this.f_129718_ = this.f_129726_;
              }
@@ -504,7 +493,7 @@
              this.f_129726_ += 50L;
              this.m_177945_();
              this.f_129754_.m_6180_("tick");
-@@ -661,17 +_,20 @@
+@@ -661,6 +_,8 @@
              this.f_129717_ = true;
              JvmProfiler.f_185340_.m_183597_(this.f_129737_);
           }
@@ -513,14 +502,8 @@
        } catch (Throwable throwable1) {
           f_129750_.error("Encountered an unexpected exception", throwable1);
           CrashReport crashreport = m_206568_(throwable1);
-          this.m_177935_(crashreport.m_178626_());
-          File file1 = new File(new File(this.m_6237_(), "crash-reports"), "crash-" + Util.m_241986_() + "-server.txt");
-          if (crashreport.m_127512_(file1)) {
--            f_129750_.error("This crash report has been saved to: {}", (Object)file1.getAbsolutePath());
-+            f_129750_.error(I18n.as("minecraftserver.crashreportsave.saved",(Object)file1.getAbsolutePath()));
-          } else {
--            f_129750_.error("We were unable to save this crash report to disk.");
-+            f_129750_.error(I18n.as("minecraftserver.crashreportsave.error"));
+@@ -672,6 +_,7 @@
+             f_129750_.error("We were unable to save this crash report to disk.");
           }
  
 +         net.minecraftforge.server.ServerLifecycleHooks.expectServerStopped(); // Forge: Has to come before MinecraftServer#onServerCrash to avoid race conditions
