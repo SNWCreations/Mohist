@@ -7,7 +7,6 @@ import com.google.common.graph.Graphs;
 import com.google.common.graph.MutableGraph;
 import com.mohistmc.bukkit.pluginfix.PluginDynamicRegistrFix;
 import com.mohistmc.plugins.MohistPlugin;
-import com.mohistmc.util.I18n;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -148,14 +147,14 @@ public final class SimplePluginManager implements PluginManager {
                 description = loader.getPluginDescription(file);
                 String name = description.getName();
                 if (name.equalsIgnoreCase("bukkit") || name.equalsIgnoreCase("minecraft") || name.equalsIgnoreCase("mojang")) {
-                    server.getLogger().log(Level.SEVERE, I18n.as("minecraftserver.plugin.load.error1",file.getPath(), directory.getPath()));
+                    server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "': Restricted Name");
                     continue;
                 } else if (description.rawName.indexOf(' ') != -1) {
-                    server.getLogger().log(Level.SEVERE, I18n.as("minecraftserver.plugin.load.error2",file.getPath(), directory.getPath()));
+                    server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "': uses the space-character (0x20) in its name");
                     continue;
                 }
             } catch (InvalidDescriptionException ex) {
-                server.getLogger().log(Level.SEVERE, I18n.as("minecraftserver.plugin.load.error3",file.getPath(), directory.getPath(),ex));
+                server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "'", ex);
                 continue;
             }
 
@@ -308,11 +307,11 @@ public final class SimplePluginManager implements PluginManager {
                             loadedPlugins.add(loadedPlugin.getName());
                             loadedPlugins.addAll(loadedPlugin.getDescription().getProvides());
                         } else {
-                            server.getLogger().log(Level.SEVERE, I18n.as("minecraftserver.plugin.load.error4",file.getPath(), directory.getPath()));
+                            server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "'");
                         }
                         continue;
                     } catch (InvalidPluginException ex) {
-                        server.getLogger().log(Level.SEVERE, I18n.as("minecraftserver.plugin.load.error3",file.getPath(), directory.getPath(),ex));
+                        server.getLogger().log(Level.SEVERE, "Could not load '" + file.getPath() + "' in folder '" + directory.getPath() + "'", ex);
                     }
                 }
             }
