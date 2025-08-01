@@ -178,6 +178,7 @@ public class v_1_20_1 {
         }
 
         protected void libPath() throws Exception {
+            if (true) return; // Mohist+ - Do not run meaningless code
             File out = new File(libPath, "com/mohistmc/cache/libPath.txt");
             if (!out.exists()) {
                 out.getParentFile().mkdirs();
