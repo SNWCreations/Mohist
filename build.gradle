@@ -104,6 +104,7 @@ subprojects {
         maven { url 'https://maven.mohistmc.com/' }
         maven { url 'https://maven.izzel.io/releases' }
         maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi' }
+        maven { url 'https://jitpack.io' } // Mohist+ - Use JitPack for some patched libraries
     }
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -281,8 +282,12 @@ def sharedDeps = {
     installer 'io.netty:netty-transport-native-unix-common:4.1.82.Final'
 
     // Paper start
-    installer "net.kyori:adventure-api:${ADVENTURE_VERSION}"
-    installer "net.kyori:adventure-key:${ADVENTURE_VERSION}"
+    // Mohist+ - Use our patched Adventure library to fix service loading
+    // installer "net.kyori:adventure-api:${ADVENTURE_VERSION}"
+    // installer "net.kyori:adventure-key:${ADVENTURE_VERSION}"
+    installer "com.github.MohistPlusMC.adventure:adventure-api:v${ADVENTURE_VERSION}_mc${MC_VERSION}-SNAPSHOT"
+    installer "com.github.MohistPlusMC.adventure:adventure-key:v${ADVENTURE_VERSION}_mc${MC_VERSION}-SNAPSHOT"
+    // Mohist+ end
     installer "net.kyori:adventure-text-minimessage:${ADVENTURE_VERSION}"
     installer "net.kyori:adventure-text-serializer-gson:${ADVENTURE_VERSION}"
     installer "net.kyori:adventure-text-serializer-json:${ADVENTURE_VERSION}"
