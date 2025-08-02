@@ -36,6 +36,8 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,11 +113,41 @@ public abstract class Action {
         return temp;
     }
 
+    // Mohist+ start - Consider symbolic links for sharing libraries between multiple installation
+    protected static String resolveLink(String path) {
+        try {
+            final Path asPath = Paths.get(path);
+            final Path parent = asPath.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+                return parent.toRealPath().resolve(asPath.getFileName()).toString();
+            }
+            return asPath.toRealPath().toString();
+        } catch (IOException e) {
+            return path;
+        }
+    }
+
+    protected static File resolveLink(File file) {
+        try {
+            final Path asPath = file.toPath();
+            final Path parent = asPath.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+                return parent.toRealPath().resolve(asPath.getFileName()).toFile();
+            }
+            return asPath.toRealPath().toFile();
+        } catch (IOException e) {
+            return file;
+        }
+    }
+    // Mohist+ end
+
     /*
     THIS IS TO NOT SPAM CONSOLE WHEN IT WILL PRINT A LOT OF THINGS
      */
     protected void mute() throws Exception {
-        File out = new File(libPath, "com/mohistmc/installation/installationLogs.txt");
+        File out = resolveLink(new File(libPath, "com/mohistmc/installation/installationLogs.txt")); // Mohist+ start - Consider symbolic links for sharing libraries between multiple installation
         if (!out.exists()) {
             out.getParentFile().mkdirs();
             out.createNewFile();
@@ -128,6 +160,7 @@ public abstract class Action {
     }
 
     protected void copyFileFromJar(File file, String pathInJar) {
+        file = resolveLink(file); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
         InputStream is = MohistMCStart.class.getClassLoader().getResourceAsStream(pathInJar);
         if (!file.exists() || !SHA256.is(file, SHA256.as(is)) || file.length() <= 1) {
             // Clear old version
@@ -155,9 +188,9 @@ public abstract class Action {
     }
 
     public boolean needsInstall() throws IOException {
-        if (installInfo.exists()) {
+        if (resolveLink(installInfo).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
             String jarmd = SHA256.as(MohistMCStart.jarTool.getFile());
-            List<String> lines = Files.readAllLines(installInfo.toPath());
+            List<String> lines = Files.readAllLines(installInfo.toPath().toRealPath()); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
             return lines.size() < 2 || !jarmd.equals(lines.get(1));
         }
         return true;
@@ -168,7 +201,7 @@ public abstract class Action {
             BufferedReader b = new BufferedReader(new InputStreamReader(DefaultLibraries.class.getClassLoader().getResourceAsStream("installer.txt")));
             for (String line = b.readLine(); line != null; line = b.readLine()) {
                 Libraries libraries = Libraries.from(line);
-                File file = new File("libraries", libraries.getPath());
+                File file = resolveLink(new File("libraries", libraries.getPath())); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 URL url = file.toURI().toURL();
                 installerTourls.add(url);
             }

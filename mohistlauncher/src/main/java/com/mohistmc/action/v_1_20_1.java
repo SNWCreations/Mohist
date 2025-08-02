@@ -75,30 +75,30 @@ public class v_1_20_1 {
                 System.exit(0);
             }
 
-            if (minecraft_server.exists()) {
+            if (resolveLink(minecraft_server).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 mute();
                 run("net.minecraftforge.installertools.ConsoleTool",
-                        new String[]{"--task", "BUNDLER_EXTRACT", "--input", minecraft_server.getPath(), "--output", libPath, "--libraries"});
+                        new String[]{"--task", "BUNDLER_EXTRACT", "--input", resolveLink(minecraft_server).getPath(), "--output", resolveLink(libPath), "--libraries"}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 unmute();
-                if (!mc_unpacked.exists()) {
+                if (!resolveLink(mc_unpacked).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                     mute();
                     run("net.minecraftforge.installertools.ConsoleTool",
-                            new String[]{"--task", "BUNDLER_EXTRACT", "--input", minecraft_server.getPath(), "--output", mc_unpacked.getPath(), "--jar-only"});
+                            new String[]{"--task", "BUNDLER_EXTRACT", "--input", resolveLink(minecraft_server).getPath(), "--output", resolveLink(mc_unpacked).getPath(), "--jar-only"}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                     unmute();
                 }
             } else {
                 System.out.println(I18n.as("installation.minecraftserver"));
             }
 
-            if (mcpZip.exists()) {
-                if (!mcpTxt.exists()) {
+            if (resolveLink(mcpZip).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
+                if (!resolveLink(mcpTxt).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
 
                     // MAKE THE MAPPINGS TXT FILE
 
                     System.out.println(I18n.as("installation.mcp"));
                     mute();
                     run("net.minecraftforge.installertools.ConsoleTool",
-                            new String[]{"--task", "MCP_DATA", "--input", mcpZip.getPath(), "--output", mcpTxt.getPath(), "--key", "mappings"});
+                            new String[]{"--task", "MCP_DATA", "--input", resolveLink(mcpZip).getPath(), "--output", resolveLink(mcpTxt).getPath(), "--key", "mappings"}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                     unmute();
                 }
             } else {
@@ -106,36 +106,38 @@ public class v_1_20_1 {
                 System.exit(0);
             }
 
-            if (JarTool.isCorrupted(extra)) {
-                extra.delete();
+            // Mohist+ start - Consider symbolic links for sharing libraries between multiple installation
+            if (JarTool.isCorrupted(resolveLink(extra))) {
+                resolveLink(extra).delete();
             }
-            if (JarTool.isCorrupted(slim)) {
-                slim.delete();
+            if (JarTool.isCorrupted(resolveLink(slim))) {
+                resolveLink(slim).delete();
             }
-            if (JarTool.isCorrupted(srg)) {
-                srg.delete();
+            if (JarTool.isCorrupted(resolveLink(srg))) {
+                resolveLink(srg).delete();
             }
+            // Mohist+ end
 
-            if (!mergedMapping.exists()) {
+            if (!resolveLink(mergedMapping).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 mute();
                 run("net.minecraftforge.installertools.ConsoleTool",
-                        new String[]{"--task", "MERGE_MAPPING", "--left", mcpTxt.getPath(), "--right", mojmap.getPath(), "--output", mergedMapping.getAbsolutePath(), "--classes", "--reverse-right"});
+                        new String[]{"--task", "MERGE_MAPPING", "--left", resolveLink(mcpTxt).getPath(), "--right", resolveLink(mojmap).getPath(), "--output", resolveLink(mergedMapping).getAbsolutePath(), "--classes", "--reverse-right"}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 unmute();
             }
 
-            if (!slim.exists() || !extra.exists()) {
+            if (!resolveLink(slim).exists() || !resolveLink(extra).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 mute();
                 run("net.minecraftforge.jarsplitter.ConsoleTool",
-                        new String[]{"--input", minecraft_server.getPath(), "--slim", slim.getPath(), "--extra", extra.getPath(), "--srg", mergedMapping.getAbsolutePath()});
+                        new String[]{"--input", resolveLink(minecraft_server).getPath(), "--slim", resolveLink(slim).getPath(), "--extra", resolveLink(extra).getPath(), "--srg", resolveLink(mergedMapping).getAbsolutePath()}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 run("net.minecraftforge.jarsplitter.ConsoleTool",
-                        new String[]{"--input", mc_unpacked.getPath(), "--slim", slim.getPath(), "--extra", extra.getPath(), "--srg", mergedMapping.getAbsolutePath()});
+                        new String[]{"--input", resolveLink(mc_unpacked).getPath(), "--slim", resolveLink(slim).getPath(), "--extra", resolveLink(extra).getPath(), "--srg", resolveLink(mergedMapping).getAbsolutePath()}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 unmute();
             }
 
-            if (!srg.exists()) {
+            if (!resolveLink(srg).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 mute();
                 run("net.minecraftforge.fart.Main",
-                        new String[]{"--input", slim.getPath(), "--output", srg.getPath(), "--names", mergedMapping.getPath(), "--ann-fix", "--ids-fix", "--src-fix", "--record-fix"});
+                        new String[]{"--input", resolveLink(slim).getPath(), "--output", resolveLink(srg).getPath(), "--names", resolveLink(mergedMapping).getPath(), "--ann-fix", "--ids-fix", "--src-fix", "--record-fix"}); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 unmute();
             }
 
@@ -144,7 +146,7 @@ public class v_1_20_1 {
             String serverSHA256 = SHA256.as(serverJar);
             String mohistSHA256 = SHA256.as(MohistMCStart.jarTool.getFile());
 
-            if (installInfo.exists()) {
+            if (resolveLink(installInfo).exists()) { // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                 List<String> infoLines = Files.readAllLines(installInfo.toPath());
                 if (!infoLines.isEmpty()) {
                     storedServerSHA256 = infoLines.get(0);
@@ -154,19 +156,19 @@ public class v_1_20_1 {
                 }
             }
 
-            if (!serverJar.exists()
+            if (!resolveLink(serverJar).exists() // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
                     || storedServerSHA256 == null
                     || storedMohistSHA256 == null
                     || !storedServerSHA256.equals(serverSHA256)
                     || !storedMohistSHA256.equals(mohistSHA256)) {
                 mute();
                 run("net.minecraftforge.binarypatcher.ConsoleTool",
-                        new String[]{"--clean", srg.getPath(), "--output", serverJar.getPath(), "--apply", lzma.getPath()});
+                        new String[]{"--clean", resolveLink(srg).getPath(), "--output", resolveLink(serverJar).getPath(), "--apply", lzma.getPath()});
                 unmute();
                 serverSHA256 = SHA256.as(serverJar);
             }
 
-            FileWriter fw = new FileWriter(installInfo);
+            FileWriter fw = new FileWriter(resolveLink(installInfo)); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
             fw.write(serverSHA256 + "\n");
             fw.write(mohistSHA256);
             fw.close();
@@ -178,8 +180,7 @@ public class v_1_20_1 {
         }
 
         protected void libPath() throws Exception {
-            if (true) return; // Mohist+ - Do not run meaningless code
-            File out = new File(libPath, "com/mohistmc/cache/libPath.txt");
+            File out = resolveLink(new File(libPath, "com/mohistmc/cache/libPath.txt"));
             if (!out.exists()) {
                 out.getParentFile().mkdirs();
                 out.createNewFile();
