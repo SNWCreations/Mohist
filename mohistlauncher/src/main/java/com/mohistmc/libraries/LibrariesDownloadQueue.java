@@ -43,6 +43,8 @@ import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
 
+import static com.mohistmc.util.SymlinkHelper.resolveLink;
+
 @ToString
 public class LibrariesDownloadQueue {
 
@@ -114,7 +116,7 @@ public class LibrariesDownloadQueue {
                     .setInitialMax(need_download.size());
             try (ProgressBar pb = builder.build()) {
                 for (Libraries lib : need_download) {
-                    File file = new File(parentDirectory, lib.path);
+                    File file = resolveLink(new File(parentDirectory, lib.path));
                     file.getParentFile().mkdirs();
                     String url = "META-INF/" + file.getPath().replaceAll("\\\\", "/");
                     if (copyFileFromJar(file, url, lib)) {
@@ -134,6 +136,7 @@ public class LibrariesDownloadQueue {
     }
 
     protected boolean copyFileFromJar(File file, String pathInJar, Libraries lib) {
+        file = resolveLink(file); // Mohist+ - Consider symbolic link for sharing libraries between multiple installations
         InputStream is = MohistMCStart.class.getClassLoader().getResourceAsStream(pathInJar);
         if (file.exists()) return true;
         if (!SHA256.is(is, lib.getSha256()) || file.length() <= 1) {

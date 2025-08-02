@@ -36,11 +36,11 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mohistmc.util.SymlinkHelper.*;
 
 public abstract class Action {
 
@@ -112,36 +112,6 @@ public abstract class Action {
         }
         return temp;
     }
-
-    // Mohist+ start - Consider symbolic links for sharing libraries between multiple installation
-    protected static String resolveLink(String path) {
-        try {
-            final Path asPath = Paths.get(path);
-            final Path parent = asPath.getParent();
-            if (parent != null) {
-                Files.createDirectories(parent);
-                return parent.toRealPath().resolve(asPath.getFileName()).toString();
-            }
-            return asPath.toRealPath().toString();
-        } catch (IOException e) {
-            return path;
-        }
-    }
-
-    protected static File resolveLink(File file) {
-        try {
-            final Path asPath = file.toPath();
-            final Path parent = asPath.getParent();
-            if (parent != null) {
-                Files.createDirectories(parent);
-                return parent.toRealPath().resolve(asPath.getFileName()).toFile();
-            }
-            return asPath.toRealPath().toFile();
-        } catch (IOException e) {
-            return file;
-        }
-    }
-    // Mohist+ end
 
     /*
     THIS IS TO NOT SPAM CONSOLE WHEN IT WILL PRINT A LOT OF THINGS

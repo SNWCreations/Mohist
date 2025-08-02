@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.mohistmc.util.SymlinkHelper.resolveLink;
+
 public class v_1_20_1 {
 
     public static void run() {
