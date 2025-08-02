@@ -287,6 +287,7 @@ def sharedDeps = {
     // installer "net.kyori:adventure-key:${ADVENTURE_VERSION}"
     installer "com.github.MohistPlusMC.adventure:adventure-api:v${ADVENTURE_VERSION}_mc${MC_VERSION}-SNAPSHOT"
     installer "com.github.MohistPlusMC.adventure:adventure-key:v${ADVENTURE_VERSION}_mc${MC_VERSION}-SNAPSHOT"
+    installer "net.kyori:option:1.1.0"
     // Mohist+ end
     installer "net.kyori:adventure-text-minimessage:${ADVENTURE_VERSION}"
     installer "net.kyori:adventure-text-serializer-gson:${ADVENTURE_VERSION}"
