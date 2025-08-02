@@ -403,7 +403,22 @@ public abstract class Command {
     }
 
     public static void broadcastCommandMessage(@NotNull CommandSender source, @NotNull String message, boolean sendToSource) {
-        String result = source.getName() + ": " + message;
+        // Paper start
+        broadcastCommandMessage(source, net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(message), sendToSource);
+    }
+
+    public static void broadcastCommandMessage(@NotNull CommandSender source, net.kyori.adventure.text.@NotNull Component message) {
+        broadcastCommandMessage(source, message, true);
+    }
+
+    public static void broadcastCommandMessage(@NotNull CommandSender source, net.kyori.adventure.text.@NotNull Component message, boolean sendToSource) {
+        net.kyori.adventure.text.TextComponent.Builder result = net.kyori.adventure.text.Component.text()
+                .color(net.kyori.adventure.text.format.NamedTextColor.WHITE)
+                .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+                .append(source.name())
+                .append(net.kyori.adventure.text.Component.text(": "))
+                .append(message);
+        // Paper end
 
         if (source instanceof BlockCommandSender) {
             BlockCommandSender blockCommandSender = (BlockCommandSender) source;
@@ -422,7 +437,12 @@ public abstract class Command {
         }
 
         Set<Permissible> users = Bukkit.getPluginManager().getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
-        String colored = ChatColor.GRAY + "" + ChatColor.ITALIC + "[" + result + ChatColor.GRAY + ChatColor.ITALIC + "]";
+        // Paper start
+        net.kyori.adventure.text.TextComponent.Builder colored = net.kyori.adventure.text.Component.text()
+                .color(net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                .decorate(net.kyori.adventure.text.format.TextDecoration.ITALIC)
+                .append(net.kyori.adventure.text.Component.text("["), result, net.kyori.adventure.text.Component.text("]"));
+        // Paper end
 
         if (sendToSource && !(source instanceof ConsoleCommandSender)) {
             source.sendMessage(message);

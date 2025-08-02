@@ -37,7 +37,21 @@ class CraftTask implements BukkitTask, Runnable {
     CraftTask(final Object task) {
         this(null, task, CraftTask.NO_REPEATING, CraftTask.NO_REPEATING);
     }
-
+    // Paper start
+    public String taskName = null;
+    boolean internal = false;
+    CraftTask(final Object task, int id, String taskName) {
+        this.rTask = (Runnable) task;
+        this.cTask = null;
+        this.plugin = CraftScheduler.MINECRAFT;
+        this.taskName = taskName;
+        this.internal = true;
+        this.id = id;
+        this.period = CraftTask.NO_REPEATING;
+        this.taskName = taskName;
+        // this.timings = MinecraftTimings.getInternalTaskName(taskName); // Mohist+ - We don't have Timings v2
+    }
+    // Paper end
     CraftTask(final Plugin plugin, final Object task, final int id, final long period) {
         this.plugin = plugin;
         if (task instanceof Runnable) {

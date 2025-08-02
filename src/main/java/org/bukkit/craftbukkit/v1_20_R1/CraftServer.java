@@ -26,6 +26,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.commands.CommandSourceStack;
@@ -50,6 +51,7 @@ import net.minecraft.server.commands.ReloadCommand;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
+import net.minecraft.server.dedicated.DedicatedServerSettings;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -190,6 +192,7 @@ import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.server.BroadcastMessageEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -230,6 +233,7 @@ import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.potion.Potion;
 import org.bukkit.profile.PlayerProfile;
+import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.structure.StructureManager;
 import org.bukkit.util.StringUtil;
@@ -238,6 +242,7 @@ import com.mohistmc.org.yaml.snakeyaml.LoaderOptions;
 import com.mohistmc.org.yaml.snakeyaml.Yaml;
 import com.mohistmc.org.yaml.snakeyaml.constructor.SafeConstructor;
 import com.mohistmc.org.yaml.snakeyaml.error.MarkedYAMLException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -934,7 +939,89 @@ public final class CraftServer implements Server {
 
     @Override
     public void reload() {
-        MohistMC.LOGGER.warn("For your server security, Bukkit reloading is not supported by Mohist.");
+        // MohistMC.LOGGER.warn("For your server security, Bukkit reloading is not supported by Mohist."); // Mohist+ - Re-implement server reloading
+        org.spigotmc.WatchdogThread.hasStarted = false; // Paper - Disable watchdog early timeout on reload
+        this.reloadCount++;
+        this.configuration = YamlConfiguration.loadConfiguration(this.getConfigFile());
+        this.commandsConfiguration = YamlConfiguration.loadConfiguration(this.getCommandsConfigFile());
+
+        console.settings = new DedicatedServerSettings(/*console.options*/java.nio.file.Paths.get("server.properties")); // Mohist+ - We aren't patched that class yet
+        DedicatedServerProperties config = console.settings.getProperties();
+
+        this.console.setPvpAllowed(config.pvp);
+        this.console.setFlightAllowed(config.allowFlight);
+        this.console.setMotd(config.motd);
+        this.overrideSpawnLimits();
+        this.warningState = WarningState.value(this.configuration.getString("settings.deprecated-verbose"));
+        TicketType.PLUGIN.timeout = Math.min(20, configuration.getInt("chunk-gc.period-in-ticks")); // Paper - cap plugin loads to 1 second
+        this.minimumAPI = this.configuration.getString("settings.minimum-api");
+        this.printSaveWarning = false;
+        console.autosavePeriod = this.configuration.getInt("ticks-per.autosave");
+        this.loadIcon();
+
+        try {
+            this.playerList.getIpBans().load();
+        } catch (IOException ex) {
+            this.logger.log(Level.WARNING, "Failed to load banned-ips.json, " + ex.getMessage());
+        }
+        try {
+            this.playerList.getBans().load();
+        } catch (IOException ex) {
+            this.logger.log(Level.WARNING, "Failed to load banned-players.json, " + ex.getMessage());
+        }
+
+        org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
+        for (ServerLevel world : this.console.getAllLevels()) {
+            // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
+            world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+
+            for (SpawnCategory spawnCategory : SpawnCategory.values()) {
+                if (CraftSpawnCategory.isValidForLimits(spawnCategory)) {
+                    long ticksPerCategorySpawn = this.getTicksPerSpawns(spawnCategory);
+                    if (ticksPerCategorySpawn < 0) {
+                        world.ticksPerSpawnCategory.put(spawnCategory, CraftSpawnCategory.getDefaultTicksPerSpawn(spawnCategory));
+                    } else {
+                        world.ticksPerSpawnCategory.put(spawnCategory, ticksPerCategorySpawn);
+                    }
+                }
+            }
+            world.spigotConfig.init(); // Spigot
+        }
+
+        Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
+        this.pluginManager.clearPlugins();
+        this.commandMap.clearCommands();
+        this.reloadData();
+        org.spigotmc.SpigotConfig.registerCommands(); // Spigot
+        com.mohistmc.paper.command.PaperCommands.registerCommands(this.console); // Paper
+        this.overrideAllCommandBlockCommands = this.commandsConfiguration.getStringList("command-block-overrides").contains("*");
+        this.ignoreVanillaPermissions = this.commandsConfiguration.getBoolean("ignore-vanilla-permissions");
+
+        int pollCount = 0;
+
+        // Wait for at most 2.5 seconds for plugins to close their threads
+        while (pollCount < 50 && this.getScheduler().getActiveWorkers().size() > 0) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {}
+            pollCount++;
+        }
+
+        List<BukkitWorker> overdueWorkers = this.getScheduler().getActiveWorkers();
+        for (BukkitWorker worker : overdueWorkers) {
+            Plugin plugin = worker.getOwner();
+            this.getLogger().log(Level.SEVERE, String.format(
+                    "Nag author(s): '%s' of '%s' about the following: %s",
+                    plugin.getDescription().getAuthors(),
+                    plugin.getDescription().getFullName(),
+                    "This plugin is not properly shutting down its async tasks when it is being reloaded.  This may cause conflicts with the newly loaded version of the plugin"
+            ));
+        }
+        this.loadPlugins();
+        this.enablePlugins(PluginLoadOrder.STARTUP);
+        this.enablePlugins(PluginLoadOrder.POSTWORLD);
+        this.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.RELOAD));
+        org.spigotmc.WatchdogThread.hasStarted = true; // Paper - Disable watchdog early timeout on reload
     }
 
     @Override
@@ -2014,7 +2101,14 @@ public final class CraftServer implements Server {
 
     @Override
     public int getSpawnLimit(SpawnCategory spawnCategory) {
-        return spawnCategoryLimit.getOrDefault(spawnCategory, -1);
+        // Paper start
+        Preconditions.checkArgument(spawnCategory != null, "SpawnCategory cannot be null");
+        Preconditions.checkArgument(CraftSpawnCategory.isValidForLimits(spawnCategory), "SpawnCategory." + spawnCategory + " does not have a spawn limit.");
+        return this.getSpawnLimitUnsafe(spawnCategory);
+    }
+    public int getSpawnLimitUnsafe(final SpawnCategory spawnCategory) {
+        // Paper end
+        return this.spawnCategoryLimit.getOrDefault(spawnCategory, -1);
     }
 
     @Override
@@ -2468,6 +2562,17 @@ public final class CraftServer implements Server {
     // Spigot end
 
     @Override
+    public @NotNull String getPermissionMessage() {
+        return ChatColor.RED + "I'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is a mistake."; // Mohist+ - We don't have Paper config, so we use Bukkit's message
+    }
+
+    @NotNull
+    @Override
+    public Component permissionMessage() {
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(getPermissionMessage()); // Mohist+ - We don't have Paper config, so we use Bukkit's message
+    }
+
+    @Override
     public int getCurrentTick() {
         return net.minecraft.server.MinecraftServer.currentTick;
     }
@@ -2515,6 +2620,35 @@ public final class CraftServer implements Server {
     }
     // Paper end
     // Paper start
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static java.nio.file.Path dumpHeap(java.nio.file.Path dir, String name) {
+        try {
+            java.nio.file.Files.createDirectories(dir);
+
+            javax.management.MBeanServer server = java.lang.management.ManagementFactory.getPlatformMBeanServer();
+            java.nio.file.Path file;
+
+            try {
+                Class clazz = Class.forName("openj9.lang.management.OpenJ9DiagnosticsMXBean");
+                Object openj9Mbean = java.lang.management.ManagementFactory.newPlatformMXBeanProxy(server, "openj9.lang.management:type=OpenJ9Diagnostics", clazz);
+                java.lang.reflect.Method m = clazz.getMethod("triggerDumpToFile", String.class, String.class);
+                file = dir.resolve(name + ".phd");
+                m.invoke(openj9Mbean, "heap", file.toString());
+            } catch (ClassNotFoundException e) {
+                Class clazz = Class.forName("com.sun.management.HotSpotDiagnosticMXBean");
+                Object hotspotMBean = java.lang.management.ManagementFactory.newPlatformMXBeanProxy(server, "com.sun.management:type=HotSpotDiagnostic", clazz);
+                java.lang.reflect.Method m = clazz.getMethod("dumpHeap", String.class, boolean.class);
+                file = dir.resolve(name + ".hprof");
+                m.invoke(hotspotMBean, file.toString(), true);
+            }
+
+            return file;
+        } catch (Throwable t) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not write heap", t);
+            return null;
+        }
+    }
+
     private Iterable<? extends net.kyori.adventure.audience.Audience> adventure$audiences;
     @Override
     public Iterable<? extends net.kyori.adventure.audience.Audience> audiences() {

@@ -2071,6 +2071,28 @@ public final class Bukkit {
         return server.getCommandMap();
     }
 
+    /**
+     * Gets the default no permission message used on the server
+     *
+     * @return the default message
+     * @deprecated use {@link #permissionMessage()}
+     */
+    @NotNull
+    @Deprecated
+    public static String getPermissionMessage() {
+        return server.getPermissionMessage();
+    }
+
+    /**
+     * Gets the default no permission message used on the server
+     *
+     * @return the default message
+     */
+    @NotNull
+    public static net.kyori.adventure.text.Component permissionMessage() {
+        return server.permissionMessage();
+    }
+
     @NotNull
     public static Server.Spigot spigot() {
         return server.spigot();
@@ -2088,4 +2110,5 @@ public final class Bukkit {
     public static boolean isStopping() {
         return server.isStopping();
     }
+    // Paper end
 }

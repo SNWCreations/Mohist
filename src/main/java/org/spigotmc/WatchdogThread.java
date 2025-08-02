@@ -15,9 +15,11 @@ import static org.bukkit.Bukkit.shutdown;
 public class WatchdogThread extends Thread
 {
 
+    public static final boolean DISABLE_WATCHDOG = Boolean.getBoolean("disable.watchdog"); // Paper
     private static WatchdogThread instance;
     private long timeoutTime;
     private boolean restart;
+    public static volatile boolean hasStarted; // Paper
     private volatile long lastTick;
     private volatile boolean stopping;
 
@@ -64,7 +66,7 @@ public class WatchdogThread extends Thread
         while ( !stopping )
         {
             //
-            if ( lastTick != 0 && timeoutTime > 0 && monotonicMillis() > lastTick + timeoutTime )
+            if ( lastTick != 0 && timeoutTime > 0 && WatchdogThread.hasStarted && monotonicMillis() > lastTick + timeoutTime && !DISABLE_WATCHDOG ) // Paper - add property to disable
             {
                 Logger log = Bukkit.getServer().getLogger();
                 log.log( Level.SEVERE, "The server has stopped responding!" );

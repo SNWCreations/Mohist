@@ -64,13 +64,20 @@
     private PlayerList f_129763_;
     private volatile boolean f_129764_ = true;
     private boolean f_129765_;
-@@ -213,6 +_,7 @@
+@@ -213,8 +_,14 @@
     private boolean f_129708_;
     @Nullable
     private String f_129709_;
 +   private net.kyori.adventure.text.Component mohist$adventure$motd; // Paper - Adventure // Mohist - Use another field for compatibility
     private int f_129711_;
     public final long[] f_129748_ = new long[100];
++   // Paper start
++   public final TickTimes tickTimes5s = new TickTimes(100);
++   public final TickTimes tickTimes10s = new TickTimes(200);
++   public final TickTimes tickTimes60s = new TickTimes(1200);
++   // Paper end
+    @Nullable
+    private KeyPair f_129712_;
     @Nullable
 @@ -237,24 +_,44 @@
     private final FrameTimer f_129735_ = new FrameTimer();
@@ -573,8 +580,16 @@
           f_129750_.debug("Autosave started");
           this.f_129754_.m_6180_("save");
           this.m_195514_(true, false, false);
-@@ -819,11 +_,24 @@
+@@ -817,13 +_,32 @@
+       long j = this.f_129748_[this.f_129766_ % 100] = Util.m_137569_() - i;
+       this.f_129737_ = this.f_129737_ * 0.8F + (float)j / 1000000.0F * 0.19999999F;
        long k = Util.m_137569_();
++
++      // Paper start
++      tickTimes5s.add(this.f_129766_, j);
++      tickTimes10s.add(this.f_129766_, j);
++      tickTimes60s.add(this.f_129766_, j);
++      // Paper end
        this.f_129735_.m_13755_(k - i);
        this.f_129754_.m_7238_();
 +      org.spigotmc.WatchdogThread.tick(); // Spigot
@@ -599,11 +614,12 @@
     }
  
     private ServerStatus.Players m_271961_() {
-@@ -847,21 +_,34 @@
+@@ -847,21 +_,35 @@
     }
  
     public void m_5703_(BooleanSupplier p_129954_) {
 +      this.server.getScheduler().mainThreadHeartbeat(this.f_129766_); // CraftBukkit
++      com.mohistmc.paper.adventure.providers.ClickCallbackProviderImpl.CALLBACK_MANAGER.handleQueue(this.f_129766_); // Paper
        this.f_129754_.m_6180_("commandFunctions");
        this.m_129890_().m_136128_();
        this.f_129754_.m_6182_("levels");
@@ -823,6 +839,39 @@
     }
  
     public static record ReloadableResources(CloseableResourceManager f_206584_, ReloadableServerResources f_206585_) implements AutoCloseable {
+@@ -1720,6 +_,32 @@
+    public static record ServerResourcePackInfo(String f_236743_, String f_236744_, boolean f_236745_, @Nullable Component f_236746_) {
+    }
+ 
++   // Paper start
++   public static class TickTimes {
++      private final long[] times;
++
++      public TickTimes(int length) {
++         times = new long[length];
++      }
++
++      void add(int index, long time) {
++         times[index % times.length] = time;
++      }
++
++      public long[] getTimes() {
++         return times.clone();
++      }
++
++      public double getAverage() {
++         long total = 0L;
++         for (long value : times) {
++            total += value;
++         }
++         return ((double) total / (double) times.length) * 1.0E-6D;
++      }
++   }
++   // Paper end
++
+    static class TimeProfiler {
+       final long f_177955_;
+       final int f_177956_;
 @@ -1761,4 +_,18 @@
           };
        }

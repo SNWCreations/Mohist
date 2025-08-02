@@ -44,7 +44,7 @@ import java.util.logging.Level;
  *     When executed from inside a synchronous method, the scheduler will be updated before next execution by virtue of the frequent {@link #parsePending()} calls.</li>
  */
 public class CraftScheduler implements BukkitScheduler {
-
+    static Plugin MINECRAFT = new MinecraftInternalPlugin();
     /**
      * The start ID for the counter.
      */
@@ -193,6 +193,14 @@ public class CraftScheduler implements BukkitScheduler {
     public void runTaskTimer(Plugin plugin, Consumer<BukkitTask> task, long delay, long period) throws IllegalArgumentException {
         runTaskTimer(plugin, (Object) task, delay, period);
     }
+
+    // Paper start
+    public BukkitTask scheduleInternalTask(Runnable run, int delay, String taskName) {
+        final CraftTask task = new CraftTask(run, nextId(), "Internal - " + (taskName != null ? taskName : "Unknown"));
+        task.internal = true;
+        return handle(task, delay);
+    }
+    // Paper end
 
     public BukkitTask runTaskTimer(Plugin plugin, Object runnable, long delay, long period) {
         validate(plugin, runnable);

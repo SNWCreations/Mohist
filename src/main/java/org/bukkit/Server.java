@@ -1879,4 +1879,23 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
     @NotNull
     Spigot spigot();
     // Spigot end
+
+    // Paper start
+    /**
+     * Gets the default no permission message used on the server
+     *
+     * @return the default message
+     * @deprecated use {@link #permissionMessage()}
+     */
+    @NotNull
+    @Deprecated
+    String getPermissionMessage();
+
+    /**
+     * Gets the default no permission message used on the server
+     *
+     * @return the default message
+     */
+    @NotNull net.kyori.adventure.text.Component permissionMessage();
+    // Paper end
 }

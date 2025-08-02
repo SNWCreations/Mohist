@@ -73,6 +73,19 @@
     }
  
     public boolean m_5563_(int p_8429_, int p_8430_) {
+@@ -279,6 +_,12 @@
+       }
+    }
+ 
++   // Paper start
++   public boolean isPositionTicking(Entity entity) {
++      return this.m_143239_(ChunkPos.m_45589_(net.minecraft.util.Mth.m_14107_(entity.m_20185_()) >> 4, net.minecraft.util.Mth.m_14107_(entity.m_20189_()) >> 4));
++   }
++   // Paper end
++
+    public boolean m_143239_(long p_143240_) {
+       ChunkHolder chunkholder = this.m_8364_(p_143240_);
+       if (chunkholder == null) {
 @@ -297,7 +_,15 @@
     }
  
