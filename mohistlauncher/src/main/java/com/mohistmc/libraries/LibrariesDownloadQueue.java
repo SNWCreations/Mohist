@@ -118,7 +118,7 @@ public class LibrariesDownloadQueue {
                 for (Libraries lib : need_download) {
                     File file = resolveLink(new File(parentDirectory, lib.path));
                     file.getParentFile().mkdirs();
-                    String url = "META-INF/" + file.getPath().replaceAll("\\\\", "/");
+                    String url = "META-INF/libraries" + lib.path; // Mohist+ - Do not re-extract library path from the constructed file
                     if (copyFileFromJar(file, url, lib)) {
                         debug("downloadFile: OK");
                         fail.remove(lib);
