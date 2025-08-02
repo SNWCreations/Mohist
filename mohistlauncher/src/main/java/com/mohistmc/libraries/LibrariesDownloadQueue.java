@@ -158,7 +158,7 @@ public class LibrariesDownloadQueue {
 
     public boolean needDownload() {
         for (Libraries libraries : allLibraries) {
-            File lib = new File(parentDirectory, libraries.path);
+            File lib = resolveLink(new File(parentDirectory, libraries.path)); // Mohist+ - Consider symbolic link for sharing libraries between multiple installations
             if (lib.exists() && SHA256.is(lib, libraries.sha256)) {
                 continue;
             }
