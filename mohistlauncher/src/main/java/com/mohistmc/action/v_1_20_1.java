@@ -178,6 +178,10 @@ public class v_1_20_1 {
             System.out.println(I18n.as("installation.finished"));
             MohistConfigUtil.yml.set("mohist.installation-finished", true);
             MohistConfigUtil.save();
+            // Mohist+ start - Allow dry run (install only)
+            boolean installOnly = MohistMCStart.mainArgs.contains("--installOnly");
+            if (!installOnly)
+            // Mohist+ end
             JarTool.restartServer(launchArgs, true);
         }
 

@@ -98,6 +98,10 @@ public class MohistMCStart {
         if (MohistConfigUtil.INSTALLATIONFINISHED()) {
             v_1_20_1.run();
         }
+        // Mohist+ start - Allow dry run (install only)
+        boolean installOnly = MohistMCStart.mainArgs.contains("--installOnly");
+        if (installOnly) return;
+        // Mohist+ end
 
         AutoDeleteMods.jar();
 
