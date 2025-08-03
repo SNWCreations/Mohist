@@ -1572,10 +1572,29 @@
        this.f_146795_ = null;
     }
  
-@@ -3320,6 +_,108 @@
+@@ -3320,6 +_,127 @@
        return true;
     }
  
++   // Mohist+ start - Methods for Paper's cancellable death event
++   protected static java.util.List<org.bukkit.inventory.ItemStack> itemEntitiesToBukkitItemStacks(@org.jetbrains.annotations.Nullable java.util.Collection<ItemEntity> itemEntities) {
++      if (itemEntities == null) {
++         return null;
++      }
++      java.util.List<org.bukkit.inventory.ItemStack> result = new java.util.ArrayList<>(itemEntities.size());
++      for (ItemEntity itemEntity : itemEntities) {
++         final ItemStack itemStack = itemEntity.m_32055_();
++         final org.bukkit.inventory.ItemStack asNMS = org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack.asCraftMirror(itemStack);
++         result.add(asNMS);
++      }
++      return result;
++   }
++
++   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit() {
++      return itemEntitiesToBukkitItemStacks(captureDrops());
++   }
++   // Mohist+ end
++
 +   /* ================================== Forge Start =====================================*/
 +
 +   private boolean canUpdate = true;

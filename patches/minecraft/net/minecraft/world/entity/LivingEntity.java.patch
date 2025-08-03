@@ -10,7 +10,7 @@
  import com.google.common.collect.Lists;
  import com.google.common.collect.Maps;
 +import com.google.common.util.concurrent.AtomicDouble;
-+import com.mohistmc.optimizations.EmeraldClose;
++// import com.mohistmc.optimizations.EmeraldClose; // Mohist+ - Remove meaningless optimization
 +import com.mohistmc.plugins.ban.bans.BanItem;
  import com.mojang.datafixers.util.Pair;
  import com.mojang.logging.LogUtils;
@@ -117,11 +117,12 @@
     private LivingEntity f_20951_;
     private int f_20952_;
     private float f_20953_;
-@@ -226,10 +_,38 @@
+@@ -226,10 +_,41 @@
     private float f_20932_;
     protected Brain<?> f_20939_;
     private boolean f_217034_;
 +   // CraftBukkit start
++   public int expToDrop;
 +   public boolean forceDrops;
 +   public CraftAttributeMap craftAttributes;
 +   public boolean collides = true;
@@ -132,6 +133,7 @@
 +   public CraftLivingEntity getBukkitLivingEntity() { return (CraftLivingEntity) super.getBukkitEntity(); }
 +   // CraftBukkit end
 +
++   public boolean silentDeath = false; // Paper - mark entity as dying silently for cancellable death event
 +   public net.kyori.adventure.util.TriState frictionState = net.kyori.adventure.util.TriState.NOT_SET; // Paper
 +
 +   @Override
@@ -148,6 +150,7 @@
 +   // Spigot end
 +   // Mohist start
 +   public AtomicInteger invulnerableDurationAtom = new AtomicInteger(20);
++   public @org.jetbrains.annotations.Nullable org.bukkit.event.entity.EntityDeathEvent mohist$deathEvent; // Mohist+ - Paper's cancellable death event
  
     protected LivingEntity(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
        super(p_20966_, p_20967_);
@@ -788,7 +791,7 @@
        }
     }
  
-@@ -1278,6 +_,7 @@
+@@ -1278,19 +_,39 @@
     }
  
     public void m_6667_(DamageSource p_21014_) {
@@ -796,7 +799,31 @@
        if (!this.m_213877_() && !this.f_20890_) {
           Entity entity = p_21014_.m_7639_();
           LivingEntity livingentity = this.m_21232_();
-@@ -1290,7 +_,7 @@
++         // Paper start - Cancellable death event
++         this.m_6668_(p_21014_); // Mohist+ - from below
++         org.bukkit.event.entity.EntityDeathEvent deathEvent = mohist$deathEvent;
++         mohist$deathEvent = null; // Mohist+ - For better mod compatibility
++         if (deathEvent == null || deathEvent.isCancelled()) {
++            if (deathEvent != null) {
++               this.m_21153_((float) deathEvent.getReviveHealth());
++            }
++            return;
++         }
++         // Paper end
+          if (this.f_20897_ >= 0 && livingentity != null) {
+             livingentity.m_5993_(this, this.f_20897_, p_21014_);
+          }
++         // Paper start - clear equipment if event is not cancelled
++         if (this instanceof Mob) {
++            for (EquipmentSlot slot : this.clearedEquipmentSlots) {
++               this.m_8061_(slot, ItemStack.f_41583_);
++            }
++            this.clearedEquipmentSlots.clear();
++         }
++         // Paper end
+ 
+          if (this.m_5803_()) {
+             this.m_5796_();
           }
  
           if (!this.m_9236_().f_46443_ && this.m_8077_()) {
@@ -805,11 +832,22 @@
           }
  
           this.f_20890_ = true;
-@@ -1315,17 +_,26 @@
+@@ -1300,7 +_,7 @@
+             ServerLevel serverlevel = (ServerLevel)level;
+             if (entity == null || entity.m_214076_(serverlevel, this)) {
+                this.m_146850_(GameEvent.f_223707_);
+-               this.m_6668_(p_21014_);
++               // this.dropAllDeathLoot(p_21014_); // Mohist+ - moved up
+                this.m_21268_(livingentity);
+             }
+ 
+@@ -1314,18 +_,27 @@
+    protected void m_21268_(@Nullable LivingEntity p_21269_) {
        if (!this.m_9236_().f_46443_) {
           boolean flag = false;
-          if (p_21269_ instanceof WitherBoss) {
+-         if (p_21269_ instanceof WitherBoss) {
 -            if (this.m_9236_().m_46469_().m_46207_(GameRules.f_46132_)) {
++         if (this.f_20890_ && p_21269_ instanceof WitherBoss) { // Paper
 +            if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.f_19853_, p_21269_)) {
                 BlockPos blockpos = this.m_20183_();
                 BlockState blockstate = Blocks.f_50070_.m_49966_();
@@ -836,8 +874,15 @@
                 this.m_9236_().m_7967_(itementity);
              }
           }
-@@ -1335,12 +_,9 @@
+@@ -1333,31 +_,67 @@
+       }
+    }
  
++   // Paper start
++   protected boolean clearEquipmentSlots = true;
++   protected Set<EquipmentSlot> clearedEquipmentSlots = new java.util.HashSet<>();
++   // Paper end
++
     protected void m_6668_(DamageSource p_21192_) {
        Entity entity = p_21192_.m_7639_();
 -      int i;
@@ -849,24 +894,53 @@
 +
 +      int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, p_21192_);
 +      this.captureDrops(new java.util.ArrayList<>());
++
++      // CraftBukkit start - Call death event
++      List<org.bukkit.inventory.ItemStack> bukkitDrops = captureDropsBukkit(); // Mohist+ - Use methods we added
++      org.bukkit.event.entity.EntityDeathEvent deathEvent = CraftEventFactory.callEntityDeathEvent(this, bukkitDrops, p_21192_); // Paper - call advancement triggers with correct entity equipment // Mohist+ - For better mod compatibility
++      if (deathEvent.isCancelled()) return; // Mohist+ - Paper's cancellable death event
++      mohist$deathEvent = deathEvent; // Mohist+ - For better mod compatibility
++      this.postDeathDropItems(deathEvent); // Paper
++      // CraftBukkit end
  
        boolean flag = this.f_20889_ > 0;
        if (this.m_6125_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_)) {
-@@ -1350,6 +_,12 @@
+          this.m_7625_(p_21192_, flag);
++         // Paper start
++         final boolean prev = this.clearEquipmentSlots;
++         this.clearEquipmentSlots = false;
++         this.clearedEquipmentSlots.clear();
++         // Paper end
+          this.m_7472_(p_21192_, i, flag);
++         this.clearEquipmentSlots = prev; // Paper
+       }
  
        this.m_5907_();
        this.m_21226_();
 +
 +      Collection<ItemEntity> drops = captureDrops(null);
-+      EmeraldClose.init(this, drops); // Mohist
-+      CraftEventFactory.callEntityDeathEvent(this, drops);
++      // EmeraldClose.init(this, drops); // Mohist // Mohist+ - Disable meaningless optimization
++      // CraftEventFactory.callEntityDeathEvent(this, drops); // Mohist+ - Rework entity death event call
 +      if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, p_21192_, drops, i, f_20889_ > 0))
 +         drops.forEach(e -> m_9236_().m_7967_(e));
     }
  
     protected void m_5907_() {
-@@ -1357,7 +_,8 @@
+    }
  
++   protected void postDeathDropItems(org.bukkit.event.entity.EntityDeathEvent event) {} // Paper - method for post death logic that cannot be ran before the event is potentially cancelled
++
++   // CraftBukkit start
++   public int getExpReward() {
++      if (this.m_9236_() instanceof ServerLevel && !this.m_217046_() && (this.m_6124_() || this.f_20889_ > 0 && this.m_6149_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_))) {
++         int i = this.m_213860_();
++         return i;
++      } else {
++         return 0;
++      }
++   }
++   // CraftBukkit end
++
     protected void m_21226_() {
        if (this.m_9236_() instanceof ServerLevel && !this.m_217046_() && (this.m_6124_() || this.f_20889_ > 0 && this.m_6149_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_))) {
 -         ExperienceOrb.m_147082_((ServerLevel)this.m_9236_(), this.m_20182_(), this.m_213860_());

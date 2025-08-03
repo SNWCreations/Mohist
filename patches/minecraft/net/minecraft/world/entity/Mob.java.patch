@@ -247,6 +247,20 @@
        this.m_9236_().m_46473_().m_6180_("sensing");
        this.f_21349_.m_26789_();
        this.m_9236_().m_46473_().m_7238_();
+@@ -882,7 +_,13 @@
+             }
+ 
+             this.m_19983_(itemstack);
++            if (this.clearEquipmentSlots) { // Paper
+             this.m_8061_(equipmentslot, ItemStack.f_41583_);
++            // Paper start
++            } else {
++               this.clearedEquipmentSlots.add(equipmentslot);
++            }
++            // Paper end
+          }
+       }
+ 
 @@ -1025,6 +_,16 @@
  
     }

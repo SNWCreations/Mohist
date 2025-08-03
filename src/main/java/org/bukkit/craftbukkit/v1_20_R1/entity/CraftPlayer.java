@@ -2111,7 +2111,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     public void sendHealthUpdate() {
         FoodData foodData = getHandle().getFoodData();
-        sendHealthUpdate(getScaledHealth(), foodData.getFoodLevel(), foodData.getSaturationLevel());
+        // Paper start - cancellable death event
+        // sendHealthUpdate(getScaledHealth(), foodData.getFoodLevel(), foodData.getSaturationLevel());
+        ClientboundSetHealthPacket packet = new ClientboundSetHealthPacket(this.getScaledHealth(), foodData.getFoodLevel(), foodData.getSaturationLevel());
+        if (this.getHandle().queueHealthUpdatePacket) {
+            this.getHandle().queuedHealthUpdatePacket = packet;
+        } else {
+            this.getHandle().connection.send(packet);
+        }
+        // Paper end
     }
 
     public void injectScaledMaxHealth(Collection<net.minecraft.world.entity.ai.attributes.AttributeInstance> collection, boolean force) {

@@ -213,10 +213,15 @@
     private WardenSpawnTracker f_244516_ = new WardenSpawnTracker(0, 0, 0);
     private final ContainerSynchronizer f_143379_ = new ContainerSynchronizer() {
        public void m_142589_(AbstractContainerMenu p_143448_, NonNullList<ItemStack> p_143449_, ItemStack p_143450_, int[] p_143451_) {
-@@ -245,6 +_,26 @@
+@@ -244,6 +_,30 @@
+    public int f_8940_;
     public int f_8943_;
     public boolean f_8944_;
- 
++   // Paper start - cancellable death event
++   public boolean queueHealthUpdatePacket = false;
++   public net.minecraft.network.protocol.game.ClientboundSetHealthPacket queuedHealthUpdatePacket;
++   // Paper end
++
 +   // CraftBukkit start
 +   public String displayName;
 +   public net.kyori.adventure.text.Component adventure$displayName; // Paper
@@ -236,10 +241,9 @@
 +   // Mohist start
 +   public boolean initialized = false;
 +   // Mohist end
-+
+ 
     public ServerPlayer(MinecraftServer p_254143_, ServerLevel p_254435_, GameProfile p_253651_) {
        super(p_254435_, p_254435_.m_220360_(), p_254435_.m_220361_(), p_253651_);
-       this.f_8939_ = p_254143_.m_7950_(this);
 @@ -254,11 +_,57 @@
        this.f_8909_ = p_254143_.m_6846_().m_11296_(this);
        this.m_274367_(1.0F);
@@ -445,7 +449,7 @@
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
           this.m_7976_(crashreportcategory);
-@@ -563,16 +_,52 @@
+@@ -563,16 +_,66 @@
     }
  
     private void m_9104_(ObjectiveCriteria p_9105_, int p_9106_) {
@@ -483,21 +487,35 @@
 +      String deathmessage = defaultMessage.getString();
 +
 +      keepLevel = keepInventory; // SPIGOT-2222: pre-set keepLevel
-+      org.bukkit.event.entity.PlayerDeathEvent event = CraftEventFactory.callPlayerDeathEvent(this, loot, deathmessage, keepLevel);
++      org.bukkit.event.entity.PlayerDeathEvent event = CraftEventFactory.callPlayerDeathEvent(this, loot, com.mohistmc.paper.adventure.PaperAdventure.asAdventure(defaultMessage), defaultMessage.getString(), keepInventory); // Paper - Adventure
++      // Paper start - cancellable death event
++      if (event.isCancelled()) {
++         // make compatible with plugins that might have already set the health in an event listener
++         if (this.m_21223_() <= 0) {
++            this.m_21153_((float) event.getReviveHealth());
++         }
++         return;
++      }
++      // Paper end
 +
 +      // SPIGOT-943 - only call if they have an inventory open
 +      if (this.f_36096_ != this.f_36095_) {
 +         this.m_6915_();
 +      }
 +
-+      String deathMessage = event.getDeathMessage();
-+      if (deathMessage != null && deathMessage.length() > 0 && flag) { // TODO: allow plugins to override?
++      net.kyori.adventure.text.Component deathMessage = event.deathMessage() != null ? event.deathMessage() : net.kyori.adventure.text.Component.empty(); // Paper - Adventure
++      if (deathMessage != null && deathMessage != net.kyori.adventure.text.Component.empty() && flag) { // Paper - Adventure // TODO: allow plugins to override?
++         // Mohist+ start - Paper's improvement on PlayerDeathEvent
++         /*
 +         Component component;
 +         if (deathMessage.equals(deathmessage)) {
-+            component = this.m_21231_().m_19293_();
++            component = this.getCombatTracker().getDeathMessage();
 +         } else {
 +            component = CraftChatMessage.fromStringOrNull(deathMessage);
 +         }
++         */
++         Component component = com.mohistmc.paper.adventure.PaperAdventure.asVanilla(deathMessage);
++         // Mohist+ end
           this.f_8906_.m_243119_(new ClientboundPlayerCombatKillPacket(this.m_19879_(), component), PacketSendListener.m_243073_(() -> {
              int i = 256;
              String s = component.m_130668_(256);
@@ -554,6 +572,25 @@
           }
        }
  
+@@ -691,7 +_,17 @@
+                }
+             }
+ 
+-            return super.m_6469_(p_9037_, p_9038_);
++            // Paper start - cancellable death events
++            // return super.hurt(p_9037_, p_9038_);
++            this.queueHealthUpdatePacket = true;
++            boolean damaged = super.m_6469_(p_9037_, p_9038_);
++            this.queueHealthUpdatePacket = false;
++            if (this.queuedHealthUpdatePacket != null) {
++               this.f_8906_.m_9829_(this.queuedHealthUpdatePacket);
++               this.queuedHealthUpdatePacket = null;
++            }
++            return damaged;
++            // Paper end
+          }
+       }
+    }
 @@ -701,34 +_,71 @@
     }
  

@@ -99,7 +99,7 @@
        if (!itemstack.m_41619_() && (this.f_31541_ & 1 << p_31590_.m_20750_() + 8) != 0) {
           return false;
        } else if (itemstack.m_41619_() && (this.f_31541_ & 1 << p_31590_.m_20750_() + 16) != 0) {
-@@ -375,9 +_,19 @@
+@@ -375,11 +_,25 @@
     public boolean m_6469_(DamageSource p_31579_, float p_31580_) {
        if (!this.m_9236_().f_46443_ && !this.m_213877_()) {
           if (p_31579_.m_269533_(DamageTypeTags.f_268738_)) {
@@ -119,17 +119,43 @@
 +            // CraftBukkit end
              if (p_31579_.m_269533_(DamageTypeTags.f_268415_)) {
                 this.m_31653_(p_31579_);
++               // Paper start - avoid duplicate event call
++               org.bukkit.event.entity.EntityDeathEvent event = mohist$deathEvent;
++               if (event != null && !event.isCancelled()) this.kill(false);
++               // Paper end
                 this.m_6074_();
-@@ -422,7 +_,7 @@
+                return false;
+             } else if (p_31579_.m_269533_(DamageTypeTags.f_268727_)) {
+@@ -421,8 +_,13 @@
+                         this.f_31528_ = i;
                       } else {
                          this.m_31646_(p_31579_);
++                        // Mohist+ start - For better mod compatibility
++                        org.bukkit.event.entity.EntityDeathEvent event = mohist$deathEvent;
++                        mohist$deathEvent = null;
++                        // Mohist+ end
                          this.m_31565_();
 -                        this.m_6074_();
-+                        this.m_146870_(); // CraftBukkit - SPIGOT-4890: remain as this.discard() since above damagesource method will call death event
++                        // this.discard(); // CraftBukkit - SPIGOT-4890: remain as this.discard() since above damagesource method will call death event
++                        if (!event.isCancelled()) this.kill(false); // Paper - we still need to kill to follow vanilla logic (emit the game event etc...)
                       }
  
                       return true;
-@@ -592,7 +_,16 @@
+@@ -471,6 +_,13 @@
+       f -= p_31650_;
+       if (f <= 0.5F) {
+          this.m_31653_(p_31649_);
++         // Paper start - avoid duplicate event call
++         // Mohist+ start - For better mod compatibility
++         org.bukkit.event.entity.EntityDeathEvent deathEvent = mohist$deathEvent;
++         mohist$deathEvent = null;
++         if (deathEvent != null && !deathEvent.isCancelled())
++         // Mohist end
++         // Paper end
+          this.m_6074_();
+       } else {
+          this.m_21153_(f);
+@@ -592,11 +_,31 @@
        return this.m_31666_();
     }
  
@@ -141,10 +167,25 @@
 +   // CraftBukkit end
 +
     public void m_6074_() {
-+      Collection<ItemEntity> captureDrops = this.captureDrops(null);
-+      CraftEventFactory.callEntityDeathEvent(this, captureDrops); // CraftBukkit - call event
++      if (mohist$callKillEvent.getAndSet(true)) { // Mohist+ - For better mod compatibility
++         org.bukkit.event.entity.EntityDeathEvent event = org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory.callEntityDeathEvent(this, captureDropsBukkit()); // CraftBukkit - call event // Paper - make cancellable
++         if (event.isCancelled()) return; // Paper - make cancellable
++         captureDrops(null); // Mohist+ - Release drops list if event was not cancelled
++      }
        this.m_142687_(Entity.RemovalReason.KILLED);
        this.m_146850_(GameEvent.f_223707_);
+    }
+ 
++   // Mohist+ start
++   private java.util.concurrent.atomic.AtomicBoolean mohist$callKillEvent = new java.util.concurrent.atomic.AtomicBoolean(true);
++   public void kill(boolean willCallEvent) {
++      mohist$callKillEvent.set(willCallEvent);
++      m_6074_();
++   }
++   // Mohist+ end
++
+    public boolean m_6128_() {
+       return this.m_20145_();
     }
 @@ -609,7 +_,7 @@
        return this.m_31677_();
