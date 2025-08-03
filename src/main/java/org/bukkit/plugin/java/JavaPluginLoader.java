@@ -354,6 +354,7 @@ public final class JavaPluginLoader implements PluginLoader {
 
         if (plugin.isEnabled()) {
             String message = String.format("Disabling %s", plugin.getDescription().getFullName());
+            plugin.getLogger().info(message);
 
             server.getPluginManager().callEvent(new PluginDisableEvent(plugin));
 
