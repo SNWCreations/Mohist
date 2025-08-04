@@ -609,7 +609,7 @@
        this.f_19804_.m_135381_(f_20961_, Mth.m_14036_(p_21154_, 0.0F, this.m_21233_()));
     }
  
-@@ -1036,36 +_,43 @@
+@@ -1036,36 +_,45 @@
     }
  
     public boolean m_6469_(DamageSource p_21016_, float p_21017_) {
@@ -645,7 +645,9 @@
 -               if (entity instanceof LivingEntity) {
 -                  LivingEntity livingentity = (LivingEntity)entity;
 -                  this.m_6728_(livingentity);
-+         if (Boolean.parseBoolean("false") && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
++
++         // CraftBukkit - Moved into damageEntity0(DamageSource, float)
++         if (Boolean.parseBoolean("false") && p_21017_ > 0.0F && this.m_21275_(p_21016_)) { // Mohist - Fix Mixin conflict
 +            net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(this, p_21016_, p_21017_);
 +            if(!ev.isCanceled()) {
 +               if(ev.shieldTakesDamage()) this.m_7909_(p_21017_);
@@ -658,11 +660,11 @@
 +                     this.m_6728_(livingentity);
 +                  }
                 }
--            }
- 
--            flag = true;
++
 +               flag = p_21017_ <= 0;
-+            }
+             }
+-
+-            flag = true;
           }
  
           if (p_21016_.m_269533_(DamageTypeTags.f_268419_) && this.m_6095_().m_204039_(EntityTypeTags.f_144295_)) {
