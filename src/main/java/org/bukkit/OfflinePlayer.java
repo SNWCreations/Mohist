@@ -28,6 +28,18 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
      */
     public boolean isOnline();
 
+    // Paper start
+    /**
+     * Checks whether the connection to this player is still valid. This will return
+     * true as long as this specific instance of the player is still connected. This
+     * will return false after this instance has disconnected, even if the same player
+     * has reconnected since.
+     *
+     * @return true if this player instance is connected
+     */
+    public boolean isConnected();
+    // Paper end
+
     /**
      * Returns the name of this player
      * <p>

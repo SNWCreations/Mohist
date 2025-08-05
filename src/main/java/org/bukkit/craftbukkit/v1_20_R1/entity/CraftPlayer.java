@@ -221,6 +221,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return server.getPlayer(getUniqueId()) != null;
     }
 
+    // Paper start
+    @Override
+    public boolean isConnected() {
+        return !this.getHandle().hasDisconnected();
+    }
+    // Paper end
+
     @Override
     public PlayerProfile getPlayerProfile() {
         return new CraftPlayerProfile(getProfile());

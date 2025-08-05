@@ -54,6 +54,11 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     @Override
+    public boolean isConnected() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         Player player = getPlayer();
         if (player != null) {
