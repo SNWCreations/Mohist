@@ -4,6 +4,8 @@
 name: Build with Gradle
 on:
   push:
+    branches:
+      - 'the_fork'
     paths:
       - 'src/**'
       - 'build.gradle'
