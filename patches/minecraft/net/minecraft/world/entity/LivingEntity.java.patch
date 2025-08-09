@@ -805,7 +805,7 @@
 +         this.m_6668_(p_21014_); // Mohist+ - from below
 +         org.bukkit.event.entity.EntityDeathEvent deathEvent = mohist$deathEvent;
 +         mohist$deathEvent = null; // Mohist+ - For better mod compatibility
-+         if (deathEvent.isCancelled()) {
++         if (deathEvent == null || deathEvent.isCancelled()) {
 +            if (deathEvent != null) {
 +               this.m_21153_((float) deathEvent.getReviveHealth());
 +            }

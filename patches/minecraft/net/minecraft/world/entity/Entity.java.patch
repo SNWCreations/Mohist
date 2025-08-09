@@ -1572,12 +1572,12 @@
        this.f_146795_ = null;
     }
  
-@@ -3320,6 +_,133 @@
+@@ -3320,6 +_,138 @@
        return true;
     }
  
 +   // Mohist+ start - Methods for Paper's cancellable death event
-+   protected static java.util.List<org.bukkit.inventory.ItemStack> itemEntitiesToBukkitItemStacks(@org.jetbrains.annotations.Nullable java.util.Collection<ItemEntity> itemEntities) {
++   protected static @org.jetbrains.annotations.Nullable java.util.List<org.bukkit.inventory.ItemStack> itemEntitiesToBukkitItemStacks(@org.jetbrains.annotations.Nullable java.util.Collection<ItemEntity> itemEntities) {
 +      if (itemEntities == null) {
 +         return null;
 +      }
@@ -1590,14 +1590,19 @@
 +      return result;
 +   }
 +
-+   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit() {
++   public @org.jetbrains.annotations.Nullable java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit() {
 +      return itemEntitiesToBukkitItemStacks(captureDrops());
 +   }
 +
-+   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit(java.util.List<ItemEntity> value) {
++   public @org.jetbrains.annotations.Nullable java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit(java.util.List<ItemEntity> value) {
 +      java.util.List<org.bukkit.inventory.ItemStack> ret = captureDropsBukkit();
 +      captureDrops = value;
 +      return ret;
++   }
++
++   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkitOrEmptyList(java.util.List<ItemEntity> value) {
++      java.util.List<org.bukkit.inventory.ItemStack> ret = captureDropsBukkit(value);
++      return ret != null ? ret : new java.util.ArrayList<>();
 +   }
 +   // Mohist+ end
 +
