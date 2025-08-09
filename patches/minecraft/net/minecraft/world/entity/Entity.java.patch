@@ -1572,7 +1572,7 @@
        this.f_146795_ = null;
     }
  
-@@ -3320,6 +_,127 @@
+@@ -3320,6 +_,133 @@
        return true;
     }
  
@@ -1592,6 +1592,12 @@
 +
 +   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit() {
 +      return itemEntitiesToBukkitItemStacks(captureDrops());
++   }
++
++   public java.util.List<org.bukkit.inventory.ItemStack> captureDropsBukkit(java.util.List<ItemEntity> value) {
++      java.util.List<org.bukkit.inventory.ItemStack> ret = captureDropsBukkit();
++      captureDrops = value;
++      return ret;
 +   }
 +   // Mohist+ end
 +
