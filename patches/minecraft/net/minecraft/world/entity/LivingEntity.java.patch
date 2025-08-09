@@ -898,7 +898,7 @@
 +      this.captureDrops(new java.util.ArrayList<>());
 +
 +      // CraftBukkit start - Call death event
-+      captureDrops().addAll(m_9236_().captureDrops); m_9236_().captureDrops = null; // Mohist+ - Retrieve dropped items from the caller
++      if (m_9236_().captureDrops != null) { captureDrops().addAll(m_9236_().captureDrops); m_9236_().captureDrops = null; } // Mohist+ - Retrieve dropped items from the caller
 +      List<org.bukkit.inventory.ItemStack> bukkitDrops = captureDropsBukkit(); // Mohist+ - Use methods we added
 +      org.bukkit.event.entity.EntityDeathEvent deathEvent = CraftEventFactory.callEntityDeathEvent(this, bukkitDrops, p_21192_); // Paper - call advancement triggers with correct entity equipment // Mohist+ - For better mod compatibility
 +      mohist$deathEvent = deathEvent; // Mohist+ - For better mod compatibility
