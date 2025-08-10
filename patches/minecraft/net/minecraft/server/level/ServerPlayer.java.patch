@@ -115,7 +115,7 @@
  import net.minecraft.world.entity.animal.horse.AbstractHorse;
  import net.minecraft.world.entity.item.ItemEntity;
  import net.minecraft.world.entity.monster.Monster;
-@@ -113,18 +_,9 @@
+@@ -113,19 +_,11 @@
  import net.minecraft.world.entity.player.Inventory;
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -135,8 +135,10 @@
 +import net.minecraft.world.inventory.*;
 +import net.minecraft.world.item.*;
  import net.minecraft.world.item.crafting.Recipe;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
  import net.minecraft.world.item.trading.MerchantOffers;
  import net.minecraft.world.level.ChunkPos;
+ import net.minecraft.world.level.GameRules;
 @@ -133,6 +_,7 @@
  import net.minecraft.world.level.Level;
  import net.minecraft.world.level.biome.BiomeManager;
@@ -449,7 +451,7 @@
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
           this.m_7976_(crashreportcategory);
-@@ -563,16 +_,66 @@
+@@ -563,16 +_,106 @@
     }
  
     private void m_9104_(ObjectiveCriteria p_9105_, int p_9106_) {
@@ -459,6 +461,46 @@
        });
     }
  
++   // Paper start - process inventory
++   private static void processKeep(org.bukkit.event.entity.PlayerDeathEvent event, NonNullList<ItemStack> inv) {
++      List<org.bukkit.inventory.ItemStack> itemsToKeep = event.getItemsToKeep();
++      if (inv == null) {
++         // remainder of items left in toKeep - plugin added stuff on death that wasn't in the initial loot?
++         if (!itemsToKeep.isEmpty()) {
++            for (org.bukkit.inventory.ItemStack itemStack : itemsToKeep) {
++               event.getEntity().getInventory().addItem(itemStack);
++            }
++         }
++
++         return;
++      }
++
++      for (int i = 0; i < inv.size(); ++i) {
++         ItemStack item = inv.get(i);
++         if (EnchantmentHelper.m_44924_(item) || itemsToKeep.isEmpty() || item.m_41619_()) {
++            inv.set(i, ItemStack.f_41583_);
++            continue;
++         }
++
++         final org.bukkit.inventory.ItemStack bukkitStack = item.getBukkitStack();
++         boolean keep = false;
++         final Iterator<org.bukkit.inventory.ItemStack> iterator = itemsToKeep.iterator();
++         while (iterator.hasNext()) {
++            final org.bukkit.inventory.ItemStack itemStack = iterator.next();
++            if (bukkitStack.equals(itemStack)) {
++               iterator.remove();
++               keep = true;
++               break;
++            }
++         }
++
++         if (!keep) {
++            inv.set(i, ItemStack.f_41583_);
++         }
++      }
++   }
++   // Paper end
++
     public void m_6667_(DamageSource p_9035_) {
        this.m_146850_(GameEvent.f_223707_);
 +      if (ForgeHooks.onLivingDeath(this, p_9035_)) return;
@@ -474,7 +516,7 @@
 +      boolean keepInventory = KeepInventory.inventory(this) || this.f_19853_.m_46469_().m_46207_(GameRules.f_46133_) || this.m_5833_();
 +
 +      if (!keepInventory) {
-+         Collection<ItemEntity> drops = this.captureDrops(null);
++         Collection<ItemEntity> drops = this.captureDrops();
 +         if (drops != null) {
 +            for (ItemEntity entity : drops) {
 +               CraftItemStack craftItemStack = CraftItemStack.asCraftMirror(entity.m_32055_());
@@ -527,15 +569,23 @@
           }
        } else {
           this.f_8906_.m_9829_(new ClientboundPlayerCombatKillPacket(this.m_19879_(), CommonComponents.f_237098_));
-@@ -601,11 +_,16 @@
+@@ -601,11 +_,24 @@
           this.m_9215_();
        }
  
 -      if (!this.m_5833_()) {
 -         this.m_6668_(p_9035_);
++      if (event.shouldDropExperience()) this.m_21226_(); // Paper - tie to event
 +      // we clean the player's inventory after the EntityDeathEvent is called so plugins can get the exact state of the inventory.
 +      if (!event.getKeepInventory()) {
++         mohist$noDropAllDeathLoot.set(true); // Mohist+ - Make dropAllDeathLoot call invalid by injecting check inside it, but leave it there to avoid Mixin errors
 +         m_6668_(p_9035_);
++         // Paper start - replace logic
++         for (NonNullList<ItemStack> inv : this.m_150109_().f_35979_) {
++            processKeep(event, inv);
++         }
++         processKeep(event, null);
++         // Paper end
        }
  
 -      this.m_36329_().m_83427_(ObjectiveCriteria.f_83590_, this.m_6302_(), Score::m_83392_);

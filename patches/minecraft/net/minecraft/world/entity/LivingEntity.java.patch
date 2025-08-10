@@ -876,7 +876,7 @@
                 this.m_9236_().m_7967_(itementity);
              }
           }
-@@ -1333,31 +_,68 @@
+@@ -1333,31 +_,71 @@
        }
     }
  
@@ -885,7 +885,10 @@
 +   protected Set<EquipmentSlot> clearedEquipmentSlots = new java.util.HashSet<>();
 +   // Paper end
 +
++   protected final java.util.concurrent.atomic.AtomicBoolean mohist$noDropAllDeathLoot = new java.util.concurrent.atomic.AtomicBoolean(false); // Mohist+ - Used while player is dying
++
     protected void m_6668_(DamageSource p_21192_) {
++      if (mohist$noDropAllDeathLoot.getAndSet(false)) return; // Mohist+ - Use Paper's logic for dropping items if this entity is a dying player
        Entity entity = p_21192_.m_7639_();
 -      int i;
 -      if (entity instanceof Player) {
