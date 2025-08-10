@@ -115,7 +115,7 @@
  import net.minecraft.world.entity.animal.horse.AbstractHorse;
  import net.minecraft.world.entity.item.ItemEntity;
  import net.minecraft.world.entity.monster.Monster;
-@@ -113,19 +_,11 @@
+@@ -113,18 +_,9 @@
  import net.minecraft.world.entity.player.Inventory;
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -135,10 +135,8 @@
 +import net.minecraft.world.inventory.*;
 +import net.minecraft.world.item.*;
  import net.minecraft.world.item.crafting.Recipe;
-+import net.minecraft.world.item.enchantment.EnchantmentHelper;
  import net.minecraft.world.item.trading.MerchantOffers;
  import net.minecraft.world.level.ChunkPos;
- import net.minecraft.world.level.GameRules;
 @@ -133,6 +_,7 @@
  import net.minecraft.world.level.Level;
  import net.minecraft.world.level.biome.BiomeManager;
@@ -451,7 +449,7 @@
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
           this.m_7976_(crashreportcategory);
-@@ -563,16 +_,106 @@
+@@ -563,16 +_,115 @@
     }
  
     private void m_9104_(ObjectiveCriteria p_9105_, int p_9106_) {
@@ -477,7 +475,7 @@
 +
 +      for (int i = 0; i < inv.size(); ++i) {
 +         ItemStack item = inv.get(i);
-+         if (EnchantmentHelper.m_44924_(item) || itemsToKeep.isEmpty() || item.m_41619_()) {
++         if (net.minecraft.world.item.enchantment.EnchantmentHelper.m_44924_(item) || itemsToKeep.isEmpty() || item.m_41619_()) {
 +            inv.set(i, ItemStack.f_41583_);
 +            continue;
 +         }
@@ -516,13 +514,22 @@
 +      boolean keepInventory = KeepInventory.inventory(this) || this.f_19853_.m_46469_().m_46207_(GameRules.f_46133_) || this.m_5833_();
 +
 +      if (!keepInventory) {
++         // Mohist+ start - Should use items from player inventory
++         /*
 +         Collection<ItemEntity> drops = this.captureDrops();
 +         if (drops != null) {
 +            for (ItemEntity entity : drops) {
-+               CraftItemStack craftItemStack = CraftItemStack.asCraftMirror(entity.m_32055_());
++               CraftItemStack craftItemStack = CraftItemStack.asCraftMirror(entity.getItem());
 +               loot.add(craftItemStack);
 +            }
 +         }
++         */
++         for (ItemStack item : this.m_150109_().getContents()) {
++            if (!item.m_41619_() && !net.minecraft.world.item.enchantment.EnchantmentHelper.m_44924_(item)) {
++               loot.add(CraftItemStack.asCraftMirror(item));
++            }
++         }
++         // Mohist+ end
 +      }
 +
 +      Component defaultMessage = this.m_21231_().m_19293_();
