@@ -6,14 +6,22 @@ import com.mohistmc.tools.FileUtils;
 import com.mohistmc.tools.JarTool;
 import com.mohistmc.tools.SHA256;
 import com.mohistmc.util.I18n;
-import com.mohistmc.util.MohistModuleManager;
+// import com.mohistmc.util.MohistModuleManager; // Mohist+ - We no longer run Forge installer in main process anymore
 import java.io.File;
 import java.io.FileWriter;
+// Mohist+ - We no longer run Forge installer in main process anymore
+/*
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+*/
+// Mohist+ end
 import java.nio.file.Files;
+// Mohist+ start - We no longer run Forge installer in main process anymore
+/*
 import java.util.ArrayList;
 import java.util.Arrays;
+*/
+// Mohist+ end
 import java.util.List;
 
 import static com.mohistmc.util.SymlinkHelper.resolveLink;
@@ -30,7 +38,7 @@ public class v_1_20_1 {
 
     public static class Install extends Action {
 
-        public static ArrayList<String> launchArgs = new ArrayList<>(Arrays.asList("java", "-jar"));
+        // public static ArrayList<String> launchArgs = new ArrayList<>(Arrays.asList("java", "-jar")); // Mohist+ - Do not run Forge installation in main process anymore
         public final File fmlloader;
         public final File fmlcore;
         public final File javafmllanguage;
@@ -57,8 +65,12 @@ public class v_1_20_1 {
         }
 
         private void install() throws Exception {
+            // Mohist+ start - Do not run Forge installation in main process anymore
+            /*
             launchArgs.add(new File(URLDecoder.decode(MohistModuleManager.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath(), StandardCharsets.UTF_8)).getAbsolutePath());
             launchArgs.addAll(MohistMCStart.mainArgs);
+            */
+            // Mohist+ end
             copyFileFromJar(lzma, "data/server.lzma");
             copyFileFromJar(fmlloader, "data/fmlloader-" + mcVer + "-" + forgeVer + ".jar");
             copyFileFromJar(fmlcore, "data/fmlcore-" + mcVer + "-" + forgeVer + ".jar");
@@ -178,11 +190,6 @@ public class v_1_20_1 {
             System.out.println(I18n.as("installation.finished"));
             MohistConfigUtil.yml.set("mohist.installation-finished", true);
             MohistConfigUtil.save();
-            // Mohist+ start - Allow dry run (install only)
-            boolean installOnly = MohistMCStart.mainArgs.contains("--installOnly");
-            if (!installOnly)
-            // Mohist+ end
-            JarTool.restartServer(launchArgs, true);
         }
 
         protected void libPath() throws Exception {

@@ -18,6 +18,7 @@
 
 package com.mohistmc.util;
 
+import com.mohistmc.MohistMCStart;
 import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.tools.OSUtil;
 import java.io.File;
@@ -155,6 +156,7 @@ public class MohistModuleManager {
         //Just read each line of launch args
         List<String> opens = new ArrayList<>();
         List<String> exports = new ArrayList<>();
+        exports.add("cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED"); // Mohist+ - Ensure BSL is exported
 
         args.parallelStream().forEach(arg -> {
             if (arg.startsWith("-p ")) {
@@ -184,6 +186,7 @@ public class MohistModuleManager {
     public void loadModules(String modulePath) throws Throwable {
         // Find all extra modules
         ModuleFinder finder = ModuleFinder.of(Arrays.stream(modulePath.split(File.pathSeparator)).map(Paths::get).peek(JarLoader::loadJar).toArray(Path[]::new));
+        JarLoader.releaseAddURLHandle(); // Mohist+ - Release addURL method handle to free a bit memory
         MethodHandle loadModuleMH = IMPL_LOOKUP.findVirtual(Class.forName("jdk.internal.loader.BuiltinClassLoader"), "loadModule", MethodType.methodType(void.class, ModuleReference.class));
 
         // Resolve modules to a new config

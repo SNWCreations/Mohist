@@ -24,7 +24,7 @@ import com.mohistmc.libraries.Libraries;
 import com.mohistmc.tools.FileUtils;
 import com.mohistmc.tools.SHA256;
 import com.mohistmc.util.DataParser;
-import com.mohistmc.util.JarLoader;
+// import com.mohistmc.util.JarLoader; // Mohist+ - We no longer run Forge installer in main process anymore
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,8 +33,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+// Mohist+ - We no longer run Forge installer in main process anymore
+/*
 import java.net.URL;
 import java.net.URLClassLoader;
+*/
+// Mohist+ end
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ import static com.mohistmc.util.SymlinkHelper.*;
 
 public abstract class Action {
 
-    private static final PrintStream origin = System.out;
+    // private static final PrintStream origin = System.out; // Mohist+ - We no longer run Forge installer in main process anymore
     public final String mohistVer;
     public final String forgeVer;
     public final String mcpVer;
@@ -64,8 +68,7 @@ public abstract class Action {
     public final File minecraft_server;
     public final String libPath = "libraries";
 
-    public List<URL> installerTourls = new ArrayList<>();
-
+    // public List<URL> installerTourls = new ArrayList<>(); // Mohist+ - unused
 
     protected Action() {
         init();
@@ -94,15 +97,38 @@ public abstract class Action {
         this.minecraft_server = new File(libPath, "net/minecraft/server/" + mcVer + "/server-" + mcVer + ".jar");
     }
 
+    // Mohist+ start - Do not run Forge installation in the main process anymore
+    private static final boolean installerDebug = Boolean.getBoolean("mohist.installer.debug");
+    public String jvmLauncherPath = ProcessHandle.current().info().command().orElseThrow(() -> new Error("JVM launched without executable path"));
+    public List<String> librariesClassPath = new ArrayList<>();
     protected void run(String mainClass, String[] args) throws Exception {
+        /*
         List<URL> classPath = stringToUrl(installerTourls);
         System.out.println("[Mohist] Loading " + classPath);
         URLClassLoader loader = URLClassLoader.newInstance(classPath.toArray(new URL[0]));
         Class.forName(mainClass, true, loader).getDeclaredMethod("main", String[].class).invoke(null, new Object[]{args});
         loader.clearAssertionStatus();
         loader.close();
+        */
+        List<String> command = new ArrayList<>();
+        command.add(jvmLauncherPath);
+        command.add("-cp");
+        command.add(String.join(com.mohistmc.tools.OSUtil.getOS() == com.mohistmc.tools.OSUtil.OS.WINDOWS ? ";" : ":", librariesClassPath));
+        command.add(mainClass);
+        command.addAll(java.util.Arrays.asList(args));
+        if (installerDebug) System.out.println("Starting process with arguments " + command);
+        final Process process;
+        if (installerDebug) {
+            process = new ProcessBuilder(command).inheritIO().start();
+        } else {
+            process = new ProcessBuilder(command).redirectInput(ProcessBuilder.Redirect.DISCARD).redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+        }
+        if (installerDebug) System.out.println("Process ID: " + process.pid());
+        final int ret = process.waitFor();
+        if (installerDebug) System.out.println("Process exited with code " + ret);
     }
 
+    /*
     protected List<URL> stringToUrl(List<URL> strs) throws Exception {
         List<URL> temp = new ArrayList<>();
         for (URL t : strs) {
@@ -112,11 +138,14 @@ public abstract class Action {
         }
         return temp;
     }
+    */
+    // Mohist+ end
 
     /*
     THIS IS TO NOT SPAM CONSOLE WHEN IT WILL PRINT A LOT OF THINGS
      */
     protected void mute() throws Exception {
+        if (true) return; // Mohist+ - We no longer run Forge installer in main process anymore
         File out = resolveLink(new File(libPath, "com/mohistmc/installation/installationLogs.txt")); // Mohist+ start - Consider symbolic links for sharing libraries between multiple installation
         if (!out.exists()) {
             out.getParentFile().mkdirs();
@@ -126,7 +155,7 @@ public abstract class Action {
     }
 
     protected void unmute() {
-        System.setOut(origin);
+        // System.setOut(origin); // Mohist+ - We no longer run Forge installer in main process anymore
     }
 
     protected void copyFileFromJar(File file, String pathInJar) {
@@ -171,9 +200,14 @@ public abstract class Action {
             BufferedReader b = new BufferedReader(new InputStreamReader(DefaultLibraries.class.getClassLoader().getResourceAsStream("installer.txt")));
             for (String line = b.readLine(); line != null; line = b.readLine()) {
                 Libraries libraries = Libraries.from(line);
-                File file = resolveLink(new File("libraries", libraries.getPath())); // Mohist+ - Consider symbolic links for sharing libraries between multiple installation
+                // Mohist+ start - Do not run Forge installer in main process
+                /*
+                File file = new File("libraries", libraries.getPath());
                 URL url = file.toURI().toURL();
                 installerTourls.add(url);
+                */
+                librariesClassPath.add(java.nio.file.Paths.get("libraries", libraries.getPath()).toRealPath().toString());
+                // Mohist+ ebd
             }
         } catch (Exception e) {
             e.printStackTrace();

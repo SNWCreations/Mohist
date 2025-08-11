@@ -9,6 +9,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven { url 'https://maven.mohistmc.com/' }
+    maven { url 'https://jitpack.io/' } // Mohist+ - Add JitPack for retrieving JVM common utils
 }
 
 dependencies {
@@ -23,6 +24,7 @@ dependencies {
     implementation "cpw.mods:bootstraplauncher:1.1.2"
     implementation 'me.tongfei:progressbar:0.10.0'
     implementation 'org.jline:jline:3.25.1'
+    implementation "com.github.TheSRSProject:jvm-common-utils:main-SNAPSHOT" // Mohist+ - Fix after installation error
 }
 
 shadowJar {
@@ -33,6 +35,7 @@ shadowJar {
         include(dependency('com.mohistmc:tools'))
         include(dependency('me.tongfei:progressbar'))
         include(dependency('org.jline:jline'))
+        include(dependency('com.github.TheSRSProject:jvm-common-utils')) // Mohist+ - Fix after installation error
     }
 }
 

@@ -788,8 +788,12 @@ project(':mohist') {
             MANIFESTS.each { pkg, values ->
                 if (pkg == '/') {
                     manifest.attributes(values += [
+                            // Mohist+ start - Do not load the main JAR as JavaAgent anymore because we don't use instrumentation API to load JARs
+                            /*
                             'Premain-Class': 'com.mohistmc.util.JarLoader',
                             'Launcher-Agent-Class': 'com.mohistmc.util.JarLoader',
+                            */
+                            // Mohist+ end
                             'Main-Class': 'com.mohistmc.MohistMCStart',
                             'Class-Path': CLASS_PATH.toString().replace("[", "").replace("]", "").replace(",", "")
                     ])
