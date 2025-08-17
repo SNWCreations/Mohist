@@ -79,7 +79,7 @@ public class JarLoader {
             java.lang.reflect.Method method = ucp.getClass().getDeclaredMethod("addURL", java.net.URL.class);
             java.lang.invoke.MethodHandle addUrlMethod;
             if (URLCLASSPATH_ADD_URL == null) {
-                System.out.println("jarloader: Saving addURL reference");
+                if (debug) System.out.println("jarloader: Saving addURL reference");
                 URLCLASSPATH_ADD_URL = snw.srs.common.vm.Unsafe.getUnsafe().getImplLookup().unreflect(method);
             }
             addUrlMethod = URLCLASSPATH_ADD_URL;
