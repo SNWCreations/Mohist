@@ -81,8 +81,8 @@
     private boolean m_31588_(Player p_31589_, EquipmentSlot p_31590_, ItemStack p_31591_, InteractionHand p_31592_) {
        ItemStack itemstack = this.m_6844_(p_31590_);
 +      // CraftBukkit start
-+      org.bukkit.inventory.ItemStack armorStandItem = CraftItemStack.asCraftMirror(p_31591_);
-+      org.bukkit.inventory.ItemStack playerHeldItem = CraftItemStack.asCraftMirror(itemstack);
++      org.bukkit.inventory.ItemStack armorStandItem = CraftItemStack.asCraftMirror(itemstack);
++      org.bukkit.inventory.ItemStack playerHeldItem = CraftItemStack.asCraftMirror(p_31591_);
 +
 +      org.bukkit.entity.Player player = (org.bukkit.entity.Player) p_31589_.getBukkitEntity();
 +      org.bukkit.entity.ArmorStand self = (org.bukkit.entity.ArmorStand) this.getBukkitEntity();
