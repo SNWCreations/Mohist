@@ -4,19 +4,9 @@
 name: Build with Gradle
 on:
   push:
-    branches:
-      - 'the_fork'
-    paths:
-      - 'src/**'
-      - 'build.gradle'
-      - 'patches/' # Also consider patch files
-      - '.github/workflows/build.yml'
+    branches: [ "the_fork" ]
   pull_request:
-    paths:
-      - 'src/**'
-      - 'build.gradle'
-      - 'patches/' # Also consider patch files
-      - '.github/workflows/build.yml'
+    branches: [ "the_fork" ]
   workflow_dispatch:
 
 jobs:
