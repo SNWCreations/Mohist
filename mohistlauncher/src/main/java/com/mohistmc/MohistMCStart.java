@@ -90,7 +90,7 @@ public class MohistMCStart {
         }
 
         ZipUtil.getFileContent(MohistMCStart.class.getClassLoader().getResourceAsStream("META-INF/libraries"));
-        if (MohistConfigUtil.INSTALLATIONFINISHED() && MohistConfigUtil.CHECK_LIBRARIES()) {
+        if (/*MohistConfigUtil.INSTALLATIONFINISHED() && */MohistConfigUtil.CHECK_LIBRARIES()) { // Mohist+ - Do not run Forge installer for every boot
             DefaultLibraries.run();
         }
 

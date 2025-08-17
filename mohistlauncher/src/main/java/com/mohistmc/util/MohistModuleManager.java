@@ -70,8 +70,12 @@ public class MohistModuleManager {
 
     public MohistModuleManager(List<String> args) {
         this.applyLaunchArgs(args);
+        // Mohist+ start - Do not run Forge installer for every boot
+        /*
         MohistConfigUtil.yml.set("mohist.installation-finished", false);
         MohistConfigUtil.save();
+        */
+        // Mohist+ end
     }
 
     public static void addExports(String module, String pkg, String target) {
