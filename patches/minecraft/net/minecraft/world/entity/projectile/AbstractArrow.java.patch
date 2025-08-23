@@ -135,7 +135,7 @@
 @@ -422,7 +_,7 @@
     }
  
-    protected boolean m_5603_(Entity p_36743_) {
+    public boolean m_5603_(Entity p_36743_) {
 -      return super.m_5603_(p_36743_) && (this.f_36701_ == null || !this.f_36701_.contains(p_36743_.m_19879_()));
 +      return super.m_5603_(p_36743_) && (this.f_36701_ == null || !this.f_36701_.contains(p_36743_.m_19879_())) && !this.ignoredEntities.contains(p_36743_.m_19879_());
     }

@@ -26,7 +26,7 @@
     public static final int f_155618_ = 1;
     public static final int f_155619_ = 0;
     public static final int f_155620_ = 1;
--   private final Container f_59525_ = new Container() {
+-   public final Container f_59525_ = new Container() {
 +   public final Container f_59525_ = new LecternInventory();
 +
 +   public class LecternInventory implements Container {
@@ -106,13 +106,7 @@
     };
     private final ContainerData f_59526_ = new ContainerData() {
        public int m_6413_(int p_59600_) {
-@@ -138,12 +_,12 @@
-       this.m_6596_();
-    }
- 
--   void m_59532_(int p_59533_) {
-+   public void m_59532_(int p_59533_) {
-       int i = Mth.m_14045_(p_59533_, 0, this.f_59529_ - 1);
+@@ -143,7 +_,7 @@
        if (i != this.f_59528_) {
           this.f_59528_ = i;
           this.m_6596_();

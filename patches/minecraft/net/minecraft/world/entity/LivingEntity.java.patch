@@ -106,17 +106,8 @@
 -   protected int f_20897_;
 +   public int f_20897_;
     public float f_20898_;
-    protected boolean f_20899_;
+    public boolean f_20899_;
     public float f_20900_;
-@@ -207,7 +_,7 @@
-    public boolean f_20948_ = true;
-    @Nullable
-    public LivingEntity f_20949_;
--   private int f_20950_;
-+   public int f_20950_;
-    private LivingEntity f_20951_;
-    private int f_20952_;
-    private float f_20953_;
 @@ -226,10 +_,41 @@
     private float f_20932_;
     protected Brain<?> f_20939_;
@@ -1537,15 +1528,6 @@
        super.m_8119_();
        this.m_21329_();
        this.m_21333_();
-@@ -2328,7 +_,7 @@
- 
-    }
- 
--   private void m_21315_() {
-+   public void m_21315_() {
-       Map<EquipmentSlot, ItemStack> map = this.m_21319_();
-       if (map != null) {
-          this.m_21091_(map);
 @@ -2358,6 +_,7 @@
  
           ItemStack itemstack1 = this.m_6844_(equipmentslot);

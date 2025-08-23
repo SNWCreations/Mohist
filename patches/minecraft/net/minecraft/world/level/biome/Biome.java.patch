@@ -47,7 +47,7 @@
 +
     /** @deprecated */
     @Deprecated
-    private float m_47505_(BlockPos p_47506_) {
+    public float m_47505_(BlockPos p_47506_) {
 @@ -188,7 +_,7 @@
     }
  

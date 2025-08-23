@@ -18,15 +18,6 @@
        this.f_36853_ = false;
        if (this.f_36855_ == Potions.f_43598_ && this.f_36852_.isEmpty()) {
           this.f_19804_.m_135381_(f_36854_, -1);
-@@ -128,7 +_,7 @@
-       return this.f_19804_.m_135370_(f_36854_);
-    }
- 
--   private void m_36882_(int p_36883_) {
-+   public void m_36882_(int p_36883_) {
-       this.f_36853_ = true;
-       this.f_19804_.m_135381_(f_36854_, p_36883_);
-    }
 @@ -178,6 +_,7 @@
        Entity entity = this.m_150173_();
  

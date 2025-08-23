@@ -12,7 +12,7 @@
 @@ -13,6 +_,10 @@
     private static final int f_150560_ = 36;
     private static final int f_150561_ = 45;
-    private final Container f_39431_;
+    public final Container f_39431_;
 +   // CraftBukkit start
 +   private CraftInventoryView bukkitEntity = null;
 +   private Inventory player;

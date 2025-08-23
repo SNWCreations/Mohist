@@ -24,12 +24,3 @@
  
        public CatalystListener(BlockState p_283224_, PositionSource p_283095_) {
           this.f_279646_ = p_283224_;
-@@ -104,7 +_,7 @@
-          return this.f_279632_;
-       }
- 
--      private void m_280309_(ServerLevel p_281501_, BlockPos p_281448_, BlockState p_281966_, RandomSource p_283606_) {
-+      public void m_280309_(ServerLevel p_281501_, BlockPos p_281448_, BlockState p_281966_, RandomSource p_283606_) {
-          p_281501_.m_7731_(p_281448_, p_281966_.m_61124_(SculkCatalystBlock.f_222086_, Boolean.valueOf(true)), 3);
-          p_281501_.m_186460_(p_281448_, p_281966_.m_60734_(), 8);
-          p_281501_.m_8767_(ParticleTypes.f_235898_, (double)p_281448_.m_123341_() + 0.5D, (double)p_281448_.m_123342_() + 1.15D, (double)p_281448_.m_123343_() + 0.5D, 2, 0.2D, 0.0D, 0.2D, 0.0D);

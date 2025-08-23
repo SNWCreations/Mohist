@@ -36,24 +36,6 @@
        }
     }
  
-@@ -481,7 +_,7 @@
-       return this.m_27921_(8);
-    }
- 
--   void m_27919_(boolean p_27920_) {
-+   public void m_27919_(boolean p_27920_) {
-       if (p_27920_) {
-          this.m_27853_();
-       }
-@@ -493,7 +_,7 @@
-       return this.m_27921_(4);
-    }
- 
--   private void m_27925_(boolean p_27926_) {
-+   public void m_27925_(boolean p_27926_) {
-       this.m_27832_(4, p_27926_);
-    }
- 
 @@ -600,11 +_,14 @@
        if (this.m_6673_(p_27762_)) {
           return false;

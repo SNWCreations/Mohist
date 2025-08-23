@@ -6,7 +6,7 @@
  
 -public abstract class Enchantment {
 +public abstract class Enchantment implements net.minecraftforge.common.extensions.IForgeEnchantment {
-    private final EquipmentSlot[] f_44671_;
+    public final EquipmentSlot[] f_44671_;
     private final Enchantment.Rarity f_44674_;
     public final EnchantmentCategory f_44672_;
 @@ -71,6 +_,7 @@

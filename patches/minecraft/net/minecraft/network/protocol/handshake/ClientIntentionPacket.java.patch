@@ -17,11 +17,10 @@
  public class ClientIntentionPacket implements Packet<ServerHandshakePacketListener> {
     private static final int f_179799_ = 255;
     private final int f_134720_;
--   private final String f_134721_;
--   private final int f_134722_;
+-   public String f_134721_;
 +   public final String f_134721_;
 +   public String original_ip;
-+   public final int f_134722_;
+    public final int f_134722_;
     private final ConnectionProtocol f_134723_;
 +   private String fmlVersion = net.minecraftforge.network.NetworkConstants.NETVERSION;
 +

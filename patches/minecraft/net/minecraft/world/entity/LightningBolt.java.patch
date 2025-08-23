@@ -17,13 +17,7 @@
  
  public class LightningBolt extends Entity {
     private static final int f_147136_ = 2;
-@@ -32,11 +_,13 @@
-    private int f_20860_;
-    public long f_20859_;
-    private int f_20861_;
--   private boolean f_20862_;
-+   public boolean f_20862_;
-    @Nullable
+@@ -37,6 +_,8 @@
     private ServerPlayer f_20863_;
     private final Set<Entity> f_147134_ = Sets.newHashSet();
     private int f_147135_;

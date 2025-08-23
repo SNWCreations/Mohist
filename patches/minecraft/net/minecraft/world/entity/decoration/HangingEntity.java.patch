@@ -25,15 +25,6 @@
  import org.slf4j.Logger;
  
  public abstract class HangingEntity extends Entity {
-@@ -47,7 +_,7 @@
-    protected void m_8097_() {
-    }
- 
--   protected void m_6022_(Direction p_31728_) {
-+   public void m_6022_(Direction p_31728_) {
-       Validate.notNull(p_31728_);
-       Validate.isTrue(p_31728_.m_122434_().m_122479_());
-       this.f_31699_ = p_31728_;
 @@ -87,16 +_,69 @@
        }
     }

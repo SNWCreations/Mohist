@@ -16,15 +16,6 @@
  
  public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
     public static final double f_149016_ = 0.6D;
-@@ -90,7 +_,7 @@
-       this.m_29725_(0.0D);
-    }
- 
--   protected void m_8099_() {
-+   public void m_8099_() {
-       this.f_21345_.m_25352_(1, new FloatGoal(this));
-       this.f_21345_.m_25352_(1, new ClimbOnTopOfPowderSnowGoal(this, this.m_9236_()));
-       this.f_21345_.m_25352_(1, new Rabbit.RabbitPanicGoal(this, 2.2D));
 @@ -524,7 +_,7 @@
  
        public boolean m_8036_() {

@@ -111,13 +111,7 @@
     protected final NeighborUpdater f_220350_;
     private final List<TickingBlockEntity> f_151503_ = Lists.newArrayList();
     private boolean f_151504_;
-@@ -101,19 +_,76 @@
-    private final RandomSource f_220348_ = RandomSource.m_216337_();
-    private final ResourceKey<DimensionType> f_220349_;
-    private final Holder<DimensionType> f_204147_;
--   protected final WritableLevelData f_46442_;
-+   public final WritableLevelData f_46442_;
-    private final Supplier<ProfilerFiller> f_46446_;
+@@ -106,14 +_,71 @@
     public final boolean f_46443_;
     private final WorldBorder f_46447_;
     private final BiomeManager f_46420_;
@@ -617,7 +611,7 @@
                    this.m_213960_(blockstate, blockpos, p_46719_, p_46718_, false);
                 }
              }
-@@ -856,11 +_,23 @@
+@@ -856,6 +_,18 @@
        return this.f_46420_;
     }
  
@@ -636,12 +630,6 @@
     public final boolean m_46659_() {
        return this.f_46424_;
     }
- 
--   protected abstract LevelEntityGetter<Entity> m_142646_();
-+   public abstract LevelEntityGetter<Entity> m_142646_();
- 
-    public long m_183596_() {
-       return (long)(this.f_186455_++);
 @@ -871,7 +_,7 @@
     }
  

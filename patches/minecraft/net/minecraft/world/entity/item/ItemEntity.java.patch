@@ -29,15 +29,9 @@
  
  public class ItemEntity extends Entity implements TraceableEntity {
     private static final EntityDataAccessor<ItemStack> f_31984_ = SynchedEntityData.m_135353_(ItemEntity.class, EntityDataSerializers.f_135033_);
-@@ -38,10 +_,15 @@
-    public int f_31986_;
-    private int f_31987_ = 5;
+@@ -42,6 +_,11 @@
     @Nullable
--   private UUID f_31988_;
-+   public UUID f_31988_;
-    @Nullable
--   private UUID f_265881_;
-+   public UUID f_265881_;
+    public UUID f_265881_;
     public final float f_31983_;
 +   /**
 +    * The maximum age of this EntityItem.  The item is expired once this is reached.

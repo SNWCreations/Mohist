@@ -49,7 +49,7 @@
     @Nullable
     public ResourceLocation f_21355_;
 @@ -115,6 +_,10 @@
-    private CompoundTag f_21359_;
+    public CompoundTag f_21359_;
     private BlockPos f_21360_ = BlockPos.f_121853_;
     private float f_21341_ = -1.0F;
 +   @Nullable

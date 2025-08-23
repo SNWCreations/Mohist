@@ -12,15 +12,6 @@
     public static ExecutorService m_183991_() {
        return f_137444_;
     }
-@@ -213,7 +_,7 @@
-       throw p_137560_ instanceof RuntimeException ? (RuntimeException)p_137560_ : new RuntimeException(p_137560_);
-    }
- 
--   private static void m_137495_(Thread p_137496_, Throwable p_137497_) {
-+   public static void m_137495_(Thread p_137496_, Throwable p_137497_) {
-       m_137570_(p_137497_);
-       if (p_137497_ instanceof CompletionException) {
-          p_137497_ = p_137497_.getCause();
 @@ -239,7 +_,7 @@
        try {
           type = DataFixers.m_14512_().getSchema(DataFixUtils.makeKey(SharedConstants.m_183709_().m_183476_().m_193006_())).getChoiceType(p_137552_, p_137553_);

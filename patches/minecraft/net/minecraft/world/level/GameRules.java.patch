@@ -67,15 +67,7 @@
           this.f_46284_ = m_46317_(p_46307_);
        }
  
-@@ -414,14 +_,14 @@
-          this.m_46368_(p_46371_.getSource().m_81377_());
-       }
- 
--      protected void m_46368_(@Nullable MinecraftServer p_46369_) {
-+      public void m_46368_(@Nullable MinecraftServer p_46369_) {
-          if (p_46369_ != null) {
-             this.f_46360_.f_46339_.accept(p_46369_, this.m_5589_());
-          }
+@@ -421,7 +_,7 @@
  
        }
  

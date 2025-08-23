@@ -1,14 +1,5 @@
 --- a/net/minecraft/world/entity/animal/Fox.java
 +++ b/net/minecraft/world/entity/animal/Fox.java
-@@ -431,7 +_,7 @@
-       return this.m_28608_(32);
-    }
- 
--   void m_28626_(boolean p_28627_) {
-+   public void m_28626_(boolean p_28627_) {
-       this.m_28532_(32, p_28627_);
-    }
- 
 @@ -480,7 +_,8 @@
  
     protected void m_7581_(ItemEntity p_28514_) {

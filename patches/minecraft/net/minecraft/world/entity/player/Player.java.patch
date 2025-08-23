@@ -63,15 +63,6 @@
     private static final Logger f_219722_ = LogUtils.getLogger();
     public static final int f_150082_ = 16;
     public static final int f_150083_ = 20;
-@@ -157,7 +_,7 @@
-    public int f_36078_;
-    public int f_36079_;
-    public float f_36080_;
--   protected int f_36081_;
-+   public int f_36081_;
-    protected final float f_36082_ = 0.02F;
-    private int f_36111_;
-    private final GameProfile f_36084_;
 @@ -168,6 +_,19 @@
     @Nullable
     public FishingHook f_36083_;
@@ -155,15 +146,6 @@
        if (this.m_20175_(Pose.SWIMMING)) {
           Pose pose;
           if (this.m_21255_()) {
-@@ -414,7 +_,7 @@
-       return SoundSource.PLAYERS;
-    }
- 
--   protected int m_6101_() {
-+   public int m_6101_() {
-       return 20;
-    }
- 
 @@ -453,8 +_,14 @@
     public void m_6083_() {
        if (!this.m_9236_().f_46443_ && this.m_36342_() && this.m_20159_()) {
@@ -946,7 +928,7 @@
     }
 @@ -1747,27 +_,40 @@
  
-    protected void m_36328_() {
+    public void m_36328_() {
        if (this.f_36109_ + 20L < this.m_9236_().m_46467_()) {
 -         this.m_36370_(this.m_36331_());
 -         this.m_36362_(new CompoundTag());
@@ -1006,24 +988,6 @@
 +      mutablecomponent = mutablecomponent.m_7220_(PlayerTeam.m_83348_(this.m_5647_(), this.displayname));
 +      mutablecomponent = suffixes.stream().reduce(mutablecomponent, MutableComponent::m_7220_);
        return this.m_36218_(mutablecomponent);
-    }
- 
-@@ -1867,7 +_,7 @@
-       return this.f_19804_.m_135370_(f_36091_);
-    }
- 
--   protected void m_36362_(CompoundTag p_36363_) {
-+   public void m_36362_(CompoundTag p_36363_) {
-       this.f_19804_.m_135381_(f_36091_, p_36363_);
-    }
- 
-@@ -1875,7 +_,7 @@
-       return this.f_19804_.m_135370_(f_36092_);
-    }
- 
--   protected void m_36364_(CompoundTag p_36365_) {
-+   public void m_36364_(CompoundTag p_36365_) {
-       this.f_19804_.m_135381_(f_36092_, p_36365_);
     }
  
 @@ -1927,24 +_,24 @@

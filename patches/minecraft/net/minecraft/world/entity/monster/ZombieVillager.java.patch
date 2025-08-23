@@ -45,12 +45,7 @@
     }
  
     public InteractionResult m_6071_(Player p_34394_, InteractionHand p_34395_) {
-@@ -167,19 +_,21 @@
-       return this.m_20088_().m_135370_(f_34359_);
-    }
- 
--   private void m_34383_(@Nullable UUID p_34384_, int p_34385_) {
-+   public void m_34383_(@Nullable UUID p_34384_, int p_34385_) {
+@@ -171,15 +_,17 @@
        this.f_34360_ = p_34384_;
        this.f_34365_ = p_34385_;
        this.m_20088_().m_135381_(f_34359_, true);

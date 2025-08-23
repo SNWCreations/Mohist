@@ -9,15 +9,6 @@
        return !this.m_9236_().f_46443_ ? this.f_33721_ : SpellcasterIllager.IllagerSpell.m_33758_(this.f_19804_.m_135370_(f_33720_));
     }
  
-@@ -95,7 +_,7 @@
- 
-    protected abstract SoundEvent m_7894_();
- 
--   protected static enum IllagerSpell {
-+   public static enum IllagerSpell {
-       NONE(0, 0.0D, 0.0D, 0.0D),
-       SUMMON_VEX(1, 0.7D, 0.7D, 0.8D),
-       FANGS(2, 0.4D, 0.3D, 0.35D),
 @@ -183,6 +_,11 @@
        public void m_8037_() {
           --this.f_33774_;

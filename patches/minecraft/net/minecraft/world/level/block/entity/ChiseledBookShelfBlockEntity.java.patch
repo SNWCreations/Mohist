@@ -8,7 +8,7 @@
  import java.util.Objects;
  import java.util.function.Predicate;
  import net.minecraft.core.BlockPos;
-@@ -14,13 +_,19 @@
+@@ -14,6 +_,9 @@
  import net.minecraft.world.level.block.ChiseledBookShelfBlock;
  import net.minecraft.world.level.block.state.BlockState;
  import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -18,11 +18,10 @@
  import org.slf4j.Logger;
  
  public class ChiseledBookShelfBlockEntity extends BlockEntity implements Container {
-    public static final int f_244647_ = 6;
+@@ -21,6 +_,9 @@
     private static final Logger f_254661_ = LogUtils.getLogger();
     private final NonNullList<ItemStack> f_260576_ = NonNullList.m_122780_(6, ItemStack.f_41583_);
--   private int f_262317_ = -1;
-+   public int f_262317_ = -1;
+    public int f_262317_ = -1;
 +   // CraftBukkit start - add fields and methods
 +   public List<HumanEntity> transaction = new java.util.ArrayList<>();
 +   private int maxStack = 1;

@@ -42,28 +42,15 @@
  import org.slf4j.Logger;
  
  public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTask> implements CommandSource, AutoCloseable {
-@@ -190,8 +_,8 @@
-    @Nullable
-    private MinecraftServer.TimeProfiler f_177876_;
-    private boolean f_177877_;
--   private final ServerConnectionListener f_129755_;
--   private final ChunkProgressListenerFactory f_129756_;
-+   private ServerConnectionListener f_129755_;
-+   public final ChunkProgressListenerFactory f_129756_;
-    @Nullable
-    private ServerStatus f_129757_;
-    @Nullable
-@@ -200,8 +_,8 @@
+@@ -200,7 +_,7 @@
     public final DataFixer f_129759_;
     private String f_129760_;
     private int f_129761_ = -1;
 -   private final LayeredRegistryAccess<RegistryLayer> f_244176_;
--   public final Map<ResourceKey<Level>, ServerLevel> f_129762_ = Maps.newLinkedHashMap();
 +   public final LayeredRegistryAccess<RegistryLayer> f_244176_;
-+   public Map<ResourceKey<Level>, ServerLevel> f_129762_ = Maps.newLinkedHashMap();
+    public Map<ResourceKey<Level>, ServerLevel> f_129762_ = Maps.newLinkedHashMap();
     private PlayerList f_129763_;
     private volatile boolean f_129764_ = true;
-    private boolean f_129765_;
 @@ -213,8 +_,14 @@
     private boolean f_129708_;
     @Nullable
@@ -79,18 +66,8 @@
     @Nullable
     private KeyPair f_129712_;
     @Nullable
-@@ -237,24 +_,44 @@
-    private final FrameTimer f_129735_ = new FrameTimer();
-    private boolean f_129736_;
-    private float f_129737_;
--   private final Executor f_129738_;
-+   public final Executor f_129738_;
-    @Nullable
-    private String f_129739_;
-    public MinecraftServer.ReloadableResources f_129740_;
-    private final StructureTemplateManager f_236720_;
--   protected final WorldData f_129749_;
-+   protected WorldData f_129749_;
+@@ -245,16 +_,36 @@
+    protected WorldData f_129749_;
     private volatile boolean f_195494_;
  
 +   // CraftBukkit start
@@ -260,8 +237,6 @@
        serverleveldata.m_5458_(GameType.SPECTATOR);
     }
  
--   private void m_129940_(ChunkProgressListener p_129941_) {
--      ServerLevel serverlevel = this.m_129783_();
 +   // CraftBukkit start
 +   public void initWorld(ServerLevel serverlevel, ServerLevelData serverleveldata, WorldData saveData,  WorldOptions worldoptions) {
 +      boolean flag = saveData.m_7513_();
@@ -302,7 +277,8 @@
 +      m_129940_(pListener);
 +   }
 +
-+   public void m_129940_(ChunkProgressListener p_129941_) {
+    public void m_129940_(ChunkProgressListener p_129941_) {
+-      ServerLevel serverlevel = this.m_129783_();
 +      this.markWorldsDirty();
 +      ServerLevel serverlevel = prepareLevels$serverlevel.getAndSet(this.m_129783_());
 +      MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(serverlevel));
@@ -545,15 +521,6 @@
  
     protected void m_130012_() {
        this.m_18699_();
-@@ -724,7 +_,7 @@
-       });
-    }
- 
--   protected TickTask m_6681_(Runnable p_129852_) {
-+   public TickTask m_6681_(Runnable p_129852_) {
-       return new TickTask(this.f_129766_, p_129852_);
-    }
- 
 @@ -779,6 +_,7 @@
              f_129750_.error("Couldn't load server icon", (Throwable)exception);
              return Optional.empty();

@@ -4,7 +4,7 @@
  import org.slf4j.Logger;
  
  public class ChunkSerializer {
--   private static final Codec<PalettedContainer<BlockState>> f_188227_ = PalettedContainer.m_238371_(Block.f_49791_, BlockState.f_61039_, PalettedContainer.Strategy.f_188137_, Blocks.f_50016_.m_49966_());
+-   public static final Codec<PalettedContainer<BlockState>> f_188227_ = PalettedContainer.m_238371_(Block.f_49791_, BlockState.f_61039_, PalettedContainer.Strategy.f_188137_, Blocks.f_50016_.m_49966_());
 +   public static final Codec<PalettedContainer<BlockState>> f_188227_ = PalettedContainer.m_238371_(Block.f_49791_, BlockState.f_61039_, PalettedContainer.Strategy.f_188137_, Blocks.f_50016_.m_49966_()); // CraftBukkit - read/write
     private static final Logger f_63449_ = LogUtils.getLogger();
     private static final String f_156511_ = "UpgradeData";

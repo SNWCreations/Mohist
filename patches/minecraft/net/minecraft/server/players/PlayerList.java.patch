@@ -91,14 +91,7 @@
     private final Map<UUID, ServerPlayer> f_11197_ = Maps.newHashMap();
     private final UserBanList f_11198_ = new UserBanList(f_11189_);
     private final IpBanList f_11199_ = new IpBanList(f_11190_);
-@@ -126,14 +_,22 @@
-    private boolean f_11205_;
-    private final LayeredRegistryAccess<RegistryLayer> f_243858_;
-    private final RegistryAccess.Frozen f_256838_;
--   protected final int f_11193_;
-+   public int f_11193_;
-    private int f_11207_;
-    private int f_184208_;
+@@ -132,8 +_,16 @@
     private boolean f_11209_;
     private static final boolean f_143988_ = false;
     private int f_11210_;
@@ -259,7 +252,7 @@
           });
           if (entity1 != null) {
              UUID uuid;
-@@ -255,9 +_,11 @@
+@@ -255,6 +_,8 @@
        }
  
        p_11263_.m_143429_();
@@ -267,11 +260,7 @@
 +      f_11188_.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", p_11263_.m_7755_().getString(), s1, p_11263_.m_19879_(), serverlevel1.K.m_5462_(), p_11263_.m_20185_(), p_11263_.m_20186_(), p_11263_.m_20189_());
     }
  
--   protected void m_11273_(ServerScoreboard p_11274_, ServerPlayer p_11275_) {
-+   public void m_11273_(ServerScoreboard p_11274_, ServerPlayer p_11275_) {
-       Set<Objective> set = Sets.newHashSet();
- 
-       for(PlayerTeam playerteam : p_11274_.m_83491_()) {
+    public void m_11273_(ServerScoreboard p_11274_, ServerPlayer p_11275_) {
 @@ -278,6 +_,7 @@
     }
  

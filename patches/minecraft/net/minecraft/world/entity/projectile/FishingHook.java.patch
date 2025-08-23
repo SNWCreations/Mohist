@@ -55,16 +55,7 @@
 +      if (hitresult.m_6662_() == HitResult.Type.MISS || !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) this.m_6532_(hitresult);
     }
  
-    protected boolean m_5603_(Entity p_37135_) {
-@@ -261,7 +_,7 @@
-       this.m_20256_(this.m_20184_().m_82541_().m_82490_(p_37142_.m_82448_(this)));
-    }
- 
--   private void m_150157_(@Nullable Entity p_150158_) {
-+   public void m_150157_(@Nullable Entity p_150158_) {
-       this.f_37094_ = p_150158_;
-       this.m_20088_().m_135381_(f_37101_, p_150158_ == null ? 0 : p_150158_.m_19879_() + 1);
-    }
+    public boolean m_5603_(Entity p_37135_) {
 @@ -270,11 +_,11 @@
        ServerLevel serverlevel = (ServerLevel)this.m_9236_();
        int i = 1;
@@ -210,21 +201,3 @@
        } else {
           return 0;
        }
-@@ -450,7 +_,7 @@
-       super.m_7822_(p_37123_);
-    }
- 
--   protected void m_150155_(Entity p_150156_) {
-+   public void m_150155_(Entity p_150156_) {
-       Entity entity = this.m_19749_();
-       if (entity != null) {
-          Vec3 vec3 = (new Vec3(entity.m_20185_() - this.m_20185_(), entity.m_20186_() - this.m_20186_(), entity.m_20189_() - this.m_20189_())).m_82490_(0.1D);
-@@ -514,7 +_,7 @@
- 
-    }
- 
--   static enum FishHookState {
-+   public static enum FishHookState {
-       FLYING,
-       HOOKED_IN_ENTITY,
-       BOBBING;

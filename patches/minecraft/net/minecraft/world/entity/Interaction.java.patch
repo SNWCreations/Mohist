@@ -35,12 +35,3 @@
           }
  
           return !this.m_271819_();
-@@ -190,7 +_,7 @@
-       return this.m_271772_().m_20393_(this.m_20182_());
-    }
- 
--   static record PlayerAction(UUID f_271379_, long f_271492_) {
-+   public static record PlayerAction(UUID f_271379_, long f_271492_) {
-       public static final Codec<Interaction.PlayerAction> f_271433_ = RecordCodecBuilder.create((p_273237_) -> {
-          return p_273237_.group(UUIDUtil.f_235867_.fieldOf("player").forGetter(Interaction.PlayerAction::f_271379_), Codec.LONG.fieldOf("timestamp").forGetter(Interaction.PlayerAction::f_271492_)).apply(p_273237_, Interaction.PlayerAction::new);
-       });

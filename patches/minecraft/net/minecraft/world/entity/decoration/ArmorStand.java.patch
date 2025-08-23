@@ -172,7 +172,7 @@
     }
  
     private void m_31566_() {
-@@ -592,11 +_,30 @@
+@@ -592,10 +_,29 @@
        return this.m_31666_();
     }
  
@@ -191,7 +191,7 @@
        this.m_142687_(Entity.RemovalReason.KILLED);
        this.m_146850_(GameEvent.f_223707_);
     }
- 
++
 +   // Mohist+ start
 +   private java.util.concurrent.atomic.AtomicBoolean mohist$callKillEvent = new java.util.concurrent.atomic.AtomicBoolean(true);
 +   public void kill(boolean willCallEvent) {
@@ -199,25 +199,6 @@
 +      m_6074_();
 +   }
 +   // Mohist+ end
-+
+ 
     public boolean m_6128_() {
        return this.m_20145_();
-    }
-@@ -609,7 +_,7 @@
-       return this.m_31677_();
-    }
- 
--   private void m_31603_(boolean p_31604_) {
-+   public void m_31603_(boolean p_31604_) {
-       this.f_19804_.m_135381_(f_31524_, this.m_31569_(this.f_19804_.m_135370_(f_31524_), 1, p_31604_));
-    }
- 
-@@ -633,7 +_,7 @@
-       return (this.f_19804_.m_135370_(f_31524_) & 8) != 0;
-    }
- 
--   private void m_31681_(boolean p_31682_) {
-+   public void m_31681_(boolean p_31682_) {
-       this.f_19804_.m_135381_(f_31524_, this.m_31569_(this.f_19804_.m_135370_(f_31524_), 16, p_31682_));
-    }
- 

@@ -11,19 +11,16 @@
  import com.mojang.authlib.GameProfile;
  import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
  import com.mojang.logging.LogUtils;
-@@ -43,15 +_,16 @@
+@@ -43,7 +_,7 @@
     private static final int f_143698_ = 600;
     private static final RandomSource f_10016_ = RandomSource.m_216327_();
     private final byte[] f_252396_;
 -   final MinecraftServer f_10018_;
--   final Connection f_10013_;
--   ServerLoginPacketListenerImpl.State f_10019_ = ServerLoginPacketListenerImpl.State.HELLO;
 +   public final MinecraftServer f_10018_;
-+   public final Connection f_10013_;
-+   public ServerLoginPacketListenerImpl.State f_10019_ = ServerLoginPacketListenerImpl.State.HELLO;
+    public final Connection f_10013_;
+    public ServerLoginPacketListenerImpl.State f_10019_ = ServerLoginPacketListenerImpl.State.HELLO;
     private int f_10020_;
-    @Nullable
-    public GameProfile f_10021_;
+@@ -52,6 +_,7 @@
     private final String f_10022_ = "";
     @Nullable
     private ServerPlayer f_10024_;
@@ -267,12 +264,3 @@
        this.m_10053_(Component.m_237115_("multiplayer.disconnect.unexpected_query_response"));
     }
  
-@@ -235,7 +_,7 @@
-       return new GameProfile(uuid, p_10039_.getName());
-    }
- 
--   static enum State {
-+   public static enum State {
-       HELLO,
-       KEY,
-       AUTHENTICATING,

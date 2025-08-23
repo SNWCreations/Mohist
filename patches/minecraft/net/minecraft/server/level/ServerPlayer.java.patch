@@ -210,8 +210,8 @@
     private boolean f_143378_;
 -   private boolean f_184127_;
 +   private boolean f_184127_ = true;
-    private WardenSpawnTracker f_244516_ = new WardenSpawnTracker(0, 0, 0);
-    private final ContainerSynchronizer f_143379_ = new ContainerSynchronizer() {
+    public WardenSpawnTracker f_244516_ = new WardenSpawnTracker(0, 0, 0);
+    public final ContainerSynchronizer f_143379_ = new ContainerSynchronizer() {
        public void m_142589_(AbstractContainerMenu p_143448_, NonNullList<ItemStack> p_143449_, ItemStack p_143450_, int[] p_143451_) {
 @@ -244,6 +_,30 @@
     public int f_8940_;
@@ -297,7 +297,7 @@
 +   }
 +   // CraftBukkit end
  
-    private void m_9201_(ServerLevel p_9202_) {
+    public void m_9201_(ServerLevel p_9202_) {
        BlockPos blockpos = p_9202_.m_220360_();
 -      if (p_9202_.m_6042_().f_223549_() && p_9202_.m_7654_().m_129910_().m_5464_() != GameType.ADVENTURE) {
 +      if (p_9202_.m_6042_().f_223549_() && (p_9202_.K == null ? p_9202_.m_7654_().m_129910_().m_5464_() != GameType.ADVENTURE : p_9202_.K.m_5464_() != GameType.ADVENTURE)) {
@@ -835,11 +835,10 @@
           if (!optional1.isPresent()) {
              f_8907_.error("Unable to create a portal, likely target out of worldborder");
           }
-@@ -802,7 +_,21 @@
+@@ -802,6 +_,20 @@
        }
     }
  
--   private void m_9209_(ServerLevel p_9210_) {
 +   @Override
 +   protected Optional<FoundRectangle> getExitPortal(ServerLevel worldserver, BlockPos blockposition, boolean flag, WorldBorder worldborder, int searchRadius, boolean canCreatePortal, int createRadius) {
 +      Optional<FoundRectangle> optional = super.getExitPortal(worldserver, blockposition, flag, worldborder, searchRadius, canCreatePortal, createRadius);
@@ -854,10 +853,9 @@
 +      return optional1;
 +   }
 +
-+   public void m_9209_(ServerLevel p_9210_) {
+    public void m_9209_(ServerLevel p_9210_) {
        ResourceKey<Level> resourcekey = p_9210_.m_46472_();
        ResourceKey<Level> resourcekey1 = this.m_9236_().m_46472_();
-       CriteriaTriggers.f_10588_.m_19757_(this, resourcekey, resourcekey1);
 @@ -829,19 +_,25 @@
        this.f_36096_.m_38946_();
     }

@@ -33,7 +33,7 @@
     public static final float f_252504_ = 0.5F;
 -   private Potion f_19701_ = Potions.f_43598_;
 +   public Potion f_19701_ = Potions.f_43598_;
-    public final List<MobEffectInstance> f_19685_ = Lists.newArrayList();
+    public List<MobEffectInstance> f_19685_ = Lists.newArrayList();
     private final Map<Entity, Integer> f_19686_ = Maps.newHashMap();
     private int f_19687_ = 600;
 @@ -99,7 +_,7 @@

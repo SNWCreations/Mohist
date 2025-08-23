@@ -59,12 +59,10 @@
     }
  
     public void m_8107_() {
-@@ -236,7 +_,8 @@
-       super.m_8107_();
+@@ -237,6 +_,7 @@
     }
  
--   private void m_34278_(int p_34279_) {
-+   public void m_34278_(int p_34279_) {
+    public void m_34278_(int p_34279_) {
 +      this.lastTick = MinecraftServer.currentTick; // CraftBukkit
        this.f_34266_ = p_34279_;
        this.m_20088_().m_135381_(f_34261_, true);

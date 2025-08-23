@@ -25,7 +25,7 @@
  public class RecipeManager extends SimpleJsonResourceReloadListener {
 @@ -37,34 +_,63 @@
     public Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> f_44007_ = ImmutableMap.of();
-    private Map<ResourceLocation, Recipe<?>> f_199900_ = ImmutableMap.of();
+    public Map<ResourceLocation, Recipe<?>> f_199900_ = ImmutableMap.of();
     private boolean f_44008_;
 +   private final net.minecraftforge.common.crafting.conditions.ICondition.IContext context; //Forge: add context
 +   public Map<RecipeType<?>, Object2ObjectLinkedOpenHashMap<ResourceLocation, Recipe<?>>> recipesCB = ImmutableMap.of(); // CraftBukkit  // Mohist use obf name

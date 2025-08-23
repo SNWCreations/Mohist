@@ -48,7 +48,7 @@
 -   private final RandomState f_214834_;
 +   private RandomState f_214834_;
     private final ChunkGeneratorStructureState f_254626_;
-    private final Supplier<DimensionDataStorage> f_140137_;
+    public final Supplier<DimensionDataStorage> f_140137_;
     private final PoiManager f_140138_;
 @@ -144,6 +_,10 @@
     private final Queue<Runnable> f_140125_ = Queues.newConcurrentLinkedQueue();
@@ -139,15 +139,6 @@
              }
  
              return levelchunk;
-@@ -797,7 +_,7 @@
-       }
-    }
- 
--   private boolean m_140258_(ChunkAccess p_140259_) {
-+   public boolean m_140258_(ChunkAccess p_140259_) {
-       this.f_140138_.m_63796_(p_140259_.m_7697_());
-       if (!p_140259_.m_6344_()) {
-          return false;
 @@ -819,6 +_,7 @@
  
              this.f_140133_.m_46473_().m_6174_("chunkSave");
@@ -223,7 +214,7 @@
 @@ -1132,9 +_,10 @@
     }
  
-    protected void m_140199_(Entity p_140200_) {
+    public void m_140199_(Entity p_140200_) {
 -      if (!(p_140200_ instanceof EnderDragonPart)) {
 +      if (!(p_140200_ instanceof net.minecraftforge.entity.PartEntity)) {
           EntityType<?> entitytype = p_140200_.m_6095_();
@@ -291,7 +282,7 @@
 +      net.minecraftforge.event.ForgeEventFactory.fireChunkWatch(p_183761_, p_183763_, this.f_140133_);
     }
  
-    protected PoiManager m_140424_() {
+    public PoiManager m_140424_() {
 @@ -1324,7 +_,7 @@
        public final Set<ServerPlayerConnection> f_140475_ = Sets.newIdentityHashSet();
  

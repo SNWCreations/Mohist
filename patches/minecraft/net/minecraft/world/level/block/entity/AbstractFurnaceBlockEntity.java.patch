@@ -37,7 +37,7 @@
     int f_58317_;
 @@ -103,12 +_,16 @@
     };
-    private final Object2IntOpenHashMap<ResourceLocation> f_58320_ = new Object2IntOpenHashMap<>();
+    public final Object2IntOpenHashMap<ResourceLocation> f_58320_ = new Object2IntOpenHashMap<>();
     private final RecipeManager.CachedCheck<Container, ? extends AbstractCookingRecipe> f_222691_;
 +   protected static BlockPos worldPosition$mohist;
  

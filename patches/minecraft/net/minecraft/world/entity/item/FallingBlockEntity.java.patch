@@ -25,20 +25,15 @@
  import org.slf4j.Logger;
  
  public class FallingBlockEntity extends Entity {
-@@ -51,10 +_,10 @@
+@@ -51,7 +_,7 @@
     private BlockState f_31946_ = Blocks.f_49992_.m_49966_();
     public int f_31942_;
     public boolean f_31943_ = true;
 -   private boolean f_31947_;
 +   public boolean f_31947_;
     public boolean f_31939_;
--   private int f_31940_ = 40;
--   private float f_149641_;
-+   public int f_31940_ = 40;
-+   public float f_149641_;
-    @Nullable
-    public CompoundTag f_31944_;
-    protected static final EntityDataAccessor<BlockPos> f_31945_ = SynchedEntityData.m_135353_(FallingBlockEntity.class, EntityDataSerializers.f_135038_);
+    public int f_31940_ = 40;
+    public float f_149641_;
 @@ -75,13 +_,26 @@
        this.m_31959_(this.m_20183_());
     }

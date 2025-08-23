@@ -8,12 +8,3 @@
  
     public DedicatedServerProperties(Properties p_180926_) {
        super(p_180926_);
-@@ -189,7 +_,7 @@
-       return this.f_244504_.m_247373_(p_250466_);
-    }
- 
--   static record WorldDimensionData(JsonObject f_244404_, String f_243780_) {
-+   public static record WorldDimensionData(JsonObject f_244404_, String f_243780_) {
-       private static final Map<String, ResourceKey<WorldPreset>> f_244358_ = Map.of("default", WorldPresets.f_226437_, "largebiomes", WorldPresets.f_226439_);
- 
-       public WorldDimensions m_247373_(RegistryAccess p_248812_) {

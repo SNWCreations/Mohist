@@ -17,12 +17,9 @@
  
     protected AbstractHorse(EntityType<? extends AbstractHorse> p_30531_, Level p_30532_) {
        super(p_30531_, p_30532_);
-@@ -310,9 +_,9 @@
-       return 2;
-    }
+@@ -312,7 +_,7 @@
  
--   protected void m_30625_() {
-+   public void m_30625_() {
+    public void m_30625_() {
        SimpleContainer simplecontainer = this.f_30520_;
 -      this.f_30520_ = new SimpleContainer(this.m_7506_());
 +      this.f_30520_ = new SimpleContainer(this.m_7506_(), (org.bukkit.entity.AbstractHorse) this.getBukkitEntity()); // CraftBukkit
@@ -57,7 +54,7 @@
 +      return this.maxDomestication; // CraftBukkit - return stored max domestication instead of 100
     }
  
-    protected float m_6121_() {
+    public float m_6121_() {
 @@ -482,7 +_,7 @@
        }
  

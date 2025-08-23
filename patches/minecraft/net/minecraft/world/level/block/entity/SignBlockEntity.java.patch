@@ -18,7 +18,7 @@
  import net.minecraft.server.network.FilteredText;
  import net.minecraft.util.Mth;
  import net.minecraft.world.entity.Entity;
-@@ -27,14 +_,18 @@
+@@ -27,9 +_,13 @@
  import net.minecraft.world.level.block.state.BlockState;
  import net.minecraft.world.phys.Vec2;
  import net.minecraft.world.phys.Vec3;
@@ -33,12 +33,6 @@
     private static final Logger f_276608_ = LogUtils.getLogger();
     private static final int f_243840_ = 90;
     private static final int f_243968_ = 10;
-    @Nullable
--   private UUID f_59722_;
-+   public UUID f_59722_;
-    private SignText f_276598_ = this.m_277006_();
-    private SignText f_276476_ = this.m_277006_();
-    private boolean f_276544_;
 @@ -142,12 +_,14 @@
     public void m_277134_(Player p_278048_, boolean p_278103_, List<FilteredText> p_277990_) {
        if (!this.m_277118_() && p_278048_.m_20148_().equals(this.m_155726_()) && this.f_58857_ != null) {

@@ -104,15 +104,6 @@
     public double f_19854_;
     public double f_19855_;
     public double f_19856_;
-@@ -161,7 +_,7 @@
-    public float f_19859_;
-    public float f_19860_;
-    private AABB f_19828_ = f_19845_;
--   private boolean f_19861_;
-+   public boolean f_19861_;
-    public boolean f_19862_;
-    public boolean f_19863_;
-    public boolean f_201939_;
 @@ -181,14 +_,16 @@
     public double f_19790_;
     public double f_19791_;
@@ -123,8 +114,7 @@
     protected final RandomSource f_19796_ = RandomSource.m_216327_();
     public int f_19797_;
     public int f_19831_ = -this.m_6101_();
--   protected boolean f_19798_;
-+   public boolean f_19798_;
+    public boolean f_19798_;
 +   @Deprecated // Forge: Use forgeFluidTypeHeight instead
     protected Object2DoubleMap<TagKey<Fluid>> f_19799_ = new Object2DoubleArrayMap<>(2);
     protected boolean f_19800_;
@@ -269,7 +259,7 @@
 @@ -373,6 +_,32 @@
     }
  
-    protected void m_19915_(float p_19916_, float p_19917_) {
+    public void m_19915_(float p_19916_, float p_19917_) {
 +      // CraftBukkit start - yaw was sometimes set to NaN, so we need to set it back to 0
 +      if (Float.isNaN(p_19916_)) {
 +         p_19916_ = 0;
@@ -1007,7 +997,7 @@
        this.m_20115_(4, p_20283_);
     }
  
-@@ -2201,15 +_,18 @@
+@@ -2201,8 +_,11 @@
        return this.m_5647_() != null ? this.m_5647_().m_83536_(p_20032_) : false;
     }
  
@@ -1019,16 +1009,7 @@
 +      }
     }
  
--   protected boolean m_20291_(int p_20292_) {
-+   public boolean m_20291_(int p_20292_) {
-       return (this.f_19804_.m_135370_(f_19805_) & 1 << p_20292_) != 0;
-    }
- 
--   protected void m_20115_(int p_20116_, boolean p_20117_) {
-+   public void m_20115_(int p_20116_, boolean p_20117_) {
-       byte b0 = this.f_19804_.m_135370_(f_19805_);
-       if (p_20117_) {
-          this.f_19804_.m_135381_(f_19805_, (byte)(b0 | 1 << p_20116_));
+    public boolean m_20291_(int p_20292_) {
 @@ -2220,7 +_,7 @@
     }
  
@@ -1407,15 +1388,6 @@
        return () -> {
           return this.m_146920_().iterator();
        };
-@@ -2939,7 +_,7 @@
-       return SoundSource.NEUTRAL;
-    }
- 
--   protected int m_6101_() {
-+   public int m_6101_() {
-       return 1;
-    }
- 
 @@ -2980,9 +_,23 @@
        this.f_19859_ = this.m_146908_();
     }
@@ -1563,15 +1535,6 @@
     public void m_274367_(float p_275672_) {
        this.f_19793_ = p_275672_;
     }
-@@ -3294,7 +_,7 @@
-       this.f_146801_.m_142472_(p_146876_);
-    }
- 
--   protected void m_146912_() {
-+   public void m_146912_() {
-       this.f_146795_ = null;
-    }
- 
 @@ -3320,6 +_,138 @@
        return true;
     }
