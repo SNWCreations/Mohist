@@ -36,7 +36,7 @@
           if (flag) {
              this.m_37552_();
 -         } else if (!list.isEmpty()) {
-+         } else if (true || !list.isEmpty()) { // CraftBukkit - Call event even if no effects to apply
++         } else if (Boolean.TRUE || !list.isEmpty()) { // CraftBukkit - Call event even if no effects to apply // Mohist+ - Avoid Mixin conflict with boolean literals
              if (this.m_37553_()) {
                 this.m_37537_(itemstack, potion);
              } else {

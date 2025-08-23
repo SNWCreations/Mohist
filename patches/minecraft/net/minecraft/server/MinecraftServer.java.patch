@@ -120,7 +120,7 @@
        this.f_244176_ = p_236726_.f_244542_();
        this.f_129749_ = p_236726_.f_206895_();
 -      if (!this.f_244176_.m_247579_().m_175515_(Registries.f_256862_).m_142003_(LevelStem.f_63971_)) {
-+      if (false && !this.f_244176_.m_247579_().m_175515_(Registries.f_256862_).m_142003_(LevelStem.f_63971_)) {
++      if (Boolean.FALSE && !this.f_244176_.m_247579_().m_175515_(Registries.f_256862_).m_142003_(LevelStem.f_63971_)) {
           throw new IllegalStateException("Missing Overworld dimension data");
        } else {
           this.f_129747_ = p_236727_;

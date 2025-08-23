@@ -151,7 +151,7 @@
           } else if (this.f_38846_ == 2) {
              if (!this.f_38847_.isEmpty()) {
 -               if (this.f_38847_.size() == 1) {
-+               if (false && this.f_38847_.size() == 1) { // CraftBukkit - treat everything as a drag since we are unable to easily call InventoryClickEvent instead
++               if (Boolean.FALSE && this.f_38847_.size() == 1) { // CraftBukkit - treat everything as a drag since we are unable to easily call InventoryClickEvent instead
                    int i1 = (this.f_38847_.iterator().next()).f_40219_;
                    this.m_38951_();
                    this.m_150430_(i1, this.f_38845_, ClickType.PICKUP, p_150434_);

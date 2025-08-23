@@ -959,7 +959,7 @@
              ServerLevel serverlevel1 = minecraftserver.m_129880_(resourcekey);
 -            if (serverlevel1 != null && minecraftserver.m_7079_() && !this.m_20159_() && this.f_19818_++ >= i) {
 -               this.m_9236_().m_46473_().m_6180_("portal");
-+            if (true && serverlevel1 != null && minecraftserver.m_7079_() && !this.m_20159_() && this.f_19818_++ >= i) { // CraftBukkit
++            if (Boolean.TRUE && serverlevel1 != null && minecraftserver.m_7079_() && !this.m_20159_() && this.f_19818_++ >= i) { // CraftBukkit // Mohist+ - Avoid Mixin conflict with boolean literals
 +               this.f_19853_.m_46473_().m_6180_("portal");
                 this.f_19818_ = i;
                 this.m_20091_();

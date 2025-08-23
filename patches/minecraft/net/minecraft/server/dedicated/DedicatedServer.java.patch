@@ -170,7 +170,7 @@
           }
  
 -         if (this.m_139669_() > 0L) {
-+         if (false && this.m_139669_() > 0L) { // Spigot - disable
++         if (Boolean.FALSE && this.m_139669_() > 0L) { // Spigot - disable
              Thread thread1 = new Thread(new ServerWatchdog(this));
              thread1.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandlerWithName(f_139598_));
              thread1.setName("Server Watchdog");

@@ -219,7 +219,7 @@
 -         if (flag) {
 -            ExperienceOrb.m_147082_((ServerLevel)this.m_9236_(), this.m_20182_(), Mth.m_14143_((float)i * 0.2F));
 +      if (this.f_31084_ == 200 && this.f_19853_ instanceof ServerLevel) {
-+         if (true) { // CraftBukkit - SPIGOT-2420: Already checked for the game rule when calculating the xp
++         if (Boolean.TRUE) { // CraftBukkit - SPIGOT-2420: Already checked for the game rule when calculating the xp
 +            int award = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.unlimitedLastHurtByPlayer, Mth.m_14143_((float)i * 0.2F));
 +            ExperienceOrb.m_147082_((ServerLevel)this.f_19853_, this.m_20182_(), award);
           }

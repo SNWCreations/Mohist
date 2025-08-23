@@ -638,7 +638,7 @@
 -                  this.m_6728_(livingentity);
 +
 +         // CraftBukkit - Moved into damageEntity0(DamageSource, float)
-+         if (Boolean.parseBoolean("false") && p_21017_ > 0.0F && this.m_21275_(p_21016_)) { // Mohist - Fix Mixin conflict
++         if (Boolean.FALSE && p_21017_ > 0.0F && this.m_21275_(p_21016_)) { // Mohist - Fix Mixin conflict
 +            net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(this, p_21016_, p_21017_);
 +            if(!ev.isCanceled()) {
 +               if(ev.shieldTakesDamage()) this.m_7909_(p_21017_);
@@ -699,7 +699,7 @@
           }
  
 -         if (p_21016_.m_269533_(DamageTypeTags.f_268627_) && !this.m_6844_(EquipmentSlot.HEAD).m_41619_()) {
-+         if (false && p_21016_.m_269533_(DamageTypeTags.f_268627_) && !this.m_6844_(EquipmentSlot.HEAD).m_41619_()) {
++         if (Boolean.FALSE && p_21016_.m_269533_(DamageTypeTags.f_268627_) && !this.m_6844_(EquipmentSlot.HEAD).m_41619_()) {
              this.m_142642_(p_21016_, p_21017_);
              p_21017_ *= 0.75F;
           }

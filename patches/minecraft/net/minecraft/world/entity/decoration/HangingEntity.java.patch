@@ -154,7 +154,7 @@
  
     public void m_5997_(double p_31744_, double p_31745_, double p_31746_) {
 -      if (!this.m_9236_().f_46443_ && !this.m_213877_() && p_31744_ * p_31744_ + p_31745_ * p_31745_ + p_31746_ * p_31746_ > 0.0D) {
-+      if (false && !this.m_9236_().f_46443_ && !this.m_213877_() && p_31744_ * p_31744_ + p_31745_ * p_31745_ + p_31746_ * p_31746_ > 0.0D) { // CraftBukkit - not needed
++      if (Boolean.FALSE && !this.m_9236_().f_46443_ && !this.m_213877_() && p_31744_ * p_31744_ + p_31745_ * p_31745_ + p_31746_ * p_31746_ > 0.0D) { // CraftBukkit - not needed
           this.m_6074_();
           this.m_5553_((Entity)null);
        }
@@ -163,7 +163,7 @@
     public void m_7378_(CompoundTag p_31730_) {
        BlockPos blockpos = new BlockPos(p_31730_.m_128451_("TileX"), p_31730_.m_128451_("TileY"), p_31730_.m_128451_("TileZ"));
 -      if (!blockpos.m_123314_(this.m_20183_(), 16.0D)) {
-+      if (Boolean.parseBoolean("false") && !blockpos.m_123314_(this.m_20183_(), 16.0D)) {
++      if (Boolean.FALSE && !blockpos.m_123314_(this.m_20183_(), 16.0D)) {
           f_238173_.error("Hanging entity at invalid position: {}", (Object)blockpos);
        } else {
           this.f_31698_ = blockpos;
