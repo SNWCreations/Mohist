@@ -472,7 +472,6 @@ public final class CraftServer implements Server {
             }
         }
         if (type == PluginLoadOrder.POSTWORLD) {
-            MohistPlugin.init(this);
             // Spigot start - Allow vanilla commands to be forced to be the main command
             setVanillaCommands(true);
             commandMap.setFallbackCommands();

@@ -66,6 +66,7 @@ public final class SimplePluginManager implements PluginManager {
 
         defaultPerms.put(true, new LinkedHashSet<Permission>());
         defaultPerms.put(false, new LinkedHashSet<Permission>());
+        plugins.add(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Use our own marker
     }
 
     /**
@@ -499,9 +500,6 @@ public final class SimplePluginManager implements PluginManager {
 
     @Override
     public void disablePlugin(@NotNull final Plugin plugin) {
-        if (plugin.getName().equals("mohist")) {
-            return;
-        }
         if (plugin.isEnabled()) {
             try {
                 plugin.getPluginLoader().disablePlugin(plugin);
@@ -547,6 +545,7 @@ public final class SimplePluginManager implements PluginManager {
     @Override
     public void clearPlugins() {
         synchronized (this) {
+            plugins.remove(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Use our own marker
             disablePlugins();
             plugins.clear();
             lookupNames.clear();
