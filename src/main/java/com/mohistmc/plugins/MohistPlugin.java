@@ -7,11 +7,17 @@ import com.mohistmc.ai.koukou.AIConfig;
 import com.mohistmc.ai.koukou.ApiController;
 */
 // Mohist+ end
+// Mohist+ start - Remove this feature as it should be implemented by a plugin
+/*
 import com.mohistmc.plugins.back.BackCommands;
 import com.mohistmc.plugins.back.BackConfig;
+*/
+// Mohist+ end
 import com.mohistmc.plugins.ban.BanConfig;
 import com.mohistmc.plugins.ban.BanListener;
 import com.mohistmc.plugins.item.ItemsConfig;
+// Mohist+ start - Remove these features as it should be implemented by a plugin
+/*
 import com.mohistmc.plugins.pluginmanager.Control;
 import com.mohistmc.plugins.tpa.TpaComamands;
 import com.mohistmc.plugins.tpa.TpacceptCommands;
@@ -21,6 +27,8 @@ import com.mohistmc.plugins.warps.WarpsConfig;
 import com.mohistmc.plugins.world.WorldManage;
 import com.mohistmc.plugins.world.commands.WorldsCommands;
 import com.mohistmc.plugins.world.listener.InventoryClickListener;
+*/
+// Mohist+ end
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,7 +57,9 @@ public class MohistPlugin {
     public static Logger LOGGER = LogManager.getLogger("MohistPlugin");
 
     public static void init(Server server) {
-        if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
+        // if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable(); // Mohist+ - Remove this feature as it should be implemented by a plugin
+        // Mohist+ start - Remove the internal Mohist plugin, we use our own way to implement this placeholder
+        /*
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
             String data;
@@ -68,19 +78,27 @@ public class MohistPlugin {
                 }
             }
         }
-        EntityClear.start();
+        */
+        // Mohist+ end
+        // EntityClear.start(); // Mohist+ - Remove this feature as it should be implemented by a plugin
         // ApiController.init(); // Mohist+ - Remove AI stuff
     }
 
     public static void initConfig() {
         ItemsConfig.init();
+        // Mohist+ start - Remove these features as it should be implemented by a plugin
+        /*
         BackConfig.init();
         WarpsConfig.init();
+        */
+        // Mohist+ end
         BanConfig.init();
         // AIConfig.init(); // Mohist+ - Remove AI stuff
     }
 
     public static void registerCommands(Map<String, Command> map) {
+        // Mohist+ start - Remove these features as they should be implemented by a plugin
+        /*
         if (MohistConfig.yml.getBoolean("worldmanage", true)) {
             map.put("worlds", new WorldsCommands("worlds"));
         }
@@ -93,18 +111,26 @@ public class MohistPlugin {
         if (MohistConfig.yml.getBoolean("back.enable", false)) {
             map.put("back", new BackCommands("back"));
         }
+        */
+        // Mohist+ end
     }
 
     public static void registerListener(Event event) {
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
         if (event instanceof InventoryClickEvent inventoryClickEvent) {
             InventoryClickListener.init(inventoryClickEvent);
         }
+        */
+        // Mohist+ end
         if (event instanceof PrepareAnvilEvent prepareAnvilEvent) {
             EnchantmentFix.anvilListener(prepareAnvilEvent);
         }
         if (event instanceof InventoryCloseEvent event1) {
             BanListener.save(event1);
         }
+        // Mohist+ start - Remove these features as it should be implemented by a plugin
+        /*
         if (event instanceof PluginEnableEvent event1) {
             PluginHooks.register(event1);
         }
@@ -114,6 +140,8 @@ public class MohistPlugin {
         if (event instanceof PlayerDeathEvent event1) {
             BackCommands.hooktDeath(event1);
         }
+        */
+        // Mohist+ end
     }
 
 }

@@ -645,7 +645,7 @@
     public void m_8622_(ServerPlayer p_8623_) {
        this.m_8853_(p_8623_);
     }
-@@ -828,25 +_,47 @@
+@@ -828,25 +_,46 @@
     }
  
     private void m_8853_(ServerPlayer p_8854_) {
@@ -670,7 +670,6 @@
           return false;
        } else {
 -         return this.f_143244_.m_157533_(p_8873_);
-+         if (p_8873_ instanceof Villager && MohistConfig.custom_no_villager) return false;
 +         if (BanEntity.check(p_8873_)) {
 +            return false;
 +         }

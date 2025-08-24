@@ -33,7 +33,7 @@ include ':clean'
 include ':mohist'
 
 include 'mohistlauncher'
-include 'mohistplugins'
+// include 'mohistplugins' // Mohist+ - Remove this as it is useless
 
 project(":mcp").projectDir = file("projects/mcp")
 project(":clean").projectDir = file("projects/clean")

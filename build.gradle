@@ -827,9 +827,13 @@ project(':mohist') {
             rename { 'data/lowcodelanguage-' + MC_VERSION + '-' + FORGE_VERSION + '.jar' }
         }
 
+        // Mohist+ start - Remove this as it is useless
+        /*
         from(project(':mohistplugins').tasks.jar.outputs) {
             rename { 'data/mohistplugins-' + MC_VERSION + '.jar' }
         }
+        */
+        // Mohist+ end
 
         from(zipTree(project(':mohistlauncher').tasks.jar.outputs.getFiles().asPath.replace(".jar", "-all.jar"))) {
             into ""

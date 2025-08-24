@@ -129,7 +129,7 @@
        f_139598_.info("Default game type: {}", (Object)dedicatedserverproperties.f_139740_);
        InetAddress inetaddress = null;
        if (!this.m_130009_().isEmpty()) {
-@@ -153,14 +_,35 @@
+@@ -153,14 +_,39 @@
           return false;
        } else {
           this.m_129823_(new DedicatedPlayerList(this, this.m_247573_(), this.f_129745_));
@@ -142,9 +142,13 @@
 +         MohistConfig.init((java.io.File) options.valueOf("mohist-settings"));
 +         MohistPlugin.initConfig();
 +         MohistConfig.registerCommands();
++         // Mohist+ start - Remove this feature as it should be implemented by a plugin
++         /*
 +         if (MohistConfig.motdEnable) {
-+            this.m_129989_(MohistConfig.motd());
++            this.setMotd(MohistConfig.motd());
 +         }
++         */
++         // Mohist+ end
 +         // Mohist end
 +         // CraftBukkit start
 +         server.loadPlugins();

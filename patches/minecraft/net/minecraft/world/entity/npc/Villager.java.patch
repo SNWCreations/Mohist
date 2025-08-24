@@ -1,14 +1,5 @@
 --- a/net/minecraft/world/entity/npc/Villager.java
 +++ b/net/minecraft/world/entity/npc/Villager.java
-@@ -4,6 +_,8 @@
- import com.google.common.collect.ImmutableList;
- import com.google.common.collect.ImmutableMap;
- import com.google.common.collect.ImmutableSet;
-+import com.mohistmc.MohistConfig;
-+import com.mohistmc.optimizations.OptVillager;
- import com.mojang.datafixers.util.Pair;
- import com.mojang.logging.LogUtils;
- import com.mojang.serialization.DataResult;
 @@ -20,7 +_,6 @@
  import net.minecraft.core.GlobalPos;
  import net.minecraft.core.Holder;
@@ -28,7 +19,7 @@
  import org.slf4j.Logger;
  
  public class Villager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
-@@ -204,10 +_,25 @@
+@@ -204,10 +_,21 @@
        return this.f_35366_;
     }
  
@@ -45,13 +36,8 @@
 +
     protected void m_8024_() {
        this.m_9236_().m_46473_().m_6180_("villagerBrain");
--      this.m_6274_().m_21865_((ServerLevel)this.m_9236_(), this);
+       this.m_6274_().m_21865_((ServerLevel)this.m_9236_(), this);
 -      this.m_9236_().m_46473_().m_7238_();
-+      // Mohist start
-+      if (this.m_9236_().spigotConfig.tickInactiveVillagers && OptVillager.getInstance().isLobotomized(this)) {
-+         this.m_6274_().m_21865_((ServerLevel)this.m_9236_(), this);
-+      }
-+      // Mohist end
 +      this.f_19853_.m_46473_().m_7238_();
        if (this.f_35366_) {
           this.f_35366_ = false;
@@ -65,16 +51,6 @@
           }
        }
  
-@@ -245,6 +_,9 @@
-    }
- 
-    public void m_8119_() {
-+      if (MohistConfig.custom_no_villager) {
-+         m_146870_();
-+      }
-       super.m_8119_();
-       if (this.m_35303_() > 0) {
-          this.m_35319_(this.m_35303_() - 1);
 @@ -255,7 +_,7 @@
  
     public InteractionResult m_6071_(Player p_35472_, InteractionHand p_35473_) {

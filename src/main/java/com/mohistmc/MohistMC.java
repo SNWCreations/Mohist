@@ -2,9 +2,9 @@ package com.mohistmc;
 
 import com.mohistmc.eventhandler.EventDispatcherRegistry;
 import com.mohistmc.i18n.i18n;
-import com.mohistmc.plugins.MohistProxySelector;
+// import com.mohistmc.plugins.MohistProxySelector; // Mohist+ - Remove this feature as it should be implemented by a plugin
 import com.mohistmc.util.VersionInfo;
-import java.net.ProxySelector;
+// import java.net.ProxySelector; // Mohist+ - Remove this feature as it should be implemented by a plugin
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class MohistMC {
         //TODO: do something when mod loading
         LOGGER.info("Mohist mod loading.....");
         EventDispatcherRegistry.init();
-        ProxySelector.setDefault(new MohistProxySelector(ProxySelector.getDefault()));
+        // ProxySelector.setDefault(new MohistProxySelector(ProxySelector.getDefault())); // Mohist+ - Remove this feature as it should be implemented by a plugin
     }
 
     public static void initVersion() {

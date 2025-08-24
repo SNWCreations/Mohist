@@ -24,7 +24,7 @@ import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.ServerAPI;
 import com.mohistmc.plugins.MohistPlugin;
 import com.mohistmc.util.I18n;
-import com.mohistmc.util.MemoryUtils;
+// import com.mohistmc.util.MemoryUtils; // Mohist+ - Remove this as it is useless
 import com.mohistmc.util.MohistThreadCost;
 import java.io.File;
 import java.util.ArrayList;
@@ -198,9 +198,13 @@ public class MohistCommand extends Command {
                     return false;
                 }
             }
+            // Mohist+ start - Remove this as it is unreasonable
+            /*
             case "memoryfix" -> {
                 sender.sendMessage(ChatColor.GREEN + MemoryUtils.setProcessWorkingSetSize(50, 100));
             }
+            */
+            // Mohist+ end
             default -> {
                 sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);
                 return false;

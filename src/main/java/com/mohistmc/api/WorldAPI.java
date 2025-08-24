@@ -1,6 +1,5 @@
 package com.mohistmc.api;
 
-import com.mohistmc.plugins.world.utils.ConfigByWorlds;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -19,12 +18,16 @@ public class WorldAPI {
 
     public static Map<BlockPos, Entity> destroyBlockProgress = new HashMap<>();
 
+    // Mohist+ start - Remove this as it is not necessary
+    /*
     public static String getWorldName(World world) {
         if (ConfigByWorlds.config.get("worlds." + world.getName() + ".name") == null) {
             return world.getName();
         }
         return ConfigByWorlds.config.getString("worlds." + world.getName() + ".name");
     }
+    */
+    // Mohist+ end
 
     public static class VoidGenerator extends ChunkGenerator {
         public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {

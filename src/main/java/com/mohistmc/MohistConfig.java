@@ -3,15 +3,19 @@ package com.mohistmc;
 import com.google.common.base.Throwables;
 import com.mohistmc.api.ServerAPI;
 import com.mohistmc.api.color.ColorsAPI;
-import com.mohistmc.commands.BackupWorldCommand;
+// import com.mohistmc.commands.BackupWorldCommand; // Mohist+ - Remove this feature as it should be implemented by a plugin
 import com.mohistmc.commands.BansCommand;
 import com.mohistmc.commands.DumpCommand;
-import com.mohistmc.commands.GetPluginListCommand;
+// import com.mohistmc.commands.GetPluginListCommand; // Mohist+ - Remove this feature as it should be implemented by a plugin
 import com.mohistmc.commands.ItemsCommand;
 import com.mohistmc.commands.MohistCommand;
+// Mohist+ start - Remove these features as it should be implemented by a plugin
+/*
 import com.mohistmc.commands.PermissionCommand;
 import com.mohistmc.commands.PingCommand;
 import com.mohistmc.commands.PluginCommand;
+*/
+// Mohist+ end
 import com.mohistmc.commands.ShowsCommand;
 import com.mohistmc.plugins.MohistPlugin;
 import com.mohistmc.util.YamlUtils;
@@ -74,15 +78,15 @@ public class MohistConfig {
 
         commands = new HashMap<>();
         commands.put("mohist", new MohistCommand("mohist"));
-        commands.put("getpluginlist", new GetPluginListCommand("getpluginlist"));
+        // commands.put("getpluginlist", new GetPluginListCommand("getpluginlist")); // Mohist+ - Remove this feature as it should be implemented by a plugin
         commands.put("dump", new DumpCommand("dump"));
-        commands.put("plugin", new PluginCommand("plugin"));
-        commands.put("backupworld", new BackupWorldCommand("backupworld"));
+        // commands.put("plugin", new PluginCommand("plugin")); // Mohist+ - Remove this feature as it should be implemented by a plugin
+        // commands.put("backupworld", new BackupWorldCommand("backupworld")); // Mohist+ - Remove this feature as it should be implemented by a plugin
         commands.put("items", new ItemsCommand("items"));
-        commands.put("permission", new PermissionCommand("permission"));
+        // commands.put("permission", new PermissionCommand("permission")); // Mohist+ - Remove this feature as it should be implemented by a plugin
         commands.put("bans", new BansCommand("bans"));
         commands.put("shows", new ShowsCommand("shows"));
-        commands.put("ping", new PingCommand("ping"));
+        // commands.put("ping", new PingCommand("ping")); // Mohist+ - Remove this feature as it should be implemented by a plugin
 
         MohistPlugin.registerCommands(commands);
 
@@ -165,9 +169,13 @@ public class MohistConfig {
     public static String mohist_lang() {
         return yml.getString("mohist.lang", Locale.getDefault().toString());
     }
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static String motd() {
         return ColorsAPI.of(MohistConfig.motdFirstLine) + "\n" + ColorsAPI.of(MohistConfig.motdSecondLine);
     }
+    */
+    // Mohist+ end
 
     public static boolean isProxyOnlineMode() {
         return org.bukkit.Bukkit.getOnlineMode()  || (velocity_enabled && velocity_onlineMode);
@@ -175,7 +183,7 @@ public class MohistConfig {
 
     public static boolean show_logo;
     public static String mohist_lang;
-    public static boolean check_update;
+    // public static boolean check_update; // Mohist+ - TODO May we need our own version checker?
     public static int maximumRepairCost;
     public static boolean enchantment_fix;
     public static int max_enchantment_level;
@@ -185,7 +193,7 @@ public class MohistConfig {
 
     public static boolean server_modlist_whitelist_enable;
     public static String server_modlist_whitelist;
-    public static int maxBees;
+    // public static int maxBees; // Mohist+ - Remove this feature as it should be implemented by a plugin
     public static boolean bookAnimationTick;
     public static boolean networkmanager_debug;
     public static List<String> networkmanager_intercept;
@@ -199,6 +207,8 @@ public class MohistConfig {
     // Thread Priority
     public static int server_thread;
 
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static boolean clear_item;
     public static boolean clear_enable;
     public static List<String> clear_item_whitelist;
@@ -209,6 +219,8 @@ public class MohistConfig {
     public static boolean clear_noitem;
     public static List<String> clear_noitem_whitelist;
     public static String clear_noitem_msg;
+    */
+    // Mohist+ end
 
     // Ban
     public static boolean ban_item_enable;
@@ -219,40 +231,51 @@ public class MohistConfig {
     public static boolean ban_enchantment_enable;
     public static List<String> ban_enchantment_list;
 
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static boolean motdEnable;
     public static String motdFirstLine;
     public static String motdSecondLine;
+    */
+    // Mohist+ end
     public static String pingCommandOutput;
 
     // Ban events
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static boolean doFireTick;
     public static boolean explosion;
 
     public static boolean worldmanage;
+    */
+    // Mohist+ end
 
     public static boolean bukkitpermissionshandler;
     public static boolean velocity_enabled;
     public static boolean velocity_onlineMode;
     public static String velocity_secret;
 
-    public static boolean recipe_warn;
+    // public static boolean recipe_warn; // Mohist+ - Remove this as it is not necessary
 
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static boolean tpa_enable;
     public static boolean tpa_permissions_enable;
     public static boolean back_enable;
     public static boolean back_permissions_enable;
+    */
     public static boolean permissions_debug_enable;
     public static boolean permissions_debug_console;
     public static boolean permissions_send_player;
 
     public static boolean watchdog_spigot;
-    public static boolean watchdog_mohist;
+    // public static boolean watchdog_mohist; // Mohist+ - Remove this as we removed it
     public static boolean async_save_world;
 
     //Messaes
     public static String message_require_forge;
 
-    public static String server_mod_name;
+    // public static String server_mod_name; // Mohist+ - Remove this feature as it should be implemented by a plugin
 
     // Mohist+ start - Remove AI stuff
     /*
@@ -265,19 +288,23 @@ public class MohistConfig {
     */
     // Mohist end
 
+    // Mohist+ start - Remove this feature as it should be implemented by a plugin
+    /*
     public static boolean custom_no_villager;
     public static boolean custom_entity_tp_end;
     public static boolean custom_entity_tp_nether;
     public static boolean custom_raid_no_emerald;
+    */
+    // Mohist+ end
     public static int custom_lava_speed_normal;
     public static int custom_lava_speed_nether;
 
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
-        check_update = getBoolean("mohist.check_update", true);
+        // check_update = getBoolean("mohist.check_update", true); // Mohist+ - TODO Maybe we need our own version checker?
         watchdog_spigot = getBoolean("mohist.watchdog_spigot", true);
-        watchdog_mohist = getBoolean("mohist.watchdog_mohist", false);
+        // watchdog_mohist = getBoolean("mohist.watchdog_mohist", false); // Mohist+ - Remove this because we removed it
         maximumRepairCost = getInt("anvilfix.maximumrepaircost", 40);
         enchantment_fix = getBoolean("anvilfix.enchantment_fix", false);
         max_enchantment_level = getInt("anvilfix.max_enchantment_level", 32767);
@@ -285,7 +312,7 @@ public class MohistConfig {
         player_modlist_blacklist = getStringList("player_modlist_blacklist.list", new ArrayList<>());
         server_modlist_whitelist_enable = getBoolean("server_modlist_whitelist.enable", false);
         server_modlist_whitelist = getString("server_modlist_whitelist.list", ServerAPI.modlists_All.toString().replace(", mohist", ""));
-        maxBees = getInt("custom.max-bees-in-hive", 3);
+        // maxBees = getInt("custom.max-bees-in-hive", 3); // Mohist+ - Remove this feature as it should be implemented by a plugin
         bookAnimationTick = getBoolean("enchantment-table-book-animation-tick", false);
         networkmanager_debug = getBoolean("networkmanager.debug", false);
         networkmanager_intercept = getStringList("networkmanager.intercept", new ArrayList<>());
@@ -297,6 +324,8 @@ public class MohistConfig {
         keepinventory_exp_permission = getString("keepinventory.permission.exp", "mohist.keepinventory.exp");
         server_thread = getInt("threadpriority.server_thread", 8);
 
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
         clear_enable = getBoolean("entity.clear.enable", false);
         clear_time = getInt("entity.clear.time", 1800);
         clear_countdown_msg = getString("entity.clear.countdown.msg", "[Server] §cItems will be cleared after %seconds% seconds！");
@@ -308,6 +337,8 @@ public class MohistConfig {
         clear_noitem = getBoolean("entity.clear.noitem.enable", false);
         clear_noitem_whitelist = getStringList("entity.clear.noitem.whitelist", new ArrayList<>());
         clear_noitem_msg = getString("entity.clear.noitem.msg", "[Server] Cleaned up %size% monster");
+        */
+        // Mohist+ end
 
         ban_item_enable = getBoolean("ban.item.enable" , false);
         ban_item_materials = getStringList("ban.item.list", new ArrayList<>());
@@ -315,25 +346,37 @@ public class MohistConfig {
         ban_entity_types = getStringList("ban.entity.list", new ArrayList<>());
         ban_enchantment_enable = getBoolean("ban.enchantment.enable", false);
         ban_enchantment_list = getStringList("ban.enchantment.list", new ArrayList<>());
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
         motdEnable = getBoolean("motd.enable", false);
         motdFirstLine = getString("motd.firstline", "<RAINBOW1>A Minecraft Server</RAINBOW>");
         motdSecondLine = getString("motd.secondline", "");
+        */
+        // Mohist+ end
 
         pingCommandOutput = getString("settings.messages.ping-command-output", "§2%s's ping is %sms");
 
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
         doFireTick = getBoolean("events.fire_tick", false);
         explosion = getBoolean("events.explosion", false);
+        */
+        // Mohist+ end
         bukkitpermissionshandler = getBoolean("forge.bukkitpermissionshandler", true);
-        worldmanage = getBoolean("worldmanage", true);
+        // worldmanage = getBoolean("worldmanage", true); // Mohist+ - Remove this feature as it should be implemented by a plugin
         velocity_enabled = getBoolean("velocity.enabled", false);
         velocity_onlineMode = getBoolean("velocity.onlineMode", false);
         velocity_secret = getString("velocity.secret", "");
 
-        recipe_warn = getBoolean("recipe.warn", false);
+        // recipe_warn = getBoolean("recipe.warn", false); // Mohist+ - Remove this feature as it is not necessary
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
         tpa_enable = getBoolean("tpa.enable", false);
         tpa_permissions_enable = getBoolean("tpa.permissions", true);
         back_enable = getBoolean("back.enable", false);
         back_permissions_enable = getBoolean("back.permissions", true);
+        */
+        // Mohist+ end
 
         permissions_debug_enable = getBoolean("permissions.debug.enable", false);
         permissions_debug_console = getBoolean("permissions.debug.console", false);
@@ -341,7 +384,7 @@ public class MohistConfig {
         async_save_world = getBoolean("world.async_save", false);
 
         message_require_forge = getString("message.require_forge", "This server has mods that require Forge to be installed on the client. Contact your server admin for more details.");
-        server_mod_name = getString("server_mod_name", "mohist");
+        // server_mod_name = getString("server_mod_name", "mohist"); // Mohist+ - Remove this feature as it should be implemented by a plugin
 
         // Mohist+ start - Remove AI stuff
         /*
@@ -354,10 +397,13 @@ public class MohistConfig {
         */
         // Mohist+ end
 
-        custom_no_villager = getBoolean("custom.no_villager", false);
+        // Mohist+ start - Remove this feature as it should be implemented by a plugin
+        /*
+        custom_no_villager = getBoolean("custom.no_villager", false); // Mohist+ - Remove this feature as it should be implemented by a plugin
         custom_entity_tp_end = getBoolean("custom.entity_tp_end", true);
         custom_entity_tp_nether = getBoolean("custom.entity_tp_nether", true);
         custom_raid_no_emerald = getBoolean("custom.raid_no_emerald", false);
+        */
         custom_lava_speed_normal = getInt("custom.lava_speed.normal", 30);
         custom_lava_speed_nether = getInt("custom.lava_speed.nether", 10);
     }
