@@ -121,7 +121,7 @@ public abstract class Action {
         if (installerDebug) {
             process = new ProcessBuilder(command).inheritIO().start();
         } else {
-            process = new ProcessBuilder(command).redirectOutput(ProcessBuilder.Redirect.DISCARD).start();
+            process = new ProcessBuilder(command).redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD).start();
         }
         if (installerDebug) System.out.println("Process ID: " + process.pid());
         final int ret = process.waitFor();
