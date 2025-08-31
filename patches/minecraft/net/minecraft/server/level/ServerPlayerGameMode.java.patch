@@ -1,12 +1,13 @@
 --- a/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/net/minecraft/server/level/ServerPlayerGameMode.java
-@@ -1,7 +_,11 @@
+@@ -1,7 +_,12 @@
  package net.minecraft.server.level;
  
 +import com.mohistmc.api.ItemAPI;
 +import com.mohistmc.eventhandler.dispatcher.BlockEventDispatcher;
 +import com.mohistmc.plugins.ban.bans.BanItem;
  import com.mojang.logging.LogUtils;
++import java.util.ArrayList;
  import java.util.Objects;
 +import java.util.concurrent.atomic.AtomicBoolean;
  import javax.annotation.Nullable;
@@ -216,7 +217,7 @@
           return false;
        } else {
           BlockEntity blockentity = this.f_9244_.m_7702_(p_9281_);
-@@ -229,38 +_,57 @@
+@@ -229,38 +_,65 @@
           if (block instanceof GameMasterBlock && !this.f_9245_.m_36337_()) {
              this.f_9244_.m_7260_(p_9281_, blockstate, blockstate, 3);
              return false;
@@ -235,6 +236,7 @@
 +               removeBlock(p_9281_, false);
                 return true;
              } else {
++               f_9244_.captureDrops = new ArrayList<>();
                 ItemStack itemstack = this.f_9245_.m_21205_();
                 ItemStack itemstack1 = itemstack.m_41777_();
 -               boolean flag1 = this.f_9245_.m_36298_(blockstate);
@@ -250,6 +252,13 @@
                    block.m_6240_(this.f_9244_, this.f_9245_, p_9281_, blockstate, blockentity, itemstack1);
                 }
  
++               if (isDropItems) {
++                   org.bukkit.block.Block craftBlock = CraftBlock.at(this.f_9244_, p_9281_);
++                   org.bukkit.block.BlockState state = craftBlock.getState();
++                   CraftEventFactory.handleBlockDropItemEvent(craftBlock, state, this.f_9245_, f_9244_.captureDrops);
++               }
++               f_9244_.captureDrops = null;
++
 +               if (flag && exp > 0)
 +                  blockstate.m_60734_().m_49805_(f_9244_, p_9281_, exp);
 +

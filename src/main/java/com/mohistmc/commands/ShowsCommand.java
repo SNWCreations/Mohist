@@ -1,6 +1,7 @@
 package com.mohistmc.commands;
 
 import com.mohistmc.api.ItemAPI;
+import com.mohistmc.api.ServerAPI;
 import com.mohistmc.api.gui.DemoGUI;
 import com.mohistmc.api.gui.GUIItem;
 import com.mohistmc.api.gui.ItemStackFactory;
@@ -119,7 +120,7 @@ public class ShowsCommand extends Command {
 
                 DemoGUI wh = new DemoGUI(I18n.as("showscommand.entitys.title", allSize.getAndSet(0)));
                 for (Map.Entry<EntityType, Integer> s : newMap.entrySet()) {
-                    wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(s.getKey()))
+                    wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(ServerAPI.entityTypeMap0.get(s.getKey())))
                             .setDisplayName(I18n.as("showscommand.entitys.itemname", s.getValue()))
                             .setLore(List.of(
                                             I18n.as("showscommand.entitys.lore", s.getKey().name()),

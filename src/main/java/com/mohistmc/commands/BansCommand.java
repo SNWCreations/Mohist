@@ -174,7 +174,7 @@ public class BansCommand extends Command {
                         DemoGUI wh = new DemoGUI(I18n.as("banscmd.show.entity"));
                         List<String> old = MohistConfig.ban_entity_types;
                         for (String s : MohistConfig.ban_entity_types) {
-                            wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(EntityAPI.entityType(s)))
+                            wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(EntityAPI.getType(s)))
                                     .setDisplayName(s)
                                     .toItemStack()) {
                                 @Override

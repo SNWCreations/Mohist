@@ -74,5 +74,4 @@ public class ItemStackFactory {
         this.item.setItemMeta(im);
         return this;
     }
-
 }

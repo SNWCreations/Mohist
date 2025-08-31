@@ -65,9 +65,11 @@ public class GUI {
                 }
                 if (openGUI.containsKey(p) && openGUI.get(p) == GUI.this) {
                     event.setCancelled(true);
-
-                    if (items[event.getSlot()] != null) {
-                        items[event.getSlot()].ClickAction(event.getClick(), p, items[event.getSlot()].display);
+                    int index = event.getRawSlot();
+                    if(index < items.length) {
+                        if (items[index] != null) {
+                            items[index].ClickAction(event.getClick(), p, items[index].display);
+                        }
                     }
                 }
             }

@@ -2,7 +2,9 @@ package com.mohistmc.api;
 
 import com.mohistmc.MohistConfig;
 import java.util.Objects;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.bukkit.entity.EntityType;
 
 public class EntityAPI {
@@ -29,7 +31,16 @@ public class EntityAPI {
         }
     }
 
-    public static boolean isBan(org.bukkit.entity.Entity entity) {
-        return MohistConfig.ban_entity_types.contains(entity.getType().name());
+    public static net.minecraft.world.entity.EntityType<?> getType(String resourceLocation) {
+        return ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(resourceLocation));
+    }
+
+    public static String resourceLocation(Entity nmsEntity) {
+        var key = ForgeRegistries.ENTITY_TYPES.getKey(nmsEntity.getType());
+        return key.toString();
+    }
+
+    public static boolean isBan(Entity entity) {
+        return MohistConfig.ban_entity_types.contains(resourceLocation(entity));
     }
 }

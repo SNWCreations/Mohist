@@ -276,7 +276,7 @@
  
 +      // CraftBukkit start - fire FurnaceExtractEvent / BlockExpEvent
 +      BlockExpEvent event;
-+      if (amount.getAndSet(0) != 0) {
++      if (amount.get() != 0) {
 +         event = new FurnaceExtractEvent((org.bukkit.entity.Player) createExperience$entityhuman.getAndSet(null).getBukkitEntity(), CraftBlock.at(p_154999_, worldPosition$mohist), org.bukkit.craftbukkit.v1_20_R1.util.CraftMagicNumbers.getMaterial(stackAtomicReference.getAndSet(null).m_41720_()), amount.getAndSet(0), i);
 +      } else {
 +         event = new BlockExpEvent(CraftBlock.at(p_154999_, worldPosition$mohist), i);

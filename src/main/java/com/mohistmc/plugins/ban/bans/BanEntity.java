@@ -12,6 +12,6 @@ public class BanEntity {
 
     public static boolean check(Entity entity) {
         if (!MohistConfig.ban_entity_enable) return false;
-        return EntityAPI.isBan(entity.getBukkitEntity());
+        return EntityAPI.isBan(entity);
     }
 }

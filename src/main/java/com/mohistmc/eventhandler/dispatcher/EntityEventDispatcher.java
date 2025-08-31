@@ -36,6 +36,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.spigotmc.AsyncCatcher;
 
 public class EntityEventDispatcher {
 
@@ -45,7 +46,7 @@ public class EntityEventDispatcher {
         LivingEntity entityliving = event.getNewTarget();
 
         if (entityliving instanceof Mob mob) {
-            if (event.isFireCBEvent()) {
+            if (!AsyncCatcher.catchAsync() && event.isFireCBEvent()) {
                 if (reason == EntityTargetEvent.TargetReason.UNKNOWN && mob.getTarget() != null && entityliving == null) {
                     reason = mob.getTarget().isAlive() ? EntityTargetEvent.TargetReason.FORGOT_TARGET : EntityTargetEvent.TargetReason.TARGET_DIED;
                 }
