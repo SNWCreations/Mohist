@@ -15,7 +15,7 @@ A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 
 ## Progress
 
-- [x] Rectify Forge([**6c4f5e286**](https://github.com/MinecraftForge/MinecraftForge/commit/d00f5c401))
+- [x] Rectify Forge([**ddb5f6c74**](https://github.com/MinecraftForge/MinecraftForge/commit/ddb5f6c74))
 - [x] Rectify NeoForge([**e7ac32353**](https://github.com/neoforged/NeoForge/commit/e7ac32353))
 - [x] Start patch
     * [x] Bukkit([**997de31d**](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/997de31d))
