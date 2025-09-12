@@ -44,7 +44,7 @@ public class v_1_20_1 {
         public final File javafmllanguage;
         public final File mclanguage;
         public final File lowcodelanguage;
-        public final File mohistplugin;
+        // public final File mohistplugin; // Mohist+ - Re-implement marker plugin
         public final File mojmap;
         public final File mc_unpacked;
         public final File mergedMapping;
@@ -56,7 +56,7 @@ public class v_1_20_1 {
             this.javafmllanguage = new File(libPath, "net/minecraftforge/javafmllanguage/" + mcVer + "-" + forgeVer + "/javafmllanguage-" + mcVer + "-" + forgeVer + ".jar");
             this.mclanguage = new File(libPath, "net/minecraftforge/mclanguage/" + mcVer + "-" + forgeVer + "/mclanguage-" + mcVer + "-" + forgeVer + ".jar");
             this.lowcodelanguage = new File(libPath, "net/minecraftforge/lowcodelanguage/" + mcVer + "-" + forgeVer + "/lowcodelanguage-" + mcVer + "-" + forgeVer + ".jar");
-            this.mohistplugin = new File(libPath, "com/mohistmc/mohistplugins/mohistplugins-" + mcVer + ".jar");
+            // this.mohistplugin = new File(libPath, "com/mohistmc/mohistplugins/mohistplugins-" + mcVer + ".jar"); // Mohist+ - Re-implement marker plugin
             this.mojmap = new File(libPath, otherStart + "-mappings.txt");
             this.mc_unpacked = new File(libPath, otherStart + "-unpacked.jar");
             this.mergedMapping = new File(libPath, mcpStart + "-mappings-merged.txt");
@@ -77,7 +77,7 @@ public class v_1_20_1 {
             copyFileFromJar(javafmllanguage, "data/javafmllanguage-" + mcVer + "-" + forgeVer + ".jar");
             copyFileFromJar(mclanguage, "data/mclanguage-" + mcVer + "-" + forgeVer + ".jar");
             copyFileFromJar(lowcodelanguage, "data/lowcodelanguage-" + mcVer + "-" + forgeVer + ".jar");
-            copyFileFromJar(mohistplugin, "data/mohistplugins-" + mcVer + ".jar");
+            // copyFileFromJar(mohistplugin, "data/mohistplugins-" + mcVer + ".jar"); // Mohist+ - Re-implement marker plugin
 
             if (!needsInstall()) return;
             System.out.println(I18n.as("installation.start"));
