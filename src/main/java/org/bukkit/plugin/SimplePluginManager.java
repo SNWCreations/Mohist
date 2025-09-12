@@ -492,6 +492,7 @@ public final class SimplePluginManager implements PluginManager {
 
     @Override
     public void disablePlugins() {
+        plugins.remove(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Use our own marker
         Plugin[] plugins = getPlugins();
         for (int i = plugins.length - 1; i >= 0; i--) {
             disablePlugin(plugins[i]);
@@ -545,7 +546,6 @@ public final class SimplePluginManager implements PluginManager {
     @Override
     public void clearPlugins() {
         synchronized (this) {
-            plugins.remove(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Use our own marker
             disablePlugins();
             plugins.clear();
             lookupNames.clear();
