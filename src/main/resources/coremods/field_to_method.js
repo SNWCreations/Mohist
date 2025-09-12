@@ -8,7 +8,7 @@ function initializeCoreMod() {
                 'name': 'net.minecraft.world.level.biome.Biome' 
             },
             'transformer': function(classNode) {
-                ASMAPI.redirectFieldToMethod(classNode, ASMAPI.mapField('f_47437_'), 'getModifiedClimateSettings')
+                ASMAPI.redirectFieldToMethod(classNode, ASMAPI.mapField('f_47437_'), 'getModifiedClimateSettings', true) // Mohist+ - Ignore access check because this field has been ATed by Paper
                 ASMAPI.redirectFieldToMethod(classNode, ASMAPI.mapField('f_47443_'), 'getModifiedSpecialEffects')
                 return classNode;
             }
@@ -49,7 +49,7 @@ function initializeCoreMod() {
                 'name': 'net.minecraft.world.item.BucketItem'
             },
             'transformer': function(classNode) {
-                ASMAPI.redirectFieldToMethod(classNode, ASMAPI.mapField('f_40687_'), 'getFluid')
+                ASMAPI.redirectFieldToMethod(classNode, ASMAPI.mapField('f_40687_'), 'getFluid', true) // Mohist+ - Ignore access check because this field has been ATed by Paper
                 return classNode;
             }
         },

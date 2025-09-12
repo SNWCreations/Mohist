@@ -28,7 +28,10 @@ dependencies {
     api("com.electronwill.night-config:core:${NIGHTCONFIG_VERSION}")
     api("com.electronwill.night-config:toml:${NIGHTCONFIG_VERSION}")
     api("cpw.mods:modlauncher:${MODLAUNCHER_VERSION}")
-    api("net.minecraftforge:coremods:${COREMODS_VERSION}")
+    // Mohist+ start - Use our patched CoreMods library
+    // api("net.minecraftforge:coremods:${COREMODS_VERSION}")
+    api("com.github.MohistPlusMC:CoreMods:${COREMODS_VERSION}")
+    // Mohist+ end
     api("com.mojang:logging:${MOJANG_LOGGING_VERSION}")
     api "net.minecraftforge:JarJarSelector:${JARJAR_VERSION}"
     api "net.minecraftforge:JarJarMetadata:${JARJAR_VERSION}"

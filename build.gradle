@@ -35,7 +35,7 @@ ext {
     SPI_VERSION = '7.0.1'
     MERGETOOL_VERSION = '1.1.5'
     ACCESSTRANSFORMERS_VERSION = '8.0.4'
-    COREMODS_VERSION = '5.2.4'
+    COREMODS_VERSION = 'mc_1.20.1-SNAPSHOT' // '5.2.4' // Mohist+ - Use our patched CoreMods library
     EVENTBUS_VERSION = '6.0.5'
     MODLAUNCHER_VERSION = '10.0.9'
     SECUREJARHANDLER_VERSION = 'mohist-2.1.11'
@@ -196,7 +196,10 @@ def sharedDeps = {
     installer "net.minecraftforge:accesstransformers:${ACCESSTRANSFORMERS_VERSION}"
     installer 'org.antlr:antlr4-runtime:4.9.1' // Dep of AccessTransformer
     installer "net.minecraftforge:forgespi:${SPI_VERSION}"
-    installer "net.minecraftforge:coremods:${COREMODS_VERSION}"
+    // Mohist+ start - Use our patched CoreMods library
+    // installer "net.minecraftforge:coremods:${COREMODS_VERSION}"
+    installer "com.github.MohistPlusMC:CoreMods:${COREMODS_VERSION}"
+    // Mohist+ end
     installer "cpw.mods:modlauncher:${MODLAUNCHER_VERSION}"
     installer 'net.minecraftforge:unsafe:0.2.+'
     installer "net.minecraftforge:mergetool:${MERGETOOL_VERSION}:api"
