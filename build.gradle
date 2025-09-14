@@ -322,8 +322,10 @@ def sharedDeps = {
     compileOnly 'org.projectlombok:lombok:1.18.30'
     installer 'com.konghq:unirest-java-core:4.4.5'
 
-    installer "net.neoforged:srgutils:1.0.9" // Mohist+ - Stacktrace deobfuscator - Mappings handling
-    annotationProcessor "org.apache.logging.log4j:log4j-core:${LOG4J_VERSION}" // Mohist+ - Stacktrace deobfuscator - Log4j Plugin
+    // Mohist+ start - Stacktrace deobfuscator - Mappings handling
+    installer "net.neoforged:srgutils:1.0.9"
+    annotationProcessor "org.apache.logging.log4j:log4j-core:${LOG4J_VERSION}"
+    // Mohist+ end
 }
 
 def sharedFmlonlyForge = { Project prj ->
@@ -879,13 +881,6 @@ project(':mohist') {
             filter(ReplaceTokens, tokens: tokens + [MODULE_PATH: MODULE_PATH.join(':').replace("2.1.2", "mohist-2.1.11"), CLASS_PATH: CLASS_PATH.join(':').replace("2.1.2", "mohist-2.1.11")]) // modlauncher use 2.1.2
             rename { 'data/unix_args.txt' }
         }
-
-        /*
-        from("$buildDir/classes/java/main/META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat") {
-            into "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat"
-        }
-
-         */
     }
 
     tasks.register('genAllData') {
