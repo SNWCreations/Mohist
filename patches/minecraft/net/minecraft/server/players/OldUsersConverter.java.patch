@@ -54,7 +54,7 @@
              }
           }
  
-@@ -315,6 +_,30 @@
+@@ -315,6 +_,32 @@
                 private void m_11167_(File p_11168_, String p_11169_, String p_11170_) {
                    File file5 = new File(file1, p_11169_ + ".dat");
                    File file6 = new File(p_11168_, p_11170_ + ".dat");
@@ -65,6 +65,7 @@
 +                  try {
 +                     root = NbtIo.m_128939_(new java.io.FileInputStream(file5));
 +                  } catch (Exception exception) {
++                     com.mohistmc.paper.util.StacktraceDeobfuscator.INSTANCE.deobfuscateThrowable(exception); // Paper
 +                     exception.printStackTrace();
 +                  }
 +
@@ -77,6 +78,7 @@
 +                     try {
 +                        NbtIo.m_128947_(root, new java.io.FileOutputStream(file2));
 +                     } catch (Exception exception) {
++                        com.mohistmc.paper.util.StacktraceDeobfuscator.INSTANCE.deobfuscateThrowable(exception); // Paper
 +                        exception.printStackTrace();
 +                     }
 +                  }

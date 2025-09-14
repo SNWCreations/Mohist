@@ -43,16 +43,29 @@
             </Policies>
             <DefaultRolloverStrategy max="5"/>
         </RollingRandomAccessFile>
+        <Async name="Async">
+            <AppenderRef ref="rewrite"/>
+        </Async>
+        <Rewrite name="rewrite">
+            <StacktraceDeobfuscatingRewritePolicy />
+            <AppenderRef ref="Console" level="INFO"/>
+            <AppenderRef ref="TerminalConsole" level="info"/>
+            <AppenderRef ref="File" level="INFO"/>
+            <AppenderRef ref="DebugFile" level="DEBUG"/>
+        </Rewrite>
     </Appenders>
     <Loggers>
         <!-- make sure mojang's logging is set to 'info' so that their LOGGER.isDebugEnabled() behavior isn't active -->
         <Logger level="info" name="com.mojang"/>
         <Logger level="info" name="net.minecraft"/>
         <Root level="all">
+            <!--
             <AppenderRef ref="Console" level="INFO"/>
             <AppenderRef ref="TerminalConsole" level="info"/>
             <AppenderRef ref="File" level="INFO"/>
             <AppenderRef ref="DebugFile" level="DEBUG"/>
+            -->
+            <AppenderRef ref="Async"/>
         </Root>
     </Loggers>
 </Configuration>
