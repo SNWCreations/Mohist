@@ -32,6 +32,8 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 
 public class PlayerEventDispatcher {
 
+    // Mohist+ start - Remove duplicate call when there is already CB patch for calling PlayerAdvancementDoneEvent
+    /*
     //For PlayerAdvancementDoneEvent
     @SubscribeEvent
     public void onAdvancementDone(AdvancementEvent event) {
@@ -39,6 +41,8 @@ public class PlayerEventDispatcher {
             Bukkit.getPluginManager().callEvent(new PlayerAdvancementDoneEvent(player.getBukkitEntity(), event.getAdvancement().bukkit));
         }
     }
+    */
+    // Mohist+ end
 
     @SubscribeEvent
     public void onContainerClose(PlayerContainerEvent.Close event) {
