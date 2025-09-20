@@ -66,7 +66,6 @@ public final class SimplePluginManager implements PluginManager {
 
         defaultPerms.put(true, new LinkedHashSet<Permission>());
         defaultPerms.put(false, new LinkedHashSet<Permission>());
-        plugins.add(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Use our own marker
     }
 
     /**
@@ -117,6 +116,7 @@ public final class SimplePluginManager implements PluginManager {
     public Plugin[] loadPlugins(@NotNull File directory) {
         Preconditions.checkArgument(directory != null, "Directory cannot be null");
         Preconditions.checkArgument(directory.isDirectory(), "Directory must be a directory");
+        plugins.add(com.mohistmc.bukkit.MarkerPlugin.INSTANCE); // Mohist+ - Ensure marker plugin exists
 
         List<Plugin> result = new ArrayList<Plugin>();
         Set<Pattern> filters = fileAssociations.keySet();
