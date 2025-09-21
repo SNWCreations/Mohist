@@ -5,7 +5,7 @@ A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 **This is a fork of the Mohist project.** No warranty on its changes,
  I just try my best to make my changes work but don't apply any promise to other parts of this project.
 
-[![](https://img.shields.io/badge/Forge-1.20.1--47.4.8-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![](https://img.shields.io/badge/Forge-1.20.1--47.4.9-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![](https://img.shields.io/badge/NeoForge-1.20.1--47.1.106-brightgreen.svg?colorB=26303d)](https://neoforged.net/)
 [![](https://img.shields.io/badge/JDK-17.0.14-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
 [![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
