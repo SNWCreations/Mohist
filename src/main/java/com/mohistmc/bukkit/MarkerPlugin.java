@@ -1,6 +1,7 @@
 package com.mohistmc.bukkit;
 
 import net.minecraftforge.eventbus.api.IEventBus;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,27 +47,23 @@ public final class MarkerPlugin extends PluginBase {
 
     @Override
     public @Nullable InputStream getResource(@NotNull String filename) {
-        throw new UnsupportedOperationException("Not supported.");
+        return null;
     }
 
     @Override
     public void saveConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void saveDefaultConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void saveResource(@NotNull String resourcePath, boolean replace) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void reloadConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
@@ -76,7 +73,7 @@ public final class MarkerPlugin extends PluginBase {
 
     @Override
     public @NotNull Server getServer() {
-        throw new UnsupportedOperationException("Not supported.");
+        return Bukkit.getServer();
     }
 
     @Override
@@ -101,22 +98,21 @@ public final class MarkerPlugin extends PluginBase {
 
     @Override
     public boolean isNaggable() {
-        throw new UnsupportedOperationException("Not supported.");
+        return true;
     }
 
     @Override
     public void setNaggable(boolean canNag) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public @Nullable ChunkGenerator getDefaultWorldGenerator(@NotNull String worldName, @Nullable String id) {
-        throw new UnsupportedOperationException("Not supported.");
+        return null;
     }
 
     @Override
     public @Nullable BiomeProvider getDefaultBiomeProvider(@NotNull String worldName, @Nullable String id) {
-        throw new UnsupportedOperationException("Not supported.");
+        return null;
     }
 
     @Override
