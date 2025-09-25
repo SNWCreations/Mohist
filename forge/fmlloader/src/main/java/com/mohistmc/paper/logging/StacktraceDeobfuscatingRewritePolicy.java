@@ -6,6 +6,8 @@ import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 
 import cpw.mods.modlauncher.Launcher;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Core;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.rewrite.RewritePolicy;
@@ -20,6 +22,9 @@ import org.apache.logging.log4j.core.impl.Log4jLogEvent;
         printObject = true
 )
 public final class StacktraceDeobfuscatingRewritePolicy implements RewritePolicy {
+    private static final boolean disabled = Boolean.getBoolean("mohist.stackdeobf.disabled");
+    private static final Logger log = LogManager.getLogger(StacktraceDeobfuscatingRewritePolicy.class);
+
     private static class MethodHandleHolder {
     private static final MethodHandle DEOBFUSCATE_THROWABLE;
 
@@ -50,12 +55,14 @@ public final class StacktraceDeobfuscatingRewritePolicy implements RewritePolicy
 
     @Override
     public LogEvent rewrite(final LogEvent rewrite) {
-        final Throwable thrown = rewrite.getThrown();
-        if (thrown != null) {
-            deobfuscateThrowable(thrown);
-            return new Log4jLogEvent.Builder(rewrite)
-                    .setThrownProxy(null)
-                    .build();
+        if (!disabled) {
+            final Throwable thrown = rewrite.getThrown();
+            if (thrown != null) {
+                deobfuscateThrowable(thrown);
+                return new Log4jLogEvent.Builder(rewrite)
+                        .setThrownProxy(null)
+                        .build();
+            }
         }
         return rewrite;
     }
@@ -72,6 +79,9 @@ public final class StacktraceDeobfuscatingRewritePolicy implements RewritePolicy
 
     @PluginFactory
     public static StacktraceDeobfuscatingRewritePolicy createPolicy() {
+        if (disabled) {
+            log.warn("Stacktrace deobfuscating is explicitly disabled with -Dmohist.stackdeobf.disabled=true");
+        }
         return new StacktraceDeobfuscatingRewritePolicy();
     }
 }
