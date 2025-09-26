@@ -89,9 +89,36 @@ public abstract class CommonLaunchHandler implements ILaunchHandlerService {
 
     @Override
     public ServiceRunner launchService(final String[] arguments, final ModuleLayer gameLayer) {
+        mohist$initializeStacktraceDeobfuscator(); // Mohist+ - Preload stacktrace deobfuscator to prevent deadlock in some cases
         FMLLoader.beforeStart(gameLayer);
         return makeService(arguments, gameLayer);
     }
+
+    // Mohist+ start - Preload stacktrace deobfuscator to prevent deadlock in some cases
+    private static void mohist$initializeStacktraceDeobfuscator() {
+        if (com.mohistmc.paper.logging.StacktraceDeobfuscatingRewritePolicy.disabled) {
+            LOGGER.info("Stacktrace deobfuscator disabled, skipping its initialization");
+            return;
+        }
+        try {
+            final java.lang.reflect.Field clField = cpw.mods.modlauncher.Launcher.class.getDeclaredField("classLoader");
+            boolean accessible = clField.isAccessible();
+            clField.setAccessible(true);
+            final ClassLoader mcLoader = (ClassLoader) clField.get(cpw.mods.modlauncher.Launcher.INSTANCE);
+            clField.setAccessible(accessible);
+            final Class<?> cls = Class.forName("com.mohistmc.paper.util.StacktraceDeobfuscator", true, mcLoader);
+            final java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.lookup();
+            final java.lang.invoke.VarHandle instanceHandle = lookup.findStaticVarHandle(cls, "INSTANCE", cls);
+            final Object deobfuscator = instanceHandle.get();
+            com.mohistmc.paper.logging.StacktraceDeobfuscatingRewritePolicy.DEOBFUSCATE_THROWABLE = lookup
+                    .unreflect(cls.getDeclaredMethod("deobfuscateThrowable", Throwable.class))
+                    .bindTo(deobfuscator);
+        } catch (final ReflectiveOperationException ex) {
+            LOGGER.error("Error loading stacktrace deobfuscator", ex);
+        }
+        LOGGER.info("Initialized stacktrace deobfuscator");
+    }
+    // Mohist+ end
 
     protected abstract ServiceRunner makeService(final String[] arguments, final ModuleLayer gameLayer);
 
