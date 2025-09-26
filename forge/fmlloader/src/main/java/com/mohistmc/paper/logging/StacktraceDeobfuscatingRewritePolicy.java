@@ -42,6 +42,10 @@ public final class StacktraceDeobfuscatingRewritePolicy implements RewritePolicy
         if (disabled) {
             return;
         }
+        if (DEOBFUSCATE_THROWABLE == null) {
+            // Maybe loggers were used before Minecraft server was booted
+            return;
+        }
         try {
             DEOBFUSCATE_THROWABLE.invoke(thrown);
         } catch (final Error e) {
