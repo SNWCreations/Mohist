@@ -115,6 +115,7 @@ public abstract class CommonLaunchHandler implements ILaunchHandlerService {
                     .bindTo(deobfuscator);
         } catch (final ReflectiveOperationException ex) {
             LOGGER.error("Error loading stacktrace deobfuscator", ex);
+            return;
         }
         LOGGER.info("Initialized stacktrace deobfuscator");
     }
