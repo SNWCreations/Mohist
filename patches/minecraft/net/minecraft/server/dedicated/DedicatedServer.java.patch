@@ -187,7 +187,7 @@
 +            this.dediLanPinger = new net.minecraft.client.server.LanServerPinger(this.m_129916_(), String.valueOf(this.m_7448_()));
 +            this.dediLanPinger.start();
 +         }
-+         Metrics.MohistMetrics.startMetrics();
++         // Metrics.MohistMetrics.startMetrics(); // Mohist+ - Stop sending metrics for the upstream
 +         // WatchMohist.start(); // Mohist+ - Remove unnecessary Watchdog implementation
 +         return net.minecraftforge.server.ServerLifecycleHooks.handleServerStarting(this);
        }
