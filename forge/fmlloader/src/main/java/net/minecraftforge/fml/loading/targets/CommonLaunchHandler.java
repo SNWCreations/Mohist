@@ -107,7 +107,7 @@ public abstract class CommonLaunchHandler implements ILaunchHandlerService {
             final ClassLoader mcLoader = (ClassLoader) clField.get(cpw.mods.modlauncher.Launcher.INSTANCE);
             clField.setAccessible(accessible);
             final Class<?> cls = Class.forName("com.mohistmc.paper.util.StacktraceDeobfuscator", true, mcLoader);
-            final java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.lookup();
+            final java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.publicLookup();
             final java.lang.invoke.VarHandle instanceHandle = lookup.findStaticVarHandle(cls, "INSTANCE", cls);
             final Object deobfuscator = instanceHandle.get();
             com.mohistmc.paper.logging.StacktraceDeobfuscatingRewritePolicy.DEOBFUSCATE_THROWABLE = lookup
