@@ -11,8 +11,6 @@ A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 [![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
 [![](https://badges.crowdin.net/mohist/localized.svg)](https://crowdin.com/project/mohist)
 
-[![](https://bstats.org/signatures/server-implementation/Mohist.svg)](https://bstats.org/plugin/server-implementation/Mohist/6762)
-
 ## Progress
 
 - [x] Rectify Forge([**e9ce8a6cc**](https://github.com/MinecraftForge/MinecraftForge/commit/e9ce8a6cc))
