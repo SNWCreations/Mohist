@@ -5,8 +5,6 @@
 
 package net.minecraftforge.client.event;
 
-import java.util.Map;
-import java.util.function.Function;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -15,6 +13,9 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Allows users to register custom {@link net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent}

@@ -6,8 +6,6 @@
 package net.minecraftforge.client.event;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import java.io.File;
-import java.io.IOException;
 import net.minecraft.client.Screenshot;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +13,9 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Fired when a screenshot is taken, but before it is written to disk.

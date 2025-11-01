@@ -16,25 +16,7 @@ import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Either;
 import com.mojang.math.Constants;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.FileUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
@@ -114,14 +96,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
@@ -193,6 +179,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Stack;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApiStatus.Internal
 public class ForgeHooksClient
@@ -1229,22 +1235,22 @@ public class ForgeHooksClient
      * @param nZ Z component of the normal
      * @return the nearest Direction to the passed in normal, biased slightly in favor of the order of declaration
      */
-    public static Direction getNearestStable(float nX, float nY, float nZ)
-    {
-        if (ForgeConfig.CLIENT.stabilizeDirectionGetNearest.get()) {
-            Direction ret = Direction.NORTH;
-            float sum = Float.MIN_VALUE;
-            for(Direction dir : Direction.values()) {
-                float newSum = nX * (float)dir.getNormal().getX() + nY * (float)dir.getNormal().getY() + nZ * (float)dir.getNormal().getZ();
-                if (newSum > sum + Constants.EPSILON) {
-                    sum = newSum;
-                    ret = dir;
-                }
-            }
-            return ret;
-        } else {
-            return Direction.getNearest(nX, nY, nZ);
-        }
+   public static Direction getNearestStable(float nX, float nY, float nZ)
+   {
+       if (ForgeConfig.CLIENT.stabilizeDirectionGetNearest.get()) {
+           Direction ret = Direction.NORTH;
+           float sum = Float.MIN_VALUE;
+           for(Direction dir : Direction.values()) {
+               float newSum = nX * (float)dir.getNormal().getX() + nY * (float)dir.getNormal().getY() + nZ * (float)dir.getNormal().getZ();
+               if (newSum > sum + Constants.EPSILON) {
+                   sum = newSum;
+                   ret = dir;
+               }
+           }
+           return ret;
+       } else {
+           return Direction.getNearest(nX, nY, nZ);
+       }
     }
 
     // Make sure the below method is only ever called once (by forge).

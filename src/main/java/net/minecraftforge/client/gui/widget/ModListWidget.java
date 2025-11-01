@@ -5,19 +5,20 @@
 
 package net.minecraftforge.client.gui.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.locale.Language;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.locale.Language;
 import net.minecraftforge.client.gui.ModListScreen;
+import net.minecraftforge.versions.forge.ForgeVersion;
 import net.minecraftforge.common.util.MavenVersionStringHelper;
 import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.versions.forge.ForgeVersion;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 public class ModListWidget extends ObjectSelectionList<ModListWidget.ModEntry>
 {

@@ -6,9 +6,6 @@
 package net.minecraftforge.event.entity;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -17,6 +14,10 @@ import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * EntityAttributeModificationEvent.<br>

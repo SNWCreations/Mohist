@@ -5,12 +5,13 @@
 
 package net.minecraftforge.registries;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.common.Mod;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.common.Mod;
 
 /**
  * ObjectHolder can be used to automatically populate public static final fields with entries

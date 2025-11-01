@@ -6,6 +6,7 @@
 package net.minecraftforge.client.model.data;
 
 import com.google.common.base.Predicates;
+
 import java.util.function.Predicate;
 
 /**

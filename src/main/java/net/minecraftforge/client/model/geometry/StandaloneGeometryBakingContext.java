@@ -8,16 +8,17 @@ package net.minecraftforge.client.model.geometry;
 import com.google.common.base.Predicates;
 import com.mojang.math.Transformation;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import java.util.Map;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A {@linkplain IGeometryBakingContext geometry baking context} that is not bound to block/item model loading.
@@ -53,6 +54,8 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
     private final Transformation rootTransform;
     @Nullable
     private final ResourceLocation renderTypeHint;
+    @Nullable
+    private final ResourceLocation renderTypeFastHint;
     private final BiPredicate<String, Boolean> visibilityTest;
 
     private StandaloneGeometryBakingContext(ResourceLocation modelName, Predicate<String> materialCheck,
@@ -71,6 +74,28 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
         this.transforms = transforms;
         this.rootTransform = rootTransform;
         this.renderTypeHint = renderTypeHint;
+        this.renderTypeFastHint = null;
+        this.visibilityTest = visibilityTest;
+    }
+
+    private StandaloneGeometryBakingContext(ResourceLocation modelName, Predicate<String> materialCheck,
+                                            Function<String, Material> materialLookup, boolean isGui3d,
+                                            boolean useBlockLight, boolean useAmbientOcclusion,
+                                            ItemTransforms transforms, Transformation rootTransform,
+                                            @Nullable ResourceLocation renderTypeHint,
+                                            @Nullable ResourceLocation renderTypeFastHint,
+                                            BiPredicate<String, Boolean> visibilityTest)
+    {
+        this.modelName = modelName;
+        this.materialCheck = materialCheck;
+        this.materialLookup = materialLookup;
+        this.isGui3d = isGui3d;
+        this.useBlockLight = useBlockLight;
+        this.useAmbientOcclusion = useAmbientOcclusion;
+        this.transforms = transforms;
+        this.rootTransform = rootTransform;
+        this.renderTypeHint = renderTypeHint;
+        this.renderTypeFastHint = renderTypeFastHint;
         this.visibilityTest = visibilityTest;
     }
 
@@ -129,6 +154,13 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
         return renderTypeHint;
     }
 
+    @Nullable
+    @Override
+    public ResourceLocation getRenderTypeFastHint()
+    {
+        return renderTypeFastHint;
+    }
+
     @Override
     public boolean isComponentVisible(String component, boolean fallback)
     {
@@ -157,6 +189,8 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
         private Transformation rootTransform = Transformation.identity();
         @Nullable
         private ResourceLocation renderTypeHint;
+        @Nullable
+        private ResourceLocation renderTypeFastHint;
         private BiPredicate<String, Boolean> visibilityTest = (c, def) -> def;
 
         private Builder()
@@ -173,6 +207,7 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
             this.transforms = parent.getTransforms();
             this.rootTransform = parent.getRootTransform();
             this.renderTypeHint = parent.getRenderTypeHint();
+            this.renderTypeFastHint = parent.getRenderTypeFastHint();
             this.visibilityTest = parent::isComponentVisible;
         }
 
@@ -231,6 +266,13 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
             return this;
         }
 
+        public Builder withRenderTypeHint(ResourceLocation renderTypeHint, ResourceLocation renderTypeFastHint)
+        {
+            this.renderTypeHint = renderTypeHint;
+            this.renderTypeFastHint = renderTypeFastHint;
+            return this;
+        }
+
         public Builder withVisibleComponents(Object2BooleanMap<String> parts)
         {
             this.visibilityTest = parts::getOrDefault;
@@ -239,7 +281,7 @@ public class StandaloneGeometryBakingContext implements IGeometryBakingContext
 
         public StandaloneGeometryBakingContext build(ResourceLocation modelName)
         {
-            return new StandaloneGeometryBakingContext(modelName, materialCheck, materialLookup, isGui3d, useBlockLight, useAmbientOcclusion, transforms, rootTransform, renderTypeHint, visibilityTest);
+            return new StandaloneGeometryBakingContext(modelName, materialCheck, materialLookup, isGui3d, useBlockLight, useAmbientOcclusion, transforms, rootTransform, renderTypeHint, renderTypeFastHint, visibilityTest);
         }
     }
 }

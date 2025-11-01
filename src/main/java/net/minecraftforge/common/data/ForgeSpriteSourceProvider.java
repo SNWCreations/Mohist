@@ -5,10 +5,11 @@
 
 package net.minecraftforge.common.data;
 
-import java.util.Optional;
 import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.Optional;
 
 public class ForgeSpriteSourceProvider extends SpriteSourceProvider
 {

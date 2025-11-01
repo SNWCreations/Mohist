@@ -7,14 +7,14 @@ package net.minecraftforge.client.gui;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.loading.ClientModLoader;
-import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.versions.forge.ForgeVersion;
+import net.minecraftforge.fml.VersionChecker;
+import net.minecraftforge.client.loading.ClientModLoader;
 
 public class TitleScreenModUpdateIndicator extends Screen
 {

@@ -5,7 +5,6 @@
 
 package net.minecraftforge.registries;
 
-import com.google.common.collect.Maps;
 import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -21,6 +20,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forgespi.language.ModFileScanData;
+
+import com.google.common.collect.Maps;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,7 +90,7 @@ public class ObjectHolderRegistry
             .toList();
 
         if (annotations.stream().noneMatch(a -> OBJECT_HOLDER.equals(a.annotationType())))
-            return; // No object holders found, skip the rest of the processing
+             return; // No object holders found, skip the rest of the processing
 
         Map<Type, String> classModIds = Maps.newHashMap();
         Map<Type, Class<?>> classCache = Maps.newHashMap();

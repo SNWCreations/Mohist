@@ -5,8 +5,9 @@
 
 package net.minecraftforge.server.permission.handler;
 
-import java.util.Collection;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
+
+import java.util.Collection;
 
 @FunctionalInterface
 public interface IPermissionHandlerFactory

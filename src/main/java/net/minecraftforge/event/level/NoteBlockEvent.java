@@ -5,12 +5,13 @@
 
 package net.minecraftforge.event.level;
 
-import com.google.common.base.Preconditions;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Cancelable;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Base class for Noteblock Events

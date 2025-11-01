@@ -5,10 +5,12 @@
 
 package net.minecraftforge.common.util;
 
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
 import java.util.Map;
 import java.util.UUID;
+
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.server.level.ServerLevel;
 
 //To be expanded for generic Mod fake players?

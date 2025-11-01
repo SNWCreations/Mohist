@@ -6,7 +6,6 @@
 package net.minecraftforge.client.event;
 
 import com.google.common.base.Preconditions;
-import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.textures.ITextureAtlasSpriteLoader;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -16,6 +15,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
 
 /**
  * Allows users to register custom {@link ITextureAtlasSpriteLoader texture atlas sprite loaders}.

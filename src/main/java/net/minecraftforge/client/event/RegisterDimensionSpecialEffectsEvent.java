@@ -5,7 +5,6 @@
 
 package net.minecraftforge.client.event;
 
-import java.util.Map;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -14,6 +13,8 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
 
 /**
  * Allows users to register custom {@link DimensionSpecialEffects} for their dimensions.

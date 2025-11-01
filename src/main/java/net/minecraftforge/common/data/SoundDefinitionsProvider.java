@@ -6,7 +6,6 @@
 package net.minecraftforge.common.data;
 
 import com.google.gson.JsonObject;
-import com.mohistmc.MohistMC;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;

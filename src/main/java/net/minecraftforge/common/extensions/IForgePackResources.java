@@ -6,10 +6,11 @@
 package net.minecraftforge.common.extensions;
 
 import java.util.Collection;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.resource.DelegatingPackResources;
-import org.jetbrains.annotations.Nullable;
 
 public interface IForgePackResources
 {

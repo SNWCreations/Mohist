@@ -5,7 +5,6 @@
 
 package net.minecraftforge.event;
 
-import java.util.function.Supplier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
@@ -18,6 +17,8 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.function.Supplier;
 
 /**
  * Fired when the contents of a specific creative mode tab are being populated.

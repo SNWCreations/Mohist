@@ -5,10 +5,12 @@
 
 package net.minecraftforge.registries.tags;
 
-import java.util.Optional;
-import java.util.stream.Stream;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  * A tag is a collection of elements with an identifying {@link TagKey tag key}.

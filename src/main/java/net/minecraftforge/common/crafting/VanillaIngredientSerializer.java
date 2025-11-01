@@ -5,11 +5,13 @@
 
 package net.minecraftforge.common.crafting;
 
-import com.google.gson.JsonObject;
 import java.util.stream.Stream;
-import net.minecraft.network.FriendlyByteBuf;
+
+import com.google.gson.JsonObject;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class VanillaIngredientSerializer implements IIngredientSerializer<Ingredient>
 {

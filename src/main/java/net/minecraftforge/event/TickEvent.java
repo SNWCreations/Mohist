@@ -5,10 +5,12 @@
 
 package net.minecraftforge.event;
 
-import java.util.function.BooleanSupplier;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.MinecraftServer;
+
+import java.util.function.BooleanSupplier;
+
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;

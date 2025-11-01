@@ -6,7 +6,6 @@
 package net.minecraftforge.client.model;
 
 import com.google.common.collect.Maps;
-import java.util.Map;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -18,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * Wrapper around {@link ItemModelShaper} that cleans up the internal maps to respect ID remapping.

@@ -6,7 +6,6 @@
 package net.minecraftforge.common.crafting;
 
 import com.google.gson.JsonElement;
-import java.util.stream.Stream;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -14,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.Stream;
 
 /**
  * Extension of {@link Ingredient} which makes most methods custom ingredients need to implement abstract, and removes the static constructors

@@ -6,8 +6,9 @@
 package net.minecraftforge.common.crafting.conditions;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemExistsCondition implements ICondition

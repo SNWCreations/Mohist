@@ -5,10 +5,12 @@
 
 package net.minecraftforge.registries.holdersets;
 
-import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.mojang.serialization.Codec;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;

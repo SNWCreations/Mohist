@@ -5,17 +5,19 @@
 
 package net.minecraftforge.client.model.generators.loaders;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.ForgeFaceData;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
@@ -31,6 +33,7 @@ public class ItemLayerModelBuilder<T extends ModelBuilder<T>> extends CustomLoad
 
     private final Int2ObjectMap<ForgeFaceData> faceData = new Int2ObjectOpenHashMap<>();
     private final Map<ResourceLocation, IntSet> renderTypes = new LinkedHashMap<>();
+    private final Map<ResourceLocation, IntSet> renderTypesFast = new LinkedHashMap<>();
     private final IntSet layersWithRenderTypes = new IntOpenHashSet();
 
     protected ItemLayerModelBuilder(T parent, ExistingFileHelper existingFileHelper)
@@ -113,6 +116,23 @@ public class ItemLayerModelBuilder<T extends ModelBuilder<T>> extends CustomLoad
         return renderType(asLoc, layers);
     }
 
+    public ItemLayerModelBuilder<T> renderType(String renderType, String renderTypeFast, int... layers)
+    {
+        Preconditions.checkNotNull(renderType, "Render type must not be null");
+        Preconditions.checkNotNull(renderTypeFast, "Fast graphics render type must not be null");
+        ResourceLocation asLoc;
+        if (renderType.contains(":"))
+            asLoc = new ResourceLocation(renderType);
+        else
+            asLoc = new ResourceLocation(parent.getLocation().getNamespace(), renderType);
+        ResourceLocation asLocFast;
+        if (renderTypeFast.contains(":"))
+            asLocFast = new ResourceLocation(renderTypeFast);
+        else
+            asLocFast = new ResourceLocation(parent.getLocation().getNamespace(), renderTypeFast);
+        return renderType(asLoc, asLocFast, layers);
+    }
+
     /**
      * Set the render type for a set of layers.
      *
@@ -142,6 +162,25 @@ public class ItemLayerModelBuilder<T extends ModelBuilder<T>> extends CustomLoad
         return this;
     }
 
+    public ItemLayerModelBuilder<T> renderType(ResourceLocation renderType, ResourceLocation renderTypeFast, int... layers)
+    {
+        Preconditions.checkNotNull(renderType, "Render type must not be null");
+        Preconditions.checkNotNull(renderTypeFast, "Fast graphics render type must not be null");
+        Preconditions.checkNotNull(layers, "Layers must not be null");
+        Preconditions.checkArgument(layers.length > 0, "At least one layer must be specified");
+        Preconditions.checkArgument(Arrays.stream(layers).allMatch(i -> i >= 0), "All layers must be >= 0");
+        var alreadyAssigned = Arrays.stream(layers).filter(layersWithRenderTypes::contains).toArray();
+        Preconditions.checkArgument(alreadyAssigned.length == 0, "Attempted to re-assign layer render types: " + Arrays.toString(alreadyAssigned));
+        var renderTypeLayers = renderTypes.computeIfAbsent(renderType, $ -> new IntOpenHashSet());
+        var renderTypeFastLayers = renderTypesFast.computeIfAbsent(renderType, $ -> new IntOpenHashSet());
+        Arrays.stream(layers).forEach(layer -> {
+            renderTypeLayers.add(layer);
+            renderTypeFastLayers.add(layer);
+            layersWithRenderTypes.add(layer);
+        });
+        return this;
+    }
+
     @Override
     public JsonObject toJson(JsonObject json)
     {
@@ -165,6 +204,14 @@ public class ItemLayerModelBuilder<T extends ModelBuilder<T>> extends CustomLoad
             renderTypes.add(renderType.toString(), array);
         });
         json.add("render_types", renderTypes);
+
+        JsonObject renderTypesFast = new JsonObject();
+        this.renderTypesFast.forEach((renderTypeFast, layers) -> {
+            JsonArray array = new JsonArray();
+            layers.intStream().sorted().forEach(array::add);
+            renderTypesFast.add(renderTypeFast.toString(), array);
+        });
+        json.add("render_types_fast", renderTypesFast);
 
         return json;
     }

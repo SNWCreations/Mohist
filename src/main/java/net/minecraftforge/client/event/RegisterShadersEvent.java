@@ -6,9 +6,8 @@
 package net.minecraftforge.client.event;
 
 import com.mojang.datafixers.util.Pair;
-import java.util.List;
-import java.util.function.Consumer;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
@@ -16,6 +15,9 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Fired to allow mods to register custom {@linkplain ShaderInstance shaders}.

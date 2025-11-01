@@ -5,15 +5,14 @@
 
 package net.minecraftforge.registries;
 
-import com.mohistmc.MohistMC;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import net.minecraft.ResourceLocationException;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ResourceLocationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -5,6 +5,8 @@
 
 package net.minecraftforge.event.entity.living;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
@@ -12,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * LivingDrownEvent is fired whenever a living entity can't breathe and its air supply is less than or equal to zero.
@@ -50,7 +51,7 @@ public class LivingDrownEvent extends LivingEvent {
     @ApiStatus.Internal
     @Deprecated(forRemoval = true, since = "1.20.1")
     public LivingDrownEvent(LivingEntity entity, boolean isDrowning) {
-        this(entity, isDrowning, 2.0F, 8);
+    	this(entity, isDrowning, 2.0F, 8);
     }
 
     /**

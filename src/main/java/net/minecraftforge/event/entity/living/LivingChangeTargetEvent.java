@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.behavior.StartAttacking;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
-import org.bukkit.event.entity.EntityTargetEvent;
 
 /**
  * This event allows you to change the target an entity has. <br>
@@ -40,9 +39,6 @@ public class LivingChangeTargetEvent extends LivingEvent
     private final ILivingTargetType targetType;
     private final LivingEntity originalTarget;
     private LivingEntity newTarget;
-    // Mohist start
-    private EntityTargetEvent.TargetReason reason;
-    private boolean fireCBEvent;
     
     public LivingChangeTargetEvent(LivingEntity entity, LivingEntity originalTarget, ILivingTargetType targetType)
     {
@@ -50,28 +46,7 @@ public class LivingChangeTargetEvent extends LivingEvent
         this.originalTarget = originalTarget;
         this.newTarget = originalTarget;
         this.targetType = targetType;
-        this.reason = EntityTargetEvent.TargetReason.UNKNOWN;
-        this.fireCBEvent = true;
     }
-
-    public EntityTargetEvent.TargetReason getReason() {
-        return reason;
-    }
-
-    public void setReason(EntityTargetEvent.TargetReason reason) {
-        this.reason = reason;
-    }
-
-    public boolean isFireCBEvent() {
-        return fireCBEvent;
-    }
-
-    public void setfireCBEvent(boolean cancel) {
-        this.fireCBEvent = cancel;
-    }
-
-    // Mohist end
-
 
     /**
      * {@return the new target of this entity.}

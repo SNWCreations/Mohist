@@ -8,6 +8,15 @@ package net.minecraftforge.network;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
 import io.netty.util.Attribute;
+import net.minecraft.ResourceLocationException;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,13 +24,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
 
 public class MCRegisterPacketHandler
 {

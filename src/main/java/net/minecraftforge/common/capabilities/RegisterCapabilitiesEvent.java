@@ -6,9 +6,11 @@
 package net.minecraftforge.common.capabilities;
 
 import java.util.Objects;
+
+import org.objectweb.asm.Type;
+
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.IModBusEvent;
-import org.objectweb.asm.Type;
 
 /**
  * This event fires when it is time to register your capabilities.

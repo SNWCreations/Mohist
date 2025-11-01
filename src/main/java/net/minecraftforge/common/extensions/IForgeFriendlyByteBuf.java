@@ -6,7 +6,6 @@
 package net.minecraftforge.common.extensions;
 
 import com.google.common.base.Preconditions;
-import java.util.Objects;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -14,6 +13,8 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Extension-Interface providing methods for writing registry-id's instead of their registry-names.

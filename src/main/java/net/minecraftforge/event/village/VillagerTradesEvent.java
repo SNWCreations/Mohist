@@ -5,15 +5,16 @@
 
 package net.minecraftforge.event.village;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import java.util.List;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 
 /**
  * VillagerTradesEvent is fired during the {@link ServerAboutToStartEvent}.  It is used to gather the trade lists for each profession.

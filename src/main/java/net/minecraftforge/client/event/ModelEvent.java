@@ -6,8 +6,6 @@
 package net.minecraftforge.client.event;
 
 import com.google.common.base.Preconditions;
-import java.util.Map;
-import java.util.Set;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelManager;
@@ -20,6 +18,9 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Houses events related to models.

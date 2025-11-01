@@ -6,15 +6,16 @@
 package net.minecraftforge.event;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import java.util.Collection;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Event;
+import com.google.common.collect.Multimap;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * This event is fired when the attributes for an ItemStack are being calculated.

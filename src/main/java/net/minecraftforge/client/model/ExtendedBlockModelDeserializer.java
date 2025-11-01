@@ -12,10 +12,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.math.Transformation;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockElementFace;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -29,6 +25,11 @@ import net.minecraftforge.client.model.geometry.GeometryLoaderManager;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import net.minecraftforge.common.util.TransformationHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * A version of {@link BlockModel.Deserializer} capable of deserializing models with custom loaders, as well as other
@@ -70,6 +71,12 @@ public class ExtendedBlockModelDeserializer extends BlockModel.Deserializer
         {
             var renderTypeHintName = GsonHelper.getAsString(jsonobject, "render_type");
             model.customData.setRenderTypeHint(new ResourceLocation(renderTypeHintName));
+        }
+
+        if (jsonobject.has("render_type_fast"))
+        {
+            var renderTypeHintName = GsonHelper.getAsString(jsonobject, "render_type_fast");
+            model.customData.setRenderTypeFastHint(new ResourceLocation(renderTypeHintName));
         }
 
         if (jsonobject.has("visibility"))

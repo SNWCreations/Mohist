@@ -7,10 +7,11 @@ package net.minecraftforge.common.extensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 public interface IForgeMobEffect
 {

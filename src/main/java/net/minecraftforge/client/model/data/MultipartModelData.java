@@ -5,10 +5,11 @@
 
 package net.minecraftforge.client.model.data;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
 import net.minecraft.client.resources.model.BakedModel;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 public class MultipartModelData
 {

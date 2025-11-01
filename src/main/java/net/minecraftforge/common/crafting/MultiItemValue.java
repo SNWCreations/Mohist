@@ -5,10 +5,12 @@
 
 package net.minecraftforge.common.crafting;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.util.Collection;
 import java.util.Collections;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient.Value;
 import net.minecraftforge.registries.ForgeRegistries;

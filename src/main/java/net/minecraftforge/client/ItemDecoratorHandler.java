@@ -5,19 +5,22 @@
 
 package net.minecraftforge.client;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.gui.Font;
+
 import net.minecraft.client.gui.GuiGraphics;
+import org.jetbrains.annotations.ApiStatus;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.gui.Font;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.fml.ModLoader;
-import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public final class ItemDecoratorHandler

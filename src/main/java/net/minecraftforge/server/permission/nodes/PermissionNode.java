@@ -6,8 +6,6 @@
 package net.minecraftforge.server.permission.nodes;
 
 import com.google.common.base.Preconditions;
-import java.util.Objects;
-import java.util.UUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,6 +13,9 @@ import net.minecraftforge.server.permission.events.PermissionGatherEvent;
 import net.minecraftforge.server.permission.handler.IPermissionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Represents the basic unit at the heart of the permission system.

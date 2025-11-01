@@ -6,10 +6,6 @@
 package net.minecraftforge.registries;
 
 import com.google.common.collect.Lists;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry.AddCallback;
@@ -19,9 +15,12 @@ import net.minecraftforge.registries.IForgeRegistry.CreateCallback;
 import net.minecraftforge.registries.IForgeRegistry.MissingFactory;
 import net.minecraftforge.registries.IForgeRegistry.ValidateCallback;
 import org.jetbrains.annotations.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 public class RegistryBuilder<T> {
-
     public static <T> RegistryBuilder<T> of() {
         return new RegistryBuilder<T>();
     }
