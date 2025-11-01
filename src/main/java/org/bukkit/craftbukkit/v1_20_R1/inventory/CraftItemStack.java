@@ -343,8 +343,10 @@ public final class CraftItemStack extends ItemStack {
 
         if (item.getTag() == null) {
             ItemMeta meta = CraftItemFactory.instance().getItemMeta(getType(item));
-            ((CraftMetaItem) meta).setForgeCaps(item.getForgeCaps());
-            return meta;
+            if (meta != null) {
+                ((CraftMetaItem) meta).setForgeCaps(item.getForgeCaps());
+                return meta;
+            }
         }
         CraftMetaItem meta = switch (getType(item)) {
             case WRITTEN_BOOK -> new CraftMetaBookSigned(item.getTag());

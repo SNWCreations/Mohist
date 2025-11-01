@@ -570,7 +570,6 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      * @deprecated use {@link #translationKey()}
      */
     @NotNull
-    @Deprecated(forRemoval = true)
     String getTranslationKey();
     // Paper end
 

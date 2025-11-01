@@ -92,8 +92,6 @@ public class MohistConfig {
 
         version = getInt("config-version", 1);
         set("config-version", 1);
-        set("keepinventory.world.inventory", false);
-        set("keepinventory.world.exp", false);
         readConfig();
 
         try {
@@ -298,10 +296,12 @@ public class MohistConfig {
     // Mohist+ end
     public static int custom_lava_speed_normal;
     public static int custom_lava_speed_nether;
+    public static String ping_status_version;
 
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
+        ping_status_version = getString("mohist.ping_status_version", "mohist 1.20.1");
         // check_update = getBoolean("mohist.check_update", true); // Mohist+ - TODO Maybe we need our own version checker?
         watchdog_spigot = getBoolean("mohist.watchdog_spigot", true);
         // watchdog_mohist = getBoolean("mohist.watchdog_mohist", false); // Mohist+ - Remove this because we removed it
@@ -406,5 +406,8 @@ public class MohistConfig {
         */
         custom_lava_speed_normal = getInt("custom.lava_speed.normal", 30);
         custom_lava_speed_nether = getInt("custom.lava_speed.nether", 10);
+
+        getBoolean("keepinventory.world.inventory", false);
+        getBoolean("keepinventory.world.exp", false);
     }
 }

@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.generator.ChunkGenerator;
 
 /**
@@ -17,6 +19,10 @@ import org.bukkit.generator.ChunkGenerator;
 public class WorldAPI {
 
     public static Map<BlockPos, Entity> destroyBlockProgress = new HashMap<>();
+
+    public static ServerLevel getServerLevel(World world) {
+        return ((CraftWorld) world).getHandle();
+    }
 
     // Mohist+ start - Remove this as it is not necessary
     /*

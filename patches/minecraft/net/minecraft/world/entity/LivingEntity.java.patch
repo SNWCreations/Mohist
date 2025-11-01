@@ -535,7 +535,7 @@
     protected void m_142540_(MobEffectInstance p_147190_, @Nullable Entity p_147191_) {
        this.f_20948_ = true;
        if (!this.m_9236_().f_46443_) {
-@@ -1015,19 +_,63 @@
+@@ -1015,19 +_,67 @@
  
     }
  
@@ -581,6 +581,10 @@
 +      fake$setHealth.set(fake);
 +   }
     public void m_21153_(float p_21154_) {
++      // Paper start - Check for NaN
++      if (Float.isNaN(p_21154_)) { p_21154_ = m_21233_(); if (this.valid) {
++          System.err.println("[NAN-HEALTH] " + m_6302_() + " had NaN health set");
++      } } // Paper end - Check for NaN
 +      // CraftBukkit start - Handle scaled health
 +      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false) && serverPlayer.initialized) {
 +         org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer player = serverPlayer.getBukkitEntity();

@@ -5,7 +5,7 @@ A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 **This is a fork of the Mohist project.** No warranty on its changes,
  I just try my best to make my changes work but don't apply any promise to other parts of this project.
 
-[![](https://img.shields.io/badge/Forge-1.20.1--47.4.9-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![](https://img.shields.io/badge/Forge-1.20.1--47.4.10-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![](https://img.shields.io/badge/NeoForge-1.20.1--47.1.106-brightgreen.svg?colorB=26303d)](https://neoforged.net/)
 [![](https://img.shields.io/badge/JDK-17.0.14-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
 [![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
@@ -13,7 +13,10 @@ A Minecraft Forge Hybrid server software implementing the Spigot/Bukkit API.
 
 ## Progress
 
-- [x] Rectify Forge([**e9ce8a6cc**](https://github.com/MinecraftForge/MinecraftForge/commit/e9ce8a6cc))
+Progress
+------
+
+- [x] Rectify Forge([**132704e5f**](https://github.com/MinecraftForge/MinecraftForge/commit/132704e5f))
 - [x] Rectify NeoForge([**e7ac32353**](https://github.com/neoforged/NeoForge/commit/e7ac32353))
 - [x] Start patch
     * [x] Bukkit([**997de31d**](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/997de31d))

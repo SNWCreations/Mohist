@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
  * Represents an object with a text representation that can be translated by the
  * Minecraft client.
  */
-@Deprecated(forRemoval = true) // Paper
 public interface Translatable {
 
     /**
@@ -16,6 +15,5 @@ public interface Translatable {
      * @deprecated look for a {@code translationKey()} method instead
      */
     @NotNull
-    @Deprecated(forRemoval = true) // Paper
     String getTranslationKey();
 }

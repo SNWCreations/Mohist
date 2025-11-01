@@ -22,8 +22,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -220,6 +222,26 @@ public class ItemAPI {
                 return getMaterial.getDefaultInstance().getBukkitStack().getType();
             } else {
                 var key = net.minecraft.world.entity.EntityType.getKey(entitytype);
+                if (ForgeRegistries.ITEMS.getValue(key) == null) {
+                    return Material.SPAWNER;
+                }
+                Material material = get(key);
+                return material.isAir() ? Material.SPAWNER : material;
+            }
+        } catch (Exception e) {
+            return Material.SPAWNER;
+        }
+    }
+
+    public static Material getEggMaterial(String entitytype) {
+        try {
+            EntityType type = EntityAPI.entityType(entitytype);
+            var entitytypeNMS = EntityAPI.getType(type.getKey().asString());
+            var getMaterial = ForgeSpawnEggItem.fromEntityType(entitytypeNMS);
+            if (getMaterial != null) {
+                return getMaterial.getDefaultInstance().getBukkitStack().getType();
+            } else {
+                var key = net.minecraft.world.entity.EntityType.getKey(entitytypeNMS);
                 if (ForgeRegistries.ITEMS.getValue(key) == null) {
                     return Material.SPAWNER;
                 }
