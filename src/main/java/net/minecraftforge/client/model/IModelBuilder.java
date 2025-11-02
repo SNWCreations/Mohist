@@ -99,7 +99,7 @@ public interface IModelBuilder<T extends IModelBuilder<T>>
         @Override
         public BakedModel build()
         {
-            return builder.build(renderTypes, renderTypesFast);
+            return builder.build(/*renderTypes, renderTypesFast*/); // Mohist+ - We don't patch client, just make it compile
         }
     }
 
