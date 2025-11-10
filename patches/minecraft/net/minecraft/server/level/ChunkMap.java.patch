@@ -292,7 +292,7 @@
           this.f_140472_ = p_140478_;
           this.f_140473_ = p_140479_;
           this.f_140474_ = SectionPos.m_235861_(p_140478_);
-@@ -1378,6 +_,12 @@
+@@ -1378,11 +_,26 @@
              double d1 = vec3.f_82479_ * vec3.f_82479_ + vec3.f_82481_ * vec3.f_82481_;
              double d2 = d0 * d0;
              boolean flag = d1 <= d2 && this.f_140472_.m_6459_(p_140498_);
@@ -304,7 +304,22 @@
 +            // CraftBukkit end
              if (flag) {
                 if (this.f_140475_.add(p_140498_.f_8906_)) {
-                   this.f_140471_.m_8541_(p_140498_);
+-                  this.f_140471_.m_8541_(p_140498_);
++                  // Paper start - entity tracking events
++                  if (com.mohistmc.paper.event.player.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.mohistmc.paper.event.player.PlayerTrackEntityEvent(p_140498_.getBukkitEntity(), this.f_140472_.getBukkitEntity()).callEvent()) {
++                      this.f_140471_.m_8541_(p_140498_);
++                  }
++                  // Paper end
+                }
+             } else if (this.f_140475_.remove(p_140498_.f_8906_)) {
++               // Paper start - entity tracking events
++               if (com.mohistmc.paper.event.player.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length > 0) {
++                   new com.mohistmc.paper.event.player.PlayerUntrackEntityEvent(p_140498_.getBukkitEntity(), this.f_140472_.getBukkitEntity()).callEvent();
++               }
++               // Paper end
+                this.f_140471_.m_8534_(p_140498_);
+             }
+ 
 @@ -1411,6 +_,17 @@
              this.m_140497_(serverplayer);
           }
