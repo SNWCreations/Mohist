@@ -9,7 +9,7 @@
 +import com.mohistmc.api.WorldAPI;
 +import com.mohistmc.forge.MohistDerivedWorldInfo;
 +import com.mohistmc.plugins.ban.bans.BanEntity;
-+import com.mohistmc.util.BooleanUtils;
++// import com.mohistmc.util.BooleanUtils; // Mohist+ - Use boolean literals instead of meaningless method names
 +import com.mohistmc.util.Level2LevelStem;
  import com.mojang.datafixers.DataFixer;
  import com.mojang.datafixers.util.Pair;
@@ -667,7 +667,7 @@
     private boolean m_8872_(Entity p_8873_) {
        if (p_8873_.m_213877_()) {
 -         f_8566_.warn("Tried to add entity {} but it was marked as removed already", (Object)EntityType.m_20613_(p_8873_.m_6095_()));
-+         if (BooleanUtils.is()) f_8566_.warn("Tried to add entity {} but it was marked as removed already", (Object)EntityType.m_20613_(p_8873_.m_6095_()));
++         if (Boolean.TRUE) f_8566_.warn("Tried to add entity {} but it was marked as removed already", (Object)EntityType.m_20613_(p_8873_.m_6095_()));
           return false;
        } else {
 -         return this.f_143244_.m_157533_(p_8873_);
