@@ -35,7 +35,6 @@ public class WorldEventDispatcher {
         if (event.getLevel() instanceof ServerLevel handle) {
             CraftWorld craftWorld = handle.getWorld();
             Bukkit.getPluginManager().callEvent(new WorldLoadEvent(craftWorld));
-            Bukkit.getPluginManager().callEvent(new WorldInitEvent(craftWorld));
         }
     }
 

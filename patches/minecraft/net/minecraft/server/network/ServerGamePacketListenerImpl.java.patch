@@ -432,7 +432,7 @@
        }
  
     }
-@@ -501,16 +_,72 @@
+@@ -501,16 +_,67 @@
  
     }
  
@@ -450,12 +450,7 @@
 +      // CraftBukkit start
 +      if (f_9750_.addAndGet(1) > 500 && !this.f_9745_.m_6846_().m_11303_(this.f_9743_.m_36316_())) {
 +         this.m_9942_(Component.m_237115_("disconnect.spam"));
-+         f_9745_.scheduleOnMain(new Runnable() {
-+             @Override
-+             public void run() {
-+                 ServerGamePacketListenerImpl.this.m_9942_(Component.m_237110_("disconnect.spam", new Object[0]));
-+             }
-+         }); // Paper
++         f_9745_.scheduleOnMain(() -> ServerGamePacketListenerImpl.this.m_9942_(Component.m_237110_("disconnect.spam", new Object[0]))); // Paper
 +         return;
        }
 -

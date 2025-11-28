@@ -39,6 +39,7 @@ public class PluginFixManager {
                 helloWorld(node, "false", "mohist");
             };
             case "net.Zrips.CMILib.Reflections" -> node -> helloWorld(node, "bR", "f_36096_");
+            case "net.coreprotect.listener.ListenerHandler" -> node -> helloWorld(node, "net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer", "mohist");
             default -> null;
         };
 

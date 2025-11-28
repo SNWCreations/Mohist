@@ -27,7 +27,7 @@
  import net.minecraft.CrashReport;
  import net.minecraft.ReportedException;
  import net.minecraft.SharedConstants;
-@@ -156,6 +_,14 @@
+@@ -156,6 +_,15 @@
  import net.minecraft.world.level.storage.loot.LootDataManager;
  import net.minecraft.world.phys.Vec2;
  import net.minecraft.world.phys.Vec3;
@@ -39,6 +39,7 @@
 +import org.bukkit.craftbukkit.v1_20_R1.util.LazyPlayerSet;
 +import org.bukkit.event.player.AsyncPlayerChatPreviewEvent;
 +import org.bukkit.event.server.ServerLoadEvent;
++import org.bukkit.event.world.WorldInitEvent;
  import org.slf4j.Logger;
  
  public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTask> implements CommandSource, AutoCloseable {
@@ -153,18 +154,22 @@
        if (profiledduration != null) {
           profiledduration.m_185413_();
        }
-@@ -335,11 +_,14 @@
-       List<CustomSpawner> list = ImmutableList.of(new PhantomSpawner(), new PatrolSpawner(), new CatSpawner(), new VillageSiege(), new WanderingTraderSpawner(serverleveldata));
+@@ -336,10 +_,18 @@
        LevelStem levelstem = registry.m_6246_(LevelStem.f_63971_);
        ServerLevel serverlevel = new ServerLevel(this, this.f_129738_, this.f_129744_, serverleveldata, Level.f_46428_, levelstem, p_129816_, flag, j, list, true, (RandomSequences)null);
-+      this.initWorld(serverlevel, serverleveldata, f_129749_, worldoptions); // CraftBukkit
        this.f_129762_.put(Level.f_46428_, serverlevel);
++      // CraftBukkit start
++      if (serverlevel.generator != null) {
++         serverlevel.getWorld().getPopulators().addAll(serverlevel.generator.getDefaultPopulators(serverlevel.getWorld()));
++      }
++      Bukkit.getPluginManager().callEvent(new WorldInitEvent(serverlevel.getWorld()));
        DimensionDataStorage dimensiondatastorage = serverlevel.m_8895_();
        this.m_129841_(dimensiondatastorage);
 +      this.server.scoreboardManager = new org.bukkit.craftbukkit.v1_20_R1.scoreboard.CraftScoreboardManager(this, serverlevel.m_6188_());
        this.f_129732_ = new CommandStorage(dimensiondatastorage);
        WorldBorder worldborder = serverlevel.m_6857_();
 +      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.level.LevelEvent.Load(f_129762_.get(Level.f_46428_)));
++
        if (!serverleveldata.m_6535_()) {
           try {
              m_177896_(serverlevel, serverleveldata, worldoptions.m_245100_(), flag);
@@ -187,10 +192,10 @@
 +            ChunkProgressListener mohist$progressListener = this.f_129756_.m_9620_(11);
 +            Level.craftWorldData(this.server.getGenerator(name), ForgeInjectBukkit.environment.get(resourcekey), this.server.getBiomeProvider(name));
 +            ServerLevel serverlevel1 = new ServerLevel(this, this.f_129738_, this.f_129744_, derivedleveldata, resourcekey1, entry.getValue(), mohist$progressListener, flag, j, ImmutableList.of(), false, randomsequences);
-+            this.initWorld(serverlevel1, derivedleveldata, f_129749_, worldoptions); // CraftBukkit
 +            // Mohist end
              worldborder.m_61929_(new BorderChangeListener.DelegateBorderChangeListener(serverlevel1.m_6857_()));
              this.f_129762_.put(resourcekey1, serverlevel1);
++            this.initWorld(serverlevel1, derivedleveldata, f_129749_, worldoptions); // CraftBukkit
 +            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.level.LevelEvent.Load(f_129762_.get(resourcekey)));
           }
        }
@@ -233,7 +238,7 @@
           int i = serverchunkcache.m_8481_().m_142051_(p_177897_);
           if (i < p_177897_.m_141937_()) {
              BlockPos blockpos = chunkpos.m_45615_();
-@@ -442,40 +_,86 @@
+@@ -442,40 +_,87 @@
        serverleveldata.m_5458_(GameType.SPECTATOR);
     }
  
@@ -246,6 +251,7 @@
 +      }
 +      WorldBorder worldborder = serverlevel.m_6857_();
 +      worldborder.m_61931_(serverleveldata.m_5813_()); // CraftBukkit - move up so that WorldBorder is set during WorldInitEvent
++      Bukkit.getPluginManager().callEvent(new WorldInitEvent(serverlevel.getWorld()));
 +
 +      if (!serverleveldata.m_6535_()) {
 +         try {

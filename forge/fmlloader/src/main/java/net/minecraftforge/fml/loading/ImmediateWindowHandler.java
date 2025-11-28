@@ -5,6 +5,8 @@
 
 package net.minecraftforge.fml.loading;
 
+import cpw.mods.modlauncher.Launcher;
+import cpw.mods.modlauncher.api.IModuleLayerManager;
 import net.minecraftforge.fml.loading.progress.ProgressMeter;
 import net.minecraftforge.fml.loading.progress.StartupNotificationManager;
 import org.apache.logging.log4j.LogManager;
@@ -23,28 +25,44 @@ public class ImmediateWindowHandler {
 
     private static ProgressMeter earlyProgress;
     public static void load(final String launchTarget, final String[] arguments) {
+        final var serviceLayer = Launcher.INSTANCE.findLayerManager()
+                .flatMap(manager -> manager.getLayer(IModuleLayerManager.Layer.SERVICE))
+                .orElse(null);
+        final var providerName = FMLConfig.getConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_PROVIDER);
+
         if (!List.of("forgeclient", "forgeclientuserdev", "forgeclientdev").contains(launchTarget)) {
-            provider = new DummyProvider();
             LOGGER.info("ImmediateWindowProvider not loading because launch target is {}", launchTarget);
         } else if (!FMLConfig.getBoolConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_CONTROL)) {
-            provider = new DummyProvider();
             LOGGER.info("ImmediateWindowProvider not loading because splash screen is disabled");
+        } else if (providerName == null) {
+            LOGGER.info("ImmediateWindowProvider not loading because splash screen provider is null");
+        } else if (serviceLayer == null) {
+            LOGGER.error("Failed to find service layer for ImmediateWindowProvider");
         } else {
-            final var providername = FMLConfig.getConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_PROVIDER);
-            LOGGER.info("Loading ImmediateWindowProvider {}", providername);
-            final var maybeProvider = ServiceLoader.load(ImmediateWindowProvider.class)
-                    .stream()
-                    .map(ServiceLoader.Provider::get)
-                    .filter(p -> Objects.equals(p.name(), providername))
-                    .findFirst();
-            provider = maybeProvider.or(() -> {
-                LOGGER.info("Failed to find ImmediateWindowProvider {}, disabling", providername);
-                return Optional.of(new DummyProvider());
-            }).orElseThrow();
+            LOGGER.info("Loading ImmediateWindowProvider {}", providerName);
+
+            for (var itr = ServiceLoader.load(serviceLayer, ImmediateWindowProvider.class).iterator(); itr.hasNext(); ) {
+                try {
+                    var srvc = itr.next();
+                    if (providerName.equals(srvc.name())) {
+                        provider = new Wrapper(srvc);
+                        break;
+                    }
+                } catch (ServiceConfigurationError e) {
+                    LOGGER.error("Failed to initalize ImmediateWindowProvider Service", e);
+                }
+            }
+
+            if (provider == null)
+                LOGGER.info("Failed to find ImmediateWindowProvider {}, disabling", providerName);
         }
+
         // Only update config if the provider isn't the dummy provider
-        if (!Objects.equals(provider.name(), "dummyprovider"))
+        if (provider != null)
             FMLConfig.updateConfig(FMLConfig.ConfigValue.EARLY_WINDOW_PROVIDER, provider.name());
+        else
+            provider = new DummyProvider();
+
         FMLLoader.progressWindowTick = provider.initialize(arguments);
         earlyProgress = StartupNotificationManager.addProgressBar("EARLY", 0);
         earlyProgress.label("Bootstrapping Minecraft");
@@ -78,6 +96,7 @@ public class ImmediateWindowHandler {
     public static String getGLVersion() {
         return provider.getGLVersion();
     }
+
     public static void updateProgress(final String message) {
         earlyProgress.label(message);
     }
@@ -154,6 +173,96 @@ public class ImmediateWindowHandler {
         @Override
         public void periodicTick() {
             // NOOP
+        }
+    }
+
+    // We create a wrapper because we want to log errors to the log files, which not all paths of ModLauncher do. Little dirty, but works for now.
+    private static class Wrapper implements ImmediateWindowProvider {
+        private final ImmediateWindowProvider delegate;
+
+        private Wrapper(ImmediateWindowProvider delegate) {
+            this.delegate = delegate;
+        }
+
+        public String name() {
+            try {
+                return delegate.name();
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.name", t);
+                throw t;
+            }
+        }
+
+        public Runnable initialize(String[] arguments) {
+            try {
+                return delegate.initialize(arguments);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.initialize", t);
+                throw t;
+            }
+        }
+
+        public void updateFramebufferSize(IntConsumer width, IntConsumer height) {
+            try {
+                delegate.updateFramebufferSize(width, height);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.updateFramebufferSize", t);
+                throw t;
+            }
+        }
+
+        public long setupMinecraftWindow(IntSupplier width, IntSupplier height, Supplier<String> title, LongSupplier monitor) {
+            try {
+                return delegate.setupMinecraftWindow(width, height, title, monitor);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.setupMinecraftWindow", t);
+                throw t;
+            }
+        }
+
+        public boolean positionWindow(Optional<Object> monitor, IntConsumer widthSetter, IntConsumer heightSetter, IntConsumer xSetter, IntConsumer ySetter) {
+            try {
+                return delegate.positionWindow(monitor, widthSetter, heightSetter, xSetter, ySetter);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.positionWindow", t);
+                throw t;
+            }
+        }
+
+        public <T> Supplier<T> loadingOverlay(Supplier<?> mc, Supplier<?> ri, Consumer<Optional<Throwable>> ex, boolean fade) {
+            try {
+                return delegate.loadingOverlay(mc, ri, ex, fade);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.loadingOverlay", t);
+                throw t;
+            }
+        }
+
+        public void updateModuleReads(ModuleLayer layer) {
+            try {
+                delegate.updateModuleReads(layer);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.updateModuleReads", t);
+                throw t;
+            }
+        }
+
+        public void periodicTick() {
+            try {
+                delegate.periodicTick();
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.periodicTick", t);
+                throw t;
+            }
+        }
+
+        public String getGLVersion() {
+            try {
+                return delegate.getGLVersion();
+            } catch (Throwable t) {
+                LOGGER.error("Failed to call provider.getGLVersion", t);
+                throw t;
+            }
         }
     }
 }

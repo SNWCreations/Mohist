@@ -18,33 +18,30 @@ import java.util.function.Supplier;
  * for each of your collections.<p/>
  * This list does not support modification operations, but the underlying lists may be mutated safely externally.
  */
-public class ConcatenatedListView<T> implements List<T>
-{
+public class ConcatenatedListView<T> implements List<T> {
     @SafeVarargs
-    public static <T> ConcatenatedListView<T> of(List<T>... lists)
-    {
+    public static <T> ConcatenatedListView<T> of(List<T>... lists) {
         return new ConcatenatedListView<>(List.of(lists));
     }
 
-    public static <T> List<T> of(List<? extends List<? extends T>> members)
-    {
-        return switch (members.size()) {
-            case 0 -> List.of();
-            case 1 -> Collections.unmodifiableList(members.get(0));
-            default -> new ConcatenatedListView<>(members);
-        };
+    public static <T> List<T> of(List<? extends List<? extends T>> members) {
+        if (members.isEmpty())
+            return List.of();
+        if (members.size() == 1)
+            return (Collections.unmodifiableList(members.get(0)));
+        @SuppressWarnings("unchecked")
+        var typed = (List<List<T>>)members;
+        return new ConcatenatedListView<>(typed);
     }
 
-    private final List<? extends List<? extends T>> lists;
+    private final List<List<T>> lists;
 
-    private ConcatenatedListView(List<? extends List<? extends T>> lists)
-    {
+    private ConcatenatedListView(List<List<T>> lists) {
         this.lists = lists;
     }
 
     @Override
-    public int size()
-    {
+    public int size() {
         int size = 0;
         for (var list : lists)
             size += list.size();
@@ -52,28 +49,26 @@ public class ConcatenatedListView<T> implements List<T>
     }
 
     @Override
-    public boolean isEmpty()
-    {
-        for (List<? extends T> list : lists)
+    public boolean isEmpty() {
+        for (List<? extends T> list : lists) {
             if (!list.isEmpty())
                 return false;
+        }
         return true;
     }
 
     @Override
-    public boolean contains(Object o)
-    {
-        for (var list : lists)
+    public boolean contains(Object o) {
+        for (var list : lists) {
             if (list.contains(o))
                 return true;
+        }
         return false;
     }
 
     @Override
-    public T get(int index)
-    {
-        for (var list : lists)
-        {
+    public T get(int index) {
+        for (var list : lists) {
             int size = list.size();
             if (index < size)
                 return list.get(index);
@@ -83,11 +78,9 @@ public class ConcatenatedListView<T> implements List<T>
     }
 
     @Override
-    public int indexOf(Object o)
-    {
+    public int indexOf(Object o) {
         int offset = 0;
-        for (var list : lists)
-        {
+        for (var list : lists) {
             int foundIndex = list.indexOf(o);
             if (foundIndex >= 0)
                 return offset + foundIndex;
@@ -97,11 +90,9 @@ public class ConcatenatedListView<T> implements List<T>
     }
 
     @Override
-    public int lastIndexOf(Object o)
-    {
+    public int lastIndexOf(Object o) {
         int offset = 0;
-        for (var list : Lists.reverse(lists))
-        {
+        for (var list : Lists.reverse(lists)) {
             int foundIndex = list.lastIndexOf(o);
             if (foundIndex >= 0)
                 return offset + foundIndex;
@@ -112,20 +103,17 @@ public class ConcatenatedListView<T> implements List<T>
 
     @NotNull
     @Override
-    public Iterator<T> iterator()
-    {
+    public Iterator<T> iterator() {
         return Iterables.unmodifiableIterable(Iterables.concat(lists)).iterator();
     }
 
     @Override
-    public Spliterator<T> spliterator()
-    {
+    public Spliterator<T> spliterator() {
         return Iterables.unmodifiableIterable(Iterables.concat(lists)).spliterator();
     }
 
     // Delegate to a concatenated collection
-    private <C extends Collection<T>> C concatenate(Supplier<C> collectionFactory)
-    {
+    private <C extends Collection<T>> C concatenate(Supplier<C> collectionFactory) {
         var concat = collectionFactory.get();
         for (var list : lists)
             concat.addAll(list);
