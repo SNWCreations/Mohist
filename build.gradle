@@ -38,7 +38,7 @@ ext {
     COREMODS_VERSION = 'mc_1.20.1-SNAPSHOT' // '5.2.4' // Mohist+ - Use our patched CoreMods library
     EVENTBUS_VERSION = '6.0.5'
     MODLAUNCHER_VERSION = '10.0.9'
-    SECUREJARHANDLER_VERSION = 'mohist-2.1.11'
+    // SECUREJARHANDLER_VERSION = 'mohist-2.1.11' // Mohist+ - Use our patched SecureJarHandler
     BOOTSTRAPLAUNCHER_VERSION = '1.1.2'
     ASM_VERSION = '9.8'
     INSTALLER_VERSION = '2.2.+'
@@ -176,10 +176,11 @@ def mohistDeps = {
     mohist "cpw.mods:bootstraplauncher:1.1.2"
     mohist "com.google.code.findbugs:jsr305:3.0.2"
     mohist 'org.checkerframework:checker-qual:2.0.0'
+    mohist 'com.github.MohistPlusMC:securejarhandler:the_fork-SNAPSHOT' // Mohist+ - Use our patched SecureJarHandler
 }
 
 def sharedDeps = {
-    moduleonly "cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}"
+    moduleonly 'com.github.MohistPlusMC:securejarhandler:the_fork-SNAPSHOT' // "cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}" // Mohist+ - Use our patched SecureJarHandler
     moduleonly "org.ow2.asm:asm:${ASM_VERSION}"
     moduleonly "org.ow2.asm:asm-commons:${ASM_VERSION}"
     moduleonly "org.ow2.asm:asm-tree:${ASM_VERSION}"
@@ -188,7 +189,7 @@ def sharedDeps = {
     moduleonly "cpw.mods:bootstraplauncher:${BOOTSTRAPLAUNCHER_VERSION}"
     moduleonly "net.minecraftforge:JarJarFileSystems:${JARJAR_VERSION}"
 
-    compileOnly "cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}" // Mohist TODO
+    compileOnly 'com.github.MohistPlusMC:securejarhandler:the_fork-SNAPSHOT' // "cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}" // Mohist+ - Use our patched SecureJarHandler // Mohist TODO
     installer "org.ow2.asm:asm:${ASM_VERSION}"
     installer "org.ow2.asm:asm-commons:${ASM_VERSION}"
     installer "org.ow2.asm:asm-tree:${ASM_VERSION}"
@@ -794,7 +795,7 @@ project(':mohist') {
                         'libraries/' + getMavenPath(rootProject.tasks.findByPath(':fmlloader:jar')),
                         "libraries/net/minecraft/server/${MC_VERSION}-${MCP_VERSION}/server-${MC_VERSION}-${MCP_VERSION}-extra.jar",
                         "libraries/cpw/mods/bootstraplauncher/1.1.2/bootstraplauncher-1.1.2.jar",
-                        "libraries/cpw/mods/securejarhandler/mohist-2.1.11/securejarhandler-mohist-2.1.11.jar",
+                        "libraries/com/github/MohistPlusMC/securejarhandler/the_fork-SNAPSHOT/securejarhandler-the_fork-SNAPSHOT.jar", // "libraries/cpw/mods/securejarhandler/mohist-2.1.11/securejarhandler-mohist-2.1.11.jar", // Mohist+ - Use our patched SecureJarHandler
                         "libraries/net/minecraftforge/installertools/1.4.1/installertools-1.4.1.jar",
                         "libraries/io/netty/netty-transport-native-epoll/4.1.82.Final/netty-transport-native-epoll-4.1.82.Final-linux-x86_64.jar",
                         "libraries/io/netty/netty-transport-native-epoll/4.1.82.Final/netty-transport-native-epoll-4.1.82.Final-linux-aarch_64.jar"

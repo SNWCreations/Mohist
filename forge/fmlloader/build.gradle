@@ -37,7 +37,10 @@ dependencies {
     api "net.minecraftforge:JarJarMetadata:${JARJAR_VERSION}"
 
     implementation("net.sf.jopt-simple:jopt-simple:${JOPT_SIMPLE_VERSION}")
-    implementation("cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}")
+    // Mohist+ start - Use our patched SecureJarHandler
+    // implementation("cpw.mods:securejarhandler:${SECUREJARHANDLER_VERSION}")
+    implementation('com.github.MohistPlusMC:securejarhandler:the_fork-SNAPSHOT')
+    // Mohist+ end
     implementation("net.minecraftforge:accesstransformers:${ACCESSTRANSFORMERS_VERSION}")
     implementation("net.minecrell:terminalconsoleappender:${TERMINALCONSOLEAPPENDER_VERSION}")
     // implementation("org.jline:jline:${JLINE_VERSION}")
